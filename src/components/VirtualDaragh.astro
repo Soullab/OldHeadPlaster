@@ -1,6 +1,8 @@
 ---
-// VirtualDaragh - AI Chat Assistant for Old Head Plaster
+// Virtual Assistant - AI Chat Widget
 // A floating chat widget powered by Claude API
+
+import { brand } from '../data/brand';
 
 const suggestedQuestions = [
   "What finish is best for a bathroom?",
@@ -8,11 +10,13 @@ const suggestedQuestions = [
   "Can I see samples before deciding?",
   "What makes your process different?"
 ];
+
+const badgeUrl = brand.badgeUrl || '/images/virtual-daragh-badge.png';
 ---
 
 <!-- Chat Button (Floating) - Full Illustration -->
-<button id="daragh-chat-btn" class="vd-badge" type="button" aria-label="Open Virtual Daragh">
-  <img src="/images/virtual-daragh-badge.png" alt="Virtual Daragh - Ask me anything" class="vd-badge-img" />
+<button id="daragh-chat-btn" class="vd-badge" type="button" aria-label={`Open ${brand.virtualName}`}>
+  <img src={badgeUrl} alt={`${brand.virtualName} - Ask me anything`} class="vd-badge-img" />
 </button>
 
 <!-- Chat Panel -->
@@ -30,8 +34,8 @@ const suggestedQuestions = [
         </svg>
       </div>
       <div>
-        <h3 class="text-cream font-heading text-sm">Virtual Daragh</h3>
-        <p class="text-cream/50 text-xs">Plaster Expert</p>
+        <h3 class="text-cream font-heading text-sm">{brand.virtualName}</h3>
+        <p class="text-cream/50 text-xs">{brand.virtualTagline}</p>
       </div>
     </div>
     <button id="daragh-close-btn" class="text-cream/50 hover:text-cream transition-colors">
@@ -52,7 +56,7 @@ const suggestedQuestions = [
       </div>
       <div class="bg-charcoal-light border border-cream/10 rounded-lg p-3 max-w-[85%]">
         <p class="text-cream/90 text-sm leading-relaxed">
-          Welcome! I'm Virtual Daragh, here to help you explore decorative plaster options. What would you like to know?
+          Welcome! I'm {brand.virtualName}, here to help you explore decorative plaster options. What would you like to know?
         </p>
       </div>
     </div>
@@ -124,8 +128,8 @@ const suggestedQuestions = [
         </svg>
       </div>
       <div>
-        <h3 class="text-cream font-heading">Virtual Daragh</h3>
-        <p class="text-cream/50 text-xs">Plaster Expert</p>
+        <h3 class="text-cream font-heading">{brand.virtualName}</h3>
+        <p class="text-cream/50 text-xs">{brand.virtualTagline}</p>
       </div>
     </div>
     <button id="daragh-mobile-close" class="text-cream/50 hover:text-cream transition-colors p-2">

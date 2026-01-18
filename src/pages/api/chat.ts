@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import Anthropic from '@anthropic-ai/sdk';
-import { DARAGH_SYSTEM_PROMPT } from '../../data/daragh-knowledge';
+import { generateSystemPrompt } from '../../data/daragh-knowledge';
 
 export const prerender = false;
 
@@ -31,8 +31,8 @@ export const POST: APIRoute = async ({ request }) => {
       apiKey: apiKey
     });
 
-    // Use custom system prompt if provided, otherwise default to Virtual Daragh
-    const effectiveSystemPrompt = systemPrompt || DARAGH_SYSTEM_PROMPT;
+    // Use custom system prompt if provided, otherwise generate based on brand
+    const effectiveSystemPrompt = systemPrompt || generateSystemPrompt();
 
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',

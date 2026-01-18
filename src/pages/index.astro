@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { brand } from '../data/brand';
 
 const credentials = [
   { value: '20+', label: 'Years Experience' },
@@ -71,18 +72,17 @@ const carouselImages = [
       <!-- The Headland Mark - Hero Moment -->
       <img
         src="/images/headland-mark.svg"
-        alt="Old Head Plaster - Est. County Mayo"
+        alt={`${brand.siteName} - ${brand.tagline}`}
         class="h-20 sm:h-24 md:h-28 w-auto mx-auto mb-16 sm:mb-24 md:mb-48 mt-20 md:mt-8"
       />
 
       <h1 class="text-ivory text-4xl md:text-5xl lg:text-6xl font-normal leading-[1.1] mb-8">
-        The Finish<br />
-        <span class="text-brass italic">Architects Specify</span>
+        {brand.heroTitle}<br />
+        <span class="text-brass italic">{brand.heroSubtitle}</span>
       </h1>
 
       <p class="text-ivory/40 text-lg max-w-md mx-auto mb-12 leading-relaxed">
-        Trusted by architects and interior designers for high-end residential,
-        hospitality, and historic restoration projects across Connecticut.
+        {brand.heroDescription}
       </p>
 
       <div class="flex flex-col sm:flex-row justify-center gap-4">
@@ -137,8 +137,8 @@ const carouselImages = [
   <section class="section-padding bg-charcoal">
     <div class="max-w-3xl mx-auto px-8 text-center">
       <p class="text-ivory/70 text-lg leading-relaxed mb-8">
-        Old Head Plaster brings Irish craftsmanship to Connecticut's
-        finest homes. Every surface tells a story of tradition
+        {brand.siteName} brings master craftsmanship to the finest
+        homes. Every surface tells a story of tradition
         meeting modern precision.
       </p>
       <p class="text-ivory/50 leading-relaxed">
@@ -370,7 +370,7 @@ const carouselImages = [
       <div class="text-brass/30 text-4xl mb-6">"</div>
 
       <blockquote class="text-ivory/80 text-xl leading-relaxed mb-8">
-        Daragh is who we call when the finish is non-negotiable. His process
+        {brand.ownerName} is who we call when the finish is non-negotiable. Their process
         removes all the guesswork — we specify with confidence knowing
         execution will be flawless.
       </blockquote>
@@ -378,7 +378,7 @@ const carouselImages = [
       <div class="flex items-center justify-center gap-4">
         <div class="w-8 h-px bg-brass/30"></div>
         <cite class="text-ivory/50 text-sm not-italic">
-          <span class="text-ivory/70">Sarah Chen, AIA</span> — Chen Architecture
+          <span class="text-ivory/70">Sample Client</span> — Architecture Firm
         </cite>
         <div class="w-8 h-px bg-brass/30"></div>
       </div>
@@ -388,7 +388,7 @@ const carouselImages = [
   <!-- Material Library -->
   <section class="section-padding bg-charcoal">
     <div class="max-w-3xl mx-auto px-8 text-center">
-      <p class="text-brass text-sm tracking-[0.25em] uppercase mb-6">Madison, Connecticut</p>
+      <p class="text-brass text-sm tracking-[0.25em] uppercase mb-6">{brand.location}</p>
 
       <h2 class="text-ivory text-2xl md:text-3xl mb-6">The Material Library</h2>
 
@@ -428,7 +428,7 @@ const carouselImages = [
   <section class="py-6 bg-charcoal-light border-t border-charcoal-border">
     <div class="max-w-5xl mx-auto px-8 text-center">
       <p class="text-ivory/40 text-sm">
-        Currently accepting projects for <span class="text-brass">Q2 2026</span>
+        <span class="text-brass">{brand.availabilityText}</span>
       </p>
     </div>
   </section>

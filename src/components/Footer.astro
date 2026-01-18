@@ -1,5 +1,8 @@
 ---
+import { brand } from '../data/brand';
+
 const currentYear = new Date().getFullYear();
+const phoneHref = `tel:${brand.phone.replace(/[^0-9+]/g, '')}`;
 
 const mainLinks = [
   { href: '/finishes', label: 'Finishes' },
@@ -12,7 +15,7 @@ const mainLinks = [
 ];
 
 const resourceLinks = [
-  { href: '/about', label: 'About Daragh' },
+  { href: '/about', label: `About ${brand.ownerName}` },
   { href: '/care', label: 'Care & Maintenance' },
   { href: '/investment', label: 'Typical Investment' },
   { href: '/contact', label: 'Contact' },
@@ -46,13 +49,12 @@ const resourceLinks = [
         <a href="/" class="block mb-6">
           <img
             src="/images/headland-mark.svg"
-            alt="Old Head Plaster"
+            alt={brand.siteName}
             class="h-14 w-auto opacity-80 hover:opacity-100 transition-opacity"
           />
         </a>
-        <p class="text-ivory/40 text-sm leading-relaxed">
-          Irish craftsmanship.<br />
-          Connecticut excellence.
+        <p class="text-ivory/40 text-sm leading-relaxed whitespace-pre-line">
+          {brand.footerTagline}
         </p>
       </div>
 
@@ -89,18 +91,18 @@ const resourceLinks = [
         <h4 class="text-xs text-brass tracking-[0.2em] uppercase mb-6">Contact</h4>
         <div class="space-y-3 text-sm">
           <p>
-            <a href="tel:+18605747004" class="text-ivory/50 hover:text-ivory transition-colors">
-              860-574-7004
+            <a href={phoneHref} class="text-ivory/50 hover:text-ivory transition-colors">
+              {brand.phone}
             </a>
           </p>
           <p>
-            <a href="mailto:daragh@oldheadplaster.com" class="text-ivory/50 hover:text-ivory transition-colors">
-              daragh@oldheadplaster.com
+            <a href={`mailto:${brand.email}`} class="text-ivory/50 hover:text-ivory transition-colors">
+              {brand.email}
             </a>
           </p>
           <p class="text-ivory/40 text-xs pt-2">
-            Madison, Connecticut<br />
-            Serving Fairfield & New Haven Counties
+            {brand.location}<br />
+            Serving {brand.serviceArea}
           </p>
         </div>
       </div>
@@ -112,12 +114,15 @@ const resourceLinks = [
     <div class="max-w-5xl mx-auto px-8 py-6">
       <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
         <p class="text-xs text-ivory/30">
-          &copy; {currentYear} Old Head Plaster
+          &copy; {currentYear} {brand.siteName}
         </p>
         <div class="flex items-center gap-4 text-xs text-ivory/30">
-          <span>EPA Lead-Safe Certified</span>
-          <span class="text-charcoal-border">|</span>
-          <span>CT Licensed & Insured</span>
+          {brand.credentials.map((cred, i) => (
+            <>
+              {i > 0 && <span class="text-charcoal-border">|</span>}
+              <span>{cred}</span>
+            </>
+          ))}
           <span class="text-charcoal-border">|</span>
           <a href="/admin" class="hover:text-brass transition-colors">Admin</a>
         </div>
