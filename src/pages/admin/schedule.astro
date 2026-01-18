@@ -1,6 +1,19 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 
+// Current date info
+const now = new Date();
+const currentMonth = now.toLocaleString('default', { month: 'long' });
+const currentYear = now.getFullYear();
+const currentDay = now.getDate();
+
+// Get first day of month and total days
+const firstDayOfMonth = new Date(currentYear, now.getMonth(), 1).getDay();
+const daysInMonth = new Date(currentYear, now.getMonth() + 1, 0).getDate();
+
+// Adjust for Monday start (0 = Monday, 6 = Sunday)
+const startOffset = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
+
 // Sample schedule data
 const today = new Date();
 const events = [
@@ -36,7 +49,7 @@ const eventsByDate = events.reduce((acc, event) => {
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7" />
         </svg>
       </button>
-      <h2 class="text-xl font-medium text-cream">January 2025</h2>
+      <h2 class="text-xl font-medium text-cream">{currentMonth} {currentYear}</h2>
       <button class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal-light rounded-lg transition-colors">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
@@ -49,9 +62,9 @@ const eventsByDate = events.reduce((acc, event) => {
 
     <div class="flex items-center gap-3">
       <div class="flex bg-charcoal-light rounded-lg p-1">
-        <button class="px-3 py-1.5 text-sm text-cream bg-charcoal rounded">Week</button>
-        <button class="px-3 py-1.5 text-sm text-cream/50 hover:text-cream">Month</button>
-        <button class="px-3 py-1.5 text-sm text-cream/50 hover:text-cream">List</button>
+        <button id="view-week" class="view-btn px-3 py-1.5 text-sm text-cream/50 hover:text-cream rounded transition-colors">Week</button>
+        <button id="view-month" class="view-btn px-3 py-1.5 text-sm text-cream bg-charcoal rounded">Month</button>
+        <button id="view-list" class="view-btn px-3 py-1.5 text-sm text-cream/50 hover:text-cream rounded transition-colors">List</button>
       </div>
       <button class="flex items-center gap-2 px-4 py-2 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -72,8 +85,51 @@ const eventsByDate = events.reduce((acc, event) => {
     ))}
   </div>
 
+  <!-- Month View -->
+  <div id="month-view" class="calendar-view">
+    <!-- Day Headers -->
+    <div class="grid grid-cols-7 gap-1 mb-2">
+      {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
+        <div class="text-center py-2 text-xs text-cream/50 uppercase">{day}</div>
+      ))}
+    </div>
+    <!-- Calendar Grid -->
+    <div class="grid grid-cols-7 gap-1">
+      {/* Empty cells for offset */}
+      {Array.from({ length: startOffset }).map(() => (
+        <div class="min-h-[100px] bg-charcoal-light/30 rounded-lg p-2"></div>
+      ))}
+      {/* Days of month */}
+      {Array.from({ length: daysInMonth }).map((_, i) => {
+        const day = i + 1;
+        const isToday = day === currentDay;
+        const dateStr = `Jan ${day}`;
+        const dayEvents = events.filter(e => e.date === dateStr || e.date.includes(`${day}-`) || e.date.includes(`-${day}`));
+
+        return (
+          <div class={`min-h-[100px] rounded-lg p-2 border transition-colors hover:border-brass/30 ${isToday ? 'bg-brass/10 border-brass/50' : 'bg-charcoal-light border-charcoal-border'}`}>
+            <div class={`text-sm font-medium mb-1 ${isToday ? 'text-brass' : 'text-cream/70'}`}>{day}</div>
+            <div class="space-y-1">
+              {dayEvents.slice(0, 2).map((event) => {
+                const colors = typeColors[event.type] || typeColors.task;
+                return (
+                  <div class={`text-xs p-1 rounded truncate ${colors.bg} ${colors.text}`} title={event.title}>
+                    {event.title}
+                  </div>
+                );
+              })}
+              {dayEvents.length > 2 && (
+                <div class="text-xs text-cream/40">+{dayEvents.length - 2} more</div>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+
   <!-- Week View -->
-  <div class="grid grid-cols-7 gap-4">
+  <div id="week-view" class="calendar-view hidden grid grid-cols-7 gap-4">
     {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, i) => {
       const date = 13 + i; // Jan 13-19
       const dateStr = `Jan ${date}`;
