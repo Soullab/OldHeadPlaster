@@ -1,71 +1,111 @@
 ---
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 
-const projects = [
+// Default projects for initial load
+const defaultProjects = [
   {
     id: 'greenwich-estate',
     name: 'Greenwich Estate',
     client: 'Harrison Family',
+    address: '247 Round Hill Road, Greenwich, CT 06831',
     status: 'active',
     phase: 'Application Phase',
     progress: 65,
     sqft: 4200,
     finishes: ['Venetian Plaster', 'Tadelakt', 'Lime Wash'],
     team: [
-      { name: 'Sarah Chen', role: 'Architect', company: 'Chen Design Group' },
-      { name: 'Mark Thompson', role: 'General Contractor', company: 'Thompson Builders' },
-      { name: 'Lisa Harrison', role: 'Client', company: '' }
+      { id: '1', name: 'Lisa Harrison', role: 'Client', company: '', email: 'lisa@harrison.com', phone: '203-555-0101', channel: 'both' },
+      { id: '2', name: 'Sarah Chen', role: 'Architect', company: 'Chen Design Group', email: 'sarah@chendesign.com', phone: '203-555-0102', channel: 'email' },
+      { id: '3', name: 'Mark Thompson', role: 'General Contractor', company: 'Thompson Builders', email: 'mark@thompsonbuilders.com', phone: '203-555-0103', channel: 'sms' },
+      { id: '4', name: 'Emily Ross', role: 'Interior Designer', company: 'Ross Interiors', email: 'emily@rossinteriors.com', phone: '203-555-0104', channel: 'both' }
     ],
-    startDate: 'Nov 15, 2024',
-    estCompletion: 'Mar 30, 2025'
+    startDate: '2024-11-15',
+    estCompletion: '2025-03-30',
+    notes: 'Estate renovation. Master suite and formal living areas. Client prefers warmer tones.',
+    milestones: [
+      { id: '1', phase: 'Design Phase', status: 'completed', startDate: 'Nov 15', endDate: 'Dec 5', tasks: ['Material Library visit', 'Architectural review', 'Finish mapping'] },
+      { id: '2', phase: 'Sampling Phase', status: 'completed', startDate: 'Dec 6', endDate: 'Jan 10', tasks: ['Custom samples for each room', 'Lighting tests', 'Client approval'] },
+      { id: '3', phase: 'Preparation Phase', status: 'completed', startDate: 'Jan 11', endDate: 'Jan 20', tasks: ['Substrate coordination', 'Surface protection', 'Primer application'] },
+      { id: '4', phase: 'Application Phase', status: 'in-progress', startDate: 'Jan 21', endDate: 'Mar 15', tasks: ['Master suite', 'Formal living', 'Dining room', 'Powder room'] },
+      { id: '5', phase: 'Completion Phase', status: 'pending', startDate: 'Mar 16', endDate: 'Mar 30', tasks: ['Final walkthrough', 'Touch-ups', 'Care documentation'] }
+    ],
+    updates: [],
+    files: []
   },
   {
     id: 'westport-modern',
     name: 'Westport Modern',
     client: 'Chen Residence',
+    address: '89 Compo Road South, Westport, CT 06880',
     status: 'active',
     phase: 'Sampling Phase',
     progress: 30,
     sqft: 2800,
     finishes: ['Microcement', 'Polished Lime'],
     team: [
-      { name: 'James Wong', role: 'Architect', company: 'Modern CT Architecture' },
-      { name: 'David Chen', role: 'Client', company: '' }
+      { id: '1', name: 'James Wong', role: 'Architect', company: 'Modern CT Architecture', email: 'james@modernct.com', phone: '203-555-0201', channel: 'email' },
+      { id: '2', name: 'David Chen', role: 'Client', company: '', email: 'david@chen.com', phone: '203-555-0202', channel: 'both' }
     ],
-    startDate: 'Dec 5, 2024',
-    estCompletion: 'Apr 15, 2025'
+    startDate: '2024-12-05',
+    estCompletion: '2025-04-15',
+    notes: 'Modern new construction. Open floor plan with minimal aesthetic.',
+    milestones: [
+      { id: '1', phase: 'Design Phase', status: 'completed', startDate: 'Dec 5', endDate: 'Dec 20', tasks: ['Material selection', 'Color consultation'] },
+      { id: '2', phase: 'Sampling Phase', status: 'in-progress', startDate: 'Dec 21', endDate: 'Jan 25', tasks: ['Sample creation', 'Client review'] },
+      { id: '3', phase: 'Preparation Phase', status: 'pending', startDate: 'Jan 26', endDate: 'Feb 10', tasks: ['Surface prep'] },
+      { id: '4', phase: 'Application Phase', status: 'pending', startDate: 'Feb 11', endDate: 'Apr 5', tasks: ['Application'] },
+      { id: '5', phase: 'Completion Phase', status: 'pending', startDate: 'Apr 6', endDate: 'Apr 15', tasks: ['Final review'] }
+    ],
+    updates: [],
+    files: []
   },
   {
     id: 'darien-restoration',
     name: 'Darien Historic',
     client: 'Wright Estate',
+    address: '156 Tokeneke Road, Darien, CT 06820',
     status: 'pending',
     phase: 'Design Phase',
     progress: 15,
     sqft: 5600,
     finishes: ['Historic Lime', 'Venetian', 'Marmorino'],
     team: [
-      { name: 'Patricia Wright', role: 'Client', company: '' },
-      { name: 'Robert Mills', role: 'Preservation Architect', company: 'Heritage Design' }
+      { id: '1', name: 'Patricia Wright', role: 'Client', company: '', email: 'patricia@wright.com', phone: '203-555-0301', channel: 'email' },
+      { id: '2', name: 'Robert Mills', role: 'Preservation Architect', company: 'Heritage Design', email: 'robert@heritagedesign.com', phone: '203-555-0302', channel: 'both' }
     ],
-    startDate: 'Jan 10, 2025',
-    estCompletion: 'Jul 30, 2025'
+    startDate: '2025-01-10',
+    estCompletion: '2025-07-30',
+    notes: 'Historic restoration requiring authentic lime plaster techniques.',
+    milestones: [
+      { id: '1', phase: 'Design Phase', status: 'in-progress', startDate: 'Jan 10', endDate: 'Feb 15', tasks: ['Historic analysis', 'Material matching'] },
+      { id: '2', phase: 'Sampling Phase', status: 'pending', startDate: 'Feb 16', endDate: 'Mar 15', tasks: ['Period samples'] },
+      { id: '3', phase: 'Preparation Phase', status: 'pending', startDate: 'Mar 16', endDate: 'Apr 15', tasks: ['Careful surface prep'] },
+      { id: '4', phase: 'Application Phase', status: 'pending', startDate: 'Apr 16', endDate: 'Jul 15', tasks: ['Traditional application'] },
+      { id: '5', phase: 'Completion Phase', status: 'pending', startDate: 'Jul 16', endDate: 'Jul 30', tasks: ['Documentation'] }
+    ],
+    updates: [],
+    files: []
   },
   {
     id: 'new-canaan-residence',
     name: 'New Canaan Residence',
     client: 'Mitchell Family',
+    address: '45 Oenoke Ridge, New Canaan, CT 06840',
     status: 'completed',
     phase: 'Completed',
     progress: 100,
     sqft: 3200,
     finishes: ['Venetian Plaster', 'Microcement'],
     team: [
-      { name: 'Amy Mitchell', role: 'Client', company: '' },
-      { name: 'Tom Bradley', role: 'Architect', company: 'Bradley Associates' }
+      { id: '1', name: 'Amy Mitchell', role: 'Client', company: '', email: 'amy@mitchell.com', phone: '203-555-0401', channel: 'both' },
+      { id: '2', name: 'Tom Bradley', role: 'Architect', company: 'Bradley Associates', email: 'tom@bradleyassoc.com', phone: '203-555-0402', channel: 'email' }
     ],
-    startDate: 'Aug 1, 2024',
-    estCompletion: 'Dec 15, 2024'
+    startDate: '2024-08-01',
+    estCompletion: '2024-12-15',
+    notes: 'Completed project. Excellent results.',
+    milestones: [],
+    updates: [],
+    files: []
   }
 ];
 
@@ -83,6 +123,19 @@ const phaseColors = {
   'Completion Phase': 'text-brass',
   'Completed': 'text-cream/50'
 };
+
+const finishOptions = [
+  'Venetian Plaster',
+  'Tadelakt',
+  'Lime Wash',
+  'Microcement',
+  'Polished Lime',
+  'Historic Lime',
+  'Marmorino',
+  'Stucco Lustro',
+  'Clay Plaster',
+  'Roman Clay'
+];
 ---
 
 <AdminLayout title="Projects" currentPage="projects">
@@ -91,6 +144,7 @@ const phaseColors = {
     <div class="flex items-center gap-4">
       <div class="relative">
         <input
+          id="search-input"
           type="search"
           placeholder="Search projects..."
           class="w-64 bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 pl-10 text-sm text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50"
@@ -100,7 +154,7 @@ const phaseColors = {
         </svg>
       </div>
 
-      <select class="bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-sm text-cream/70 focus:outline-none focus:border-brass/50">
+      <select id="status-filter" class="bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-sm text-cream/70 focus:outline-none focus:border-brass/50">
         <option value="all">All Status</option>
         <option value="active">Active</option>
         <option value="pending">Pending</option>
@@ -108,102 +162,539 @@ const phaseColors = {
       </select>
     </div>
 
-    <a href="/admin/projects/new" class="flex items-center gap-2 px-4 py-2 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors">
+    <button id="new-project-btn" class="flex items-center gap-2 px-4 py-2 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
       </svg>
       New Project
-    </a>
+    </button>
+  </div>
+
+  <!-- Stats Overview -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+    <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-4 text-center">
+      <div id="total-count" class="text-2xl font-semibold text-cream">0</div>
+      <div class="text-sm text-cream/50">Total Projects</div>
+    </div>
+    <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-4 text-center">
+      <div id="active-count" class="text-2xl font-semibold text-emerald-400">0</div>
+      <div class="text-sm text-cream/50">Active</div>
+    </div>
+    <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-4 text-center">
+      <div id="pending-count" class="text-2xl font-semibold text-amber-400">0</div>
+      <div class="text-sm text-cream/50">Pending</div>
+    </div>
+    <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-4 text-center">
+      <div id="sqft-count" class="text-2xl font-semibold text-brass">0</div>
+      <div class="text-sm text-cream/50">Total Sq Ft</div>
+    </div>
   </div>
 
   <!-- Projects Grid -->
-  <div class="grid gap-6">
-    {projects.map((project) => (
-      <a href={`/admin/projects/${project.id}`} class="block bg-charcoal-light border border-charcoal-border rounded-lg overflow-hidden hover:border-brass/30 transition-all group">
-        <div class="p-6">
-          <div class="flex items-start justify-between mb-4">
-            <div class="flex-1">
-              <div class="flex items-center gap-3 mb-2">
-                <h3 class="text-xl text-cream font-medium group-hover:text-brass transition-colors">{project.name}</h3>
-                <span class={`text-xs px-2 py-0.5 rounded-full border ${statusColors[project.status]}`}>
-                  {project.status}
-                </span>
-              </div>
-              <p class="text-sm text-cream/50">{project.client} · {project.sqft.toLocaleString()} sq ft</p>
-            </div>
-            <div class="text-right">
-              <div class="text-xs text-cream/40 mb-1">Est. Completion</div>
-              <div class="text-sm text-brass">{project.estCompletion}</div>
-            </div>
+  <div id="projects-grid" class="grid gap-6">
+    <!-- Projects rendered by JavaScript -->
+  </div>
+
+  <!-- Empty State -->
+  <div id="empty-state" class="hidden text-center py-16">
+    <svg class="w-16 h-16 text-cream/20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+    </svg>
+    <h3 class="text-lg text-cream mb-2">No projects found</h3>
+    <p class="text-cream/50 mb-4">Get started by creating your first project</p>
+    <button id="empty-new-btn" class="px-4 py-2 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors">
+      Create Project
+    </button>
+  </div>
+
+  <!-- Project Modal -->
+  <div id="project-modal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+    <div class="bg-charcoal-light border border-charcoal-border rounded-xl w-full max-w-3xl mx-4 max-h-[90vh] overflow-y-auto">
+      <div class="p-6 border-b border-charcoal-border flex items-center justify-between">
+        <h2 id="modal-title" class="text-xl text-cream font-medium">New Project</h2>
+        <button id="close-modal" class="text-cream/50 hover:text-cream transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="project-form" class="p-6 space-y-6">
+        <input type="hidden" id="project-id" />
+
+        <div class="grid grid-cols-2 gap-6">
+          <!-- Project Name -->
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Project Name *</label>
+            <input
+              type="text"
+              id="project-name"
+              required
+              placeholder="e.g. Greenwich Estate"
+              class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-2 text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50"
+            />
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <!-- Progress -->
-            <div class="md:col-span-2">
-              <div class="flex items-center justify-between text-xs mb-2">
-                <span class={phaseColors[project.phase] || 'text-cream/60'}>{project.phase}</span>
-                <span class="text-brass">{project.progress}%</span>
+          <!-- Client -->
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Client Name *</label>
+            <input
+              type="text"
+              id="project-client"
+              required
+              placeholder="e.g. Harrison Family"
+              class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-2 text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50"
+            />
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div>
+          <label class="block text-sm text-cream/60 mb-2">Project Address</label>
+          <input
+            type="text"
+            id="project-address"
+            placeholder="e.g. 247 Round Hill Road, Greenwich, CT 06831"
+            class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-2 text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50"
+          />
+        </div>
+
+        <div class="grid grid-cols-3 gap-6">
+          <!-- Status -->
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Status</label>
+            <select id="project-status" class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-brass/50">
+              <option value="pending">Pending</option>
+              <option value="active">Active</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+
+          <!-- Phase -->
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Current Phase</label>
+            <select id="project-phase" class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-brass/50">
+              <option value="Design Phase">Design Phase</option>
+              <option value="Sampling Phase">Sampling Phase</option>
+              <option value="Preparation Phase">Preparation Phase</option>
+              <option value="Application Phase">Application Phase</option>
+              <option value="Completion Phase">Completion Phase</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+
+          <!-- Square Footage -->
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Square Footage</label>
+            <input
+              type="number"
+              id="project-sqft"
+              placeholder="e.g. 4200"
+              class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-2 text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-6">
+          <!-- Progress -->
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Progress (%)</label>
+            <input
+              type="number"
+              id="project-progress"
+              min="0"
+              max="100"
+              value="0"
+              class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-2 text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50"
+            />
+          </div>
+
+          <!-- Start Date -->
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Start Date</label>
+            <input
+              type="date"
+              id="project-start"
+              class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-brass/50"
+            />
+          </div>
+
+          <!-- Est. Completion -->
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Est. Completion</label>
+            <input
+              type="date"
+              id="project-end"
+              class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-brass/50"
+            />
+          </div>
+        </div>
+
+        <!-- Finishes -->
+        <div>
+          <label class="block text-sm text-cream/60 mb-2">Finishes</label>
+          <div id="finishes-container" class="flex flex-wrap gap-2">
+            {finishOptions.map(finish => (
+              <label class="finish-option flex items-center gap-2 px-3 py-1.5 bg-charcoal rounded-lg cursor-pointer hover:bg-charcoal-border/50 transition-colors">
+                <input type="checkbox" value={finish} class="finish-checkbox accent-brass" />
+                <span class="text-sm text-cream/70">{finish}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div>
+          <label class="block text-sm text-cream/60 mb-2">Project Notes</label>
+          <textarea
+            id="project-notes"
+            rows="3"
+            placeholder="Add any notes about this project..."
+            class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-3 text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50 resize-none"
+          ></textarea>
+        </div>
+      </form>
+
+      <div class="p-6 border-t border-charcoal-border flex items-center justify-between">
+        <button id="delete-project-btn" class="text-sm text-red-400 hover:text-red-300 transition-colors hidden">
+          Delete Project
+        </button>
+        <div class="flex items-center gap-3 ml-auto">
+          <button id="cancel-modal" class="px-4 py-2 text-cream/70 text-sm hover:text-cream transition-colors">
+            Cancel
+          </button>
+          <button id="save-project-btn" class="px-6 py-2 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors">
+            Save Project
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="delete-modal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+    <div class="bg-charcoal-light border border-charcoal-border rounded-xl w-full max-w-md mx-4 p-6">
+      <h3 class="text-lg text-cream font-medium mb-2">Delete Project?</h3>
+      <p class="text-cream/60 mb-6">This action cannot be undone. All project data, team members, and files will be permanently deleted.</p>
+      <div class="flex justify-end gap-3">
+        <button id="cancel-delete" class="px-4 py-2 text-cream/70 text-sm hover:text-cream transition-colors">
+          Cancel
+        </button>
+        <button id="confirm-delete" class="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors">
+          Delete Project
+        </button>
+      </div>
+    </div>
+  </div>
+</AdminLayout>
+
+<script define:vars={{ defaultProjects, statusColors, phaseColors }}>
+  // Initialize data
+  const STORAGE_KEY = 'oldhead_projects';
+
+  function getProjects() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      return JSON.parse(stored);
+    }
+    // Initialize with default projects
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultProjects));
+    return defaultProjects;
+  }
+
+  function saveProjects(projects) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+  }
+
+  function generateId(name) {
+    return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now();
+  }
+
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  // DOM Elements
+  const projectsGrid = document.getElementById('projects-grid');
+  const emptyState = document.getElementById('empty-state');
+  const searchInput = document.getElementById('search-input');
+  const statusFilter = document.getElementById('status-filter');
+  const modal = document.getElementById('project-modal');
+  const deleteModal = document.getElementById('delete-modal');
+  const form = document.getElementById('project-form');
+
+  let currentProjectId = null;
+  let projectToDelete = null;
+
+  // Render projects
+  function renderProjects() {
+    const projects = getProjects();
+    const search = searchInput.value.toLowerCase();
+    const statusFilterValue = statusFilter.value;
+
+    let filtered = projects.filter(p => {
+      const matchesSearch = p.name.toLowerCase().includes(search) ||
+                           p.client.toLowerCase().includes(search) ||
+                           (p.address && p.address.toLowerCase().includes(search));
+      const matchesStatus = statusFilterValue === 'all' || p.status === statusFilterValue;
+      return matchesSearch && matchesStatus;
+    });
+
+    // Update stats
+    document.getElementById('total-count').textContent = projects.length;
+    document.getElementById('active-count').textContent = projects.filter(p => p.status === 'active').length;
+    document.getElementById('pending-count').textContent = projects.filter(p => p.status === 'pending').length;
+    document.getElementById('sqft-count').textContent = projects.reduce((sum, p) => sum + (p.sqft || 0), 0).toLocaleString();
+
+    if (filtered.length === 0) {
+      projectsGrid.innerHTML = '';
+      emptyState.classList.remove('hidden');
+      return;
+    }
+
+    emptyState.classList.add('hidden');
+
+    projectsGrid.innerHTML = filtered.map(project => {
+      const statusColor = statusColors[project.status] || statusColors.pending;
+      const phaseColor = phaseColors[project.phase] || 'text-cream/60';
+
+      return `
+        <div class="block bg-charcoal-light border border-charcoal-border rounded-lg overflow-hidden hover:border-brass/30 transition-all group">
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-2">
+                  <a href="/admin/projects/${project.id}" class="text-xl text-cream font-medium group-hover:text-brass transition-colors">${project.name}</a>
+                  <span class="text-xs px-2 py-0.5 rounded-full border ${statusColor}">
+                    ${project.status}
+                  </span>
+                </div>
+                <p class="text-sm text-cream/50">${project.client} ${project.sqft ? `· ${project.sqft.toLocaleString()} sq ft` : ''}</p>
               </div>
-              <div class="h-2 bg-charcoal rounded-full overflow-hidden">
-                <div class="h-full bg-brass rounded-full transition-all" style={`width: ${project.progress}%`}></div>
-              </div>
-              <div class="flex gap-2 mt-3">
-                {project.finishes.map((finish) => (
-                  <span class="text-xs px-2 py-1 bg-charcoal rounded text-cream/60">{finish}</span>
-                ))}
+              <div class="text-right">
+                <div class="text-xs text-cream/40 mb-1">Est. Completion</div>
+                <div class="text-sm text-brass">${formatDate(project.estCompletion)}</div>
               </div>
             </div>
 
-            <!-- Team -->
-            <div>
-              <div class="text-xs text-cream/40 mb-2">Team ({project.team.length})</div>
-              <div class="flex -space-x-2">
-                {project.team.slice(0, 4).map((member, i) => (
-                  <div
-                    class="w-8 h-8 rounded-full bg-brass/20 border-2 border-charcoal-light flex items-center justify-center"
-                    title={`${member.name} - ${member.role}`}
-                  >
-                    <span class="text-brass text-xs font-medium">{member.name.charAt(0)}</span>
-                  </div>
-                ))}
-                {project.team.length > 4 && (
-                  <div class="w-8 h-8 rounded-full bg-charcoal border-2 border-charcoal-light flex items-center justify-center">
-                    <span class="text-cream/50 text-xs">+{project.team.length - 4}</span>
-                  </div>
-                )}
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <!-- Progress -->
+              <div class="md:col-span-2">
+                <div class="flex items-center justify-between text-xs mb-2">
+                  <span class="${phaseColor}">${project.phase}</span>
+                  <span class="text-brass">${project.progress}%</span>
+                </div>
+                <div class="h-2 bg-charcoal rounded-full overflow-hidden">
+                  <div class="h-full bg-brass rounded-full transition-all" style="width: ${project.progress}%"></div>
+                </div>
+                <div class="flex gap-2 mt-3 flex-wrap">
+                  ${(project.finishes || []).slice(0, 3).map(finish =>
+                    `<span class="text-xs px-2 py-1 bg-charcoal rounded text-cream/60">${finish}</span>`
+                  ).join('')}
+                  ${(project.finishes || []).length > 3 ? `<span class="text-xs px-2 py-1 bg-charcoal rounded text-cream/40">+${project.finishes.length - 3}</span>` : ''}
+                </div>
               </div>
-            </div>
 
-            <!-- Quick Actions -->
-            <div class="flex items-center justify-end gap-2">
-              <button
-                class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal rounded-lg transition-colors"
-                title="Send Message"
-              >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                </svg>
-              </button>
-              <button
-                class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal rounded-lg transition-colors"
-                title="View Timeline"
-              >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </button>
-              <button
-                class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal rounded-lg transition-colors"
-                title="Documents"
-              >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </button>
+              <!-- Team -->
+              <div>
+                <div class="text-xs text-cream/40 mb-2">Team (${(project.team || []).length})</div>
+                <div class="flex -space-x-2">
+                  ${(project.team || []).slice(0, 4).map(member =>
+                    `<div class="w-8 h-8 rounded-full bg-brass/20 border-2 border-charcoal-light flex items-center justify-center" title="${member.name} - ${member.role}">
+                      <span class="text-brass text-xs font-medium">${member.name.charAt(0)}</span>
+                    </div>`
+                  ).join('')}
+                  ${(project.team || []).length > 4 ?
+                    `<div class="w-8 h-8 rounded-full bg-charcoal border-2 border-charcoal-light flex items-center justify-center">
+                      <span class="text-cream/50 text-xs">+${project.team.length - 4}</span>
+                    </div>` : ''}
+                </div>
+              </div>
+
+              <!-- Quick Actions -->
+              <div class="flex items-center justify-end gap-2">
+                <a
+                  href="/admin/projects/${project.id}"
+                  class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal rounded-lg transition-colors"
+                  title="View Project"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                </a>
+                <button
+                  class="edit-project-btn p-2 text-cream/50 hover:text-cream hover:bg-charcoal rounded-lg transition-colors"
+                  data-id="${project.id}"
+                  title="Edit Project"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </a>
-    ))}
-  </div>
-</AdminLayout>
+      `;
+    }).join('');
+
+    // Attach edit handlers
+    document.querySelectorAll('.edit-project-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const id = btn.dataset.id;
+        openEditModal(id);
+      });
+    });
+  }
+
+  // Modal functions
+  function openModal(isEdit = false) {
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.getElementById('modal-title').textContent = isEdit ? 'Edit Project' : 'New Project';
+    document.getElementById('delete-project-btn').classList.toggle('hidden', !isEdit);
+  }
+
+  function closeModal() {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    form.reset();
+    document.querySelectorAll('.finish-checkbox').forEach(cb => cb.checked = false);
+    currentProjectId = null;
+  }
+
+  function openEditModal(projectId) {
+    const projects = getProjects();
+    const project = projects.find(p => p.id === projectId);
+    if (!project) return;
+
+    currentProjectId = projectId;
+    document.getElementById('project-id').value = project.id;
+    document.getElementById('project-name').value = project.name;
+    document.getElementById('project-client').value = project.client;
+    document.getElementById('project-address').value = project.address || '';
+    document.getElementById('project-status').value = project.status;
+    document.getElementById('project-phase').value = project.phase;
+    document.getElementById('project-sqft').value = project.sqft || '';
+    document.getElementById('project-progress').value = project.progress || 0;
+    document.getElementById('project-start').value = project.startDate || '';
+    document.getElementById('project-end').value = project.estCompletion || '';
+    document.getElementById('project-notes').value = project.notes || '';
+
+    // Set finishes
+    document.querySelectorAll('.finish-checkbox').forEach(cb => {
+      cb.checked = (project.finishes || []).includes(cb.value);
+    });
+
+    openModal(true);
+  }
+
+  function saveProject() {
+    const projects = getProjects();
+    const finishes = Array.from(document.querySelectorAll('.finish-checkbox:checked')).map(cb => cb.value);
+
+    const projectData = {
+      id: currentProjectId || generateId(document.getElementById('project-name').value),
+      name: document.getElementById('project-name').value,
+      client: document.getElementById('project-client').value,
+      address: document.getElementById('project-address').value,
+      status: document.getElementById('project-status').value,
+      phase: document.getElementById('project-phase').value,
+      sqft: parseInt(document.getElementById('project-sqft').value) || 0,
+      progress: parseInt(document.getElementById('project-progress').value) || 0,
+      startDate: document.getElementById('project-start').value,
+      estCompletion: document.getElementById('project-end').value,
+      finishes: finishes,
+      notes: document.getElementById('project-notes').value,
+      team: [],
+      milestones: [],
+      updates: [],
+      files: []
+    };
+
+    if (currentProjectId) {
+      // Editing existing project - preserve team, milestones, etc.
+      const existingIndex = projects.findIndex(p => p.id === currentProjectId);
+      if (existingIndex !== -1) {
+        projectData.team = projects[existingIndex].team || [];
+        projectData.milestones = projects[existingIndex].milestones || [];
+        projectData.updates = projects[existingIndex].updates || [];
+        projectData.files = projects[existingIndex].files || [];
+        projects[existingIndex] = projectData;
+      }
+    } else {
+      // New project - generate default milestones
+      projectData.milestones = [
+        { id: '1', phase: 'Design Phase', status: 'pending', startDate: '', endDate: '', tasks: ['Material Library visit', 'Architectural review', 'Finish mapping'] },
+        { id: '2', phase: 'Sampling Phase', status: 'pending', startDate: '', endDate: '', tasks: ['Custom samples', 'Client approval'] },
+        { id: '3', phase: 'Preparation Phase', status: 'pending', startDate: '', endDate: '', tasks: ['Substrate coordination', 'Primer application'] },
+        { id: '4', phase: 'Application Phase', status: 'pending', startDate: '', endDate: '', tasks: ['Application work'] },
+        { id: '5', phase: 'Completion Phase', status: 'pending', startDate: '', endDate: '', tasks: ['Final walkthrough', 'Care documentation'] }
+      ];
+      projects.unshift(projectData);
+    }
+
+    saveProjects(projects);
+    closeModal();
+    renderProjects();
+  }
+
+  function deleteProject(projectId) {
+    const projects = getProjects();
+    const filtered = projects.filter(p => p.id !== projectId);
+    saveProjects(filtered);
+    renderProjects();
+  }
+
+  // Event listeners
+  document.getElementById('new-project-btn').addEventListener('click', () => openModal(false));
+  document.getElementById('empty-new-btn')?.addEventListener('click', () => openModal(false));
+  document.getElementById('close-modal').addEventListener('click', closeModal);
+  document.getElementById('cancel-modal').addEventListener('click', closeModal);
+  document.getElementById('save-project-btn').addEventListener('click', saveProject);
+
+  document.getElementById('delete-project-btn').addEventListener('click', () => {
+    projectToDelete = currentProjectId;
+    deleteModal.classList.remove('hidden');
+    deleteModal.classList.add('flex');
+  });
+
+  document.getElementById('cancel-delete').addEventListener('click', () => {
+    deleteModal.classList.add('hidden');
+    deleteModal.classList.remove('flex');
+    projectToDelete = null;
+  });
+
+  document.getElementById('confirm-delete').addEventListener('click', () => {
+    if (projectToDelete) {
+      deleteProject(projectToDelete);
+      deleteModal.classList.add('hidden');
+      deleteModal.classList.remove('flex');
+      closeModal();
+      projectToDelete = null;
+    }
+  });
+
+  searchInput.addEventListener('input', renderProjects);
+  statusFilter.addEventListener('change', renderProjects);
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  deleteModal.addEventListener('click', (e) => {
+    if (e.target === deleteModal) {
+      deleteModal.classList.add('hidden');
+      deleteModal.classList.remove('flex');
+      projectToDelete = null;
+    }
+  });
+
+  // Initial render
+  renderProjects();
+</script>
