@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+/* Old Head Plaster Brand Theme - Greenwich Edition */
+@theme {
+  /* Colors - Refined New England Palette */
+  --color-charcoal: #1C1C1E;
+  --color-charcoal-light: #2D2D30;
+  --color-charcoal-border: #3a3a3d;
+  --color-brass: #A8935C;
+  --color-brass-light: #C4B07A;
+  --color-bronze: #A8935C;
+  --color-bronze-light: #C4B07A;
+  --color-ivory: #FAFAF8;
+  --color-cream: #FAFAF8;
+  --color-stone: #ECEAE7;
+  --color-slate: #6B7280;
+
+  /* Typography - Georgia for that refined feel */
+  --font-heading: Georgia, 'Times New Roman', serif;
+  --font-body: Georgia, 'Times New Roman', serif;
+
+  /* Spacing */
+  --spacing-section: 5rem;
+  --spacing-section-sm: 3rem;
+}
+
+/* Base Styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--color-ivory);
+    background-color: var(--color-charcoal);
+    line-height: 1.7;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    line-height: 1.3;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  h3 {
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  }
+}
+
+/* Utility Classes */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .section-padding {
+    padding-top: var(--spacing-section);
+    padding-bottom: var(--spacing-section);
+  }
+
+  @media (max-width: 768px) {
+    .section-padding {
+      padding-top: var(--spacing-section-sm);
+      padding-bottom: var(--spacing-section-sm);
+    }
+  }
+
+  /* Greenwich typography utilities */
+  .section-label {
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--color-brass);
+    font-weight: 400;
+  }
+
+  .section-title {
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-brass);
+    font-weight: 400;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-charcoal-border);
+    margin-bottom: 2rem;
+  }
+
+  .card {
+    background-color: var(--color-charcoal-light);
+    border: 1px solid var(--color-charcoal-border);
+    padding: 2rem;
+  }
+
+  .card-title {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-brass);
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+  }
+
+  .body-text {
+    color: rgba(250, 250, 248, 0.7);
+    line-height: 1.7;
+  }
+
+  .subtle-text {
+    color: rgba(250, 250, 248, 0.5);
+  }
+
+  /* Carousel animations */
+  .animate-scroll {
+    animation: scroll 30s linear infinite;
+  }
+
+  .animate-scroll-reverse {
+    animation: scroll-reverse 35s linear infinite;
+  }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes scroll-reverse {
+    0% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  .carousel-track:hover,
+  .carousel-track-reverse:hover {
+    animation-play-state: paused;
+  }
+}

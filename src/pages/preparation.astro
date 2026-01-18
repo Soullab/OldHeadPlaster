@@ -1,0 +1,454 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const carouselImages = [
+  { src: '/images/Website/20241024_135059.jpg', alt: 'Microcement bathroom with calacatta marble' },
+  { src: '/images/Website/20220311_162443.jpg', alt: 'Fireplace with crown molding transition' },
+  { src: '/images/Website/20241011_173659~4.jpg', alt: 'Marbled plaster close-up' },
+  { src: '/images/Website/20220124_163453.jpg', alt: 'Dark venetian with depth' },
+  { src: '/images/Website/20200910_093606~2.jpg', alt: 'Metallic patina texture' },
+  { src: '/images/Website/20221012_132132.jpg', alt: 'Gray plaster room with oval window' },
+  { src: '/images/Website/20220309_151608.jpg', alt: 'Tadelakt bathroom seamless finish' },
+  { src: '/images/Website/20240913_170334.jpg', alt: 'Shower niches with perfect corners' },
+];
+
+const substrates = [
+  {
+    id: 'new-drywall',
+    name: 'New Drywall',
+    requirement: 'Level 5 Finish',
+    description: 'Standard drywall joints and texture are visible through decorative plaster. Level 5 skim coating creates the uniform surface these finishes demand.',
+    considerations: [
+      'Must be primed and fully cured',
+      'All joints taped and mudded to Level 5',
+      'No texture — smooth finish only',
+      'Minimum 2 weeks cure time after final coat'
+    ],
+    prepLevel: 'Standard'
+  },
+  {
+    id: 'existing-plaster',
+    name: 'Existing Plaster',
+    requirement: 'Condition Assessment',
+    description: 'Historic plaster can be an excellent substrate — or a liability. The difference is condition. Loose, cracked, or hollow plaster must be addressed before any decorative work begins.',
+    considerations: [
+      'Sounding test for delamination',
+      'Crack evaluation: structural vs. surface',
+      'Lead paint testing for pre-1978 surfaces',
+      'Adhesion testing in multiple locations'
+    ],
+    prepLevel: 'Variable'
+  },
+  {
+    id: 'painted-surfaces',
+    name: 'Painted Surfaces',
+    requirement: 'Adhesion Protocol',
+    description: 'What lives under the paint determines everything. Glossy finishes, multiple paint layers, or failing coatings must be removed or treated for proper adhesion.',
+    considerations: [
+      'Gloss paints require full removal or aggressive sanding',
+      'Lead testing mandatory for older homes',
+      'Delaminating paint must be scraped to stable substrate',
+      'Oil-based paints require special bonding agents'
+    ],
+    prepLevel: 'Moderate to Extensive'
+  },
+  {
+    id: 'concrete-masonry',
+    name: 'Concrete & Masonry',
+    requirement: 'Moisture Management',
+    description: 'Concrete and block absorb and release moisture. Without proper sealing and bonding, decorative plaster will fail. This substrate requires the most rigorous preparation.',
+    considerations: [
+      'Moisture testing before any work',
+      'Efflorescence treatment if present',
+      'Bonding agent application',
+      'Often requires base coat system'
+    ],
+    prepLevel: 'Extensive'
+  }
+];
+
+const baseCoats = [
+  {
+    name: 'Standard Base Coat',
+    description: 'A preparatory layer that creates uniform suction and provides a stable foundation for decorative finishes. Appropriate for substrates in good condition.',
+    when: [
+      'Level 5 drywall in good condition',
+      'Sound existing plaster',
+      'Properly prepared painted surfaces',
+      'Single-room projects'
+    ],
+    characteristics: [
+      'Applied in 1-2 coats',
+      '24-48 hour cure between coats',
+      'Creates uniform surface texture',
+      'Standard preparation included in most estimates'
+    ]
+  },
+  {
+    name: 'Imperial Base Coat',
+    description: 'A reinforced, multi-layer base system for challenging substrates. Uses fiber mesh, specialized bonding agents, and extended cure times to ensure long-term performance.',
+    when: [
+      'Substrates with movement or hairline cracks',
+      'Concrete or masonry walls',
+      'Historic plaster being overlaid',
+      'High-humidity environments',
+      'Projects requiring warranty on substrate performance'
+    ],
+    characteristics: [
+      'Applied in 3+ coats with fiber reinforcement',
+      'Full cure time: 5-7 days',
+      'Addresses substrate deficiencies',
+      'Additional cost — quoted separately based on conditions'
+    ]
+  }
+];
+
+const challenges = [
+  {
+    name: 'Moisture Issues',
+    description: 'Active moisture destroys decorative plaster. Source must be identified and resolved before any work begins.',
+    action: 'Moisture testing required. Remediation by others before plastering.'
+  },
+  {
+    name: 'Movement Cracks',
+    description: 'Cracks that return after repair indicate structural movement. Decorative plaster will crack in the same locations.',
+    action: 'Assessment required. May need fiber-reinforced base coat or crack isolation membrane.'
+  },
+  {
+    name: 'Wallpaper Removal',
+    description: 'Adhesive residue and damaged paper facing affect plaster adhesion. Complete removal and surface restoration required.',
+    action: 'Full stripping to stable substrate. Often requires skim coat before decorative work.'
+  },
+  {
+    name: 'Lead Paint',
+    description: 'Pre-1978 surfaces may contain lead. Disturbance creates hazardous dust. We are EPA Lead-Safe Certified.',
+    action: 'Testing required. Lead-safe work practices add time and cost. Non-negotiable.'
+  },
+  {
+    name: 'Textured Surfaces',
+    description: 'Knockdown, orange peel, and popcorn textures must be fully removed. Decorative plaster cannot hide underlying texture.',
+    action: 'Complete texture removal and skim coating to Level 5.'
+  }
+];
+---
+
+<Layout title="Preparation" description="Wall preparation and base coat requirements for decorative plaster. Understanding substrates, base coats, and the conditions that determine project success.">
+  <!-- Hero -->
+  <section class="relative py-24 md:py-32 bg-stone overflow-hidden">
+    <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E');"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-12 h-px bg-bronze"></div>
+        <p class="text-bronze text-sm tracking-[0.2em] uppercase font-medium">Before the Finish</p>
+      </div>
+      <h1 class="text-charcoal mb-6">Wall Preparation</h1>
+      <p class="text-charcoal/70 text-lg max-w-2xl leading-relaxed">
+        What lives under the paint determines the success of decorative plaster. Substrate condition is why estimates vary — and why proper preparation is non-negotiable.
+      </p>
+    </div>
+  </section>
+
+  <!-- Image Carousel -->
+  <div class="bg-charcoal py-4 overflow-hidden border-t border-charcoal-border">
+    <div class="carousel-track flex gap-4 animate-scroll">
+      {[...carouselImages, ...carouselImages].map((img) => (
+        <div class="flex-shrink-0 w-72 h-48 overflow-hidden">
+          <img
+            src={img.src}
+            alt={img.alt}
+            class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+            loading="lazy"
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Key Principle -->
+  <section class="py-12 bg-charcoal">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="max-w-3xl">
+        <p class="text-cream/80 text-lg leading-relaxed">
+          Decorative plaster reveals everything beneath it. Imperfections, texture variations, substrate failures — they all telegraph through the finish. This is why we assess substrate condition before quoting, and why preparation costs vary significantly between projects.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Substrate Types -->
+  <section class="py-20 bg-cream">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-8 h-px bg-bronze"></div>
+        <p class="text-bronze text-sm tracking-[0.2em] uppercase font-medium">Substrate Assessment</p>
+      </div>
+      <h2 class="text-charcoal mb-4">Know Your Walls</h2>
+      <p class="text-charcoal/60 mb-12 max-w-2xl">
+        Each substrate type has specific requirements. These cannot be shortcut.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {substrates.map((substrate) => (
+          <div class="bg-stone p-8">
+            <div class="flex items-start justify-between mb-4">
+              <h3 class="text-charcoal text-xl">{substrate.name}</h3>
+              <span class="text-xs tracking-[0.15em] uppercase text-bronze bg-bronze/10 px-3 py-1">
+                {substrate.prepLevel}
+              </span>
+            </div>
+            <p class="text-sm text-bronze mb-4 tracking-wide">{substrate.requirement}</p>
+            <p class="text-charcoal/60 mb-6 leading-relaxed">{substrate.description}</p>
+            <ul class="space-y-2">
+              {substrate.considerations.map((item) => (
+                <li class="flex items-start gap-3 text-charcoal/50 text-sm">
+                  <span class="text-bronze mt-1">—</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Base Coats -->
+  <section class="py-20 bg-stone">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-8 h-px bg-bronze"></div>
+        <p class="text-bronze text-sm tracking-[0.2em] uppercase font-medium">Foundation Systems</p>
+      </div>
+      <h2 class="text-charcoal mb-4">Base Coat Options</h2>
+      <p class="text-charcoal/60 mb-12 max-w-2xl">
+        The base coat bridges substrate and finish. The right system depends on what we find.
+      </p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        {baseCoats.map((coat, index) => (
+          <div class:list={[
+            'relative',
+            index === 1 ? 'lg:border-l lg:border-charcoal/10 lg:pl-12' : ''
+          ]}>
+            <h3 class="text-charcoal text-2xl mb-4">{coat.name}</h3>
+            <p class="text-charcoal/60 mb-8 leading-relaxed">{coat.description}</p>
+
+            <div class="mb-8">
+              <h4 class="text-sm font-medium text-charcoal mb-4 tracking-wide uppercase">When Required</h4>
+              <ul class="space-y-2">
+                {coat.when.map((item) => (
+                  <li class="flex items-start gap-3 text-charcoal/60">
+                    <svg class="w-4 h-4 text-bronze flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="bg-cream/50 p-6">
+              <h4 class="text-sm font-medium text-charcoal mb-4 tracking-wide uppercase">Characteristics</h4>
+              <ul class="space-y-2">
+                {coat.characteristics.map((item) => (
+                  <li class="flex items-start gap-3 text-charcoal/50 text-sm">
+                    <span class="text-bronze">—</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Common Challenges -->
+  <section class="py-20 bg-cream">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-8 h-px bg-bronze"></div>
+        <p class="text-bronze text-sm tracking-[0.2em] uppercase font-medium">Problem Conditions</p>
+      </div>
+      <h2 class="text-charcoal mb-4">Common Challenges</h2>
+      <p class="text-charcoal/60 mb-12 max-w-2xl">
+        These conditions affect every estimate. Some can be addressed. Some must be resolved by others first.
+      </p>
+
+      <div class="space-y-6">
+        {challenges.map((challenge) => (
+          <div class="bg-stone p-6 md:p-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+              <div class="md:col-span-3">
+                <h3 class="text-charcoal font-medium">{challenge.name}</h3>
+              </div>
+              <div class="md:col-span-5">
+                <p class="text-charcoal/60 leading-relaxed">{challenge.description}</p>
+              </div>
+              <div class="md:col-span-4">
+                <p class="text-sm text-charcoal/70 bg-cream/50 p-4">
+                  <span class="text-bronze font-medium">Action:</span> {challenge.action}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- New vs Renovation -->
+  <section class="py-20 bg-charcoal relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E');"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-8 h-px bg-bronze/60"></div>
+        <p class="text-bronze text-sm tracking-[0.2em] uppercase font-medium">Project Context</p>
+        <div class="w-8 h-px bg-bronze/60"></div>
+      </div>
+      <h2 class="text-cream text-center mb-12">New Construction vs. Renovation</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+          <h3 class="text-cream text-xl mb-6 pb-4 border-b border-cream/10">New Construction</h3>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-4 text-cream/60">
+              <span class="text-bronze text-lg">01</span>
+              <div>
+                <p class="text-cream/80 mb-1">Coordinate with drywall contractor</p>
+                <p class="text-sm text-cream/40">Level 5 finish must be specified in advance</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-4 text-cream/60">
+              <span class="text-bronze text-lg">02</span>
+              <div>
+                <p class="text-cream/80 mb-1">Schedule after mechanical rough-in</p>
+                <p class="text-sm text-cream/40">HVAC, electrical, and plumbing complete</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-4 text-cream/60">
+              <span class="text-bronze text-lg">03</span>
+              <div>
+                <p class="text-cream/80 mb-1">Allow cure time before other finishes</p>
+                <p class="text-sm text-cream/40">Plaster must cure before cabinetry, trim, flooring</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-4 text-cream/60">
+              <span class="text-bronze text-lg">04</span>
+              <div>
+                <p class="text-cream/80 mb-1">Climate control required</p>
+                <p class="text-sm text-cream/40">Consistent temperature and humidity during application</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-cream text-xl mb-6 pb-4 border-b border-cream/10">Renovation</h3>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-4 text-cream/60">
+              <span class="text-bronze text-lg">01</span>
+              <div>
+                <p class="text-cream/80 mb-1">Site visit required before quote</p>
+                <p class="text-sm text-cream/40">Substrate condition determines scope</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-4 text-cream/60">
+              <span class="text-bronze text-lg">02</span>
+              <div>
+                <p class="text-cream/80 mb-1">Unknowns revealed during prep</p>
+                <p class="text-sm text-cream/40">Estimates may adjust based on what we find</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-4 text-cream/60">
+              <span class="text-bronze text-lg">03</span>
+              <div>
+                <p class="text-cream/80 mb-1">Protection of existing finishes</p>
+                <p class="text-sm text-cream/40">Floors, trim, and adjacent surfaces masked</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-4 text-cream/60">
+              <span class="text-bronze text-lg">04</span>
+              <div>
+                <p class="text-cream/80 mb-1">Lead testing for pre-1978 homes</p>
+                <p class="text-sm text-cream/40">Required before any surface disturbance</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Photo Gallery Placeholder -->
+  <section class="py-20 bg-stone">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-8 h-px bg-bronze"></div>
+        <p class="text-bronze text-sm tracking-[0.2em] uppercase font-medium">Documentation</p>
+      </div>
+      <h2 class="text-charcoal mb-4">Preparation in Practice</h2>
+      <p class="text-charcoal/60 mb-12 max-w-2xl">
+        Every project is documented. These images show the reality of substrate preparation — the work that happens before the finish.
+      </p>
+
+      <!-- Photo grid placeholder - will be replaced with PhotoGallery component -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="aspect-square bg-charcoal/10 flex items-center justify-center">
+          <span class="text-charcoal/30 text-sm">Substrate Assessment</span>
+        </div>
+        <div class="aspect-square bg-charcoal/10 flex items-center justify-center">
+          <span class="text-charcoal/30 text-sm">Base Coat Application</span>
+        </div>
+        <div class="aspect-square bg-charcoal/10 flex items-center justify-center">
+          <span class="text-charcoal/30 text-sm">Problem Remediation</span>
+        </div>
+        <div class="aspect-square bg-charcoal/10 flex items-center justify-center">
+          <span class="text-charcoal/30 text-sm">Ready for Finish</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 bg-cream relative">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-16 bg-gradient-to-b from-stone to-transparent"></div>
+
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h2 class="text-charcoal mb-4">Questions About Your Walls?</h2>
+      <p class="text-charcoal/60 mb-10 max-w-xl mx-auto leading-relaxed">
+        Substrate condition is best assessed in person. Schedule a consultation and we'll evaluate what your walls need.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/contact"
+          class="group relative inline-block px-10 py-5 bg-charcoal text-cream font-medium tracking-[0.1em] uppercase text-sm overflow-hidden transition-all duration-500 hover:shadow-[0_8px_30px_rgba(45,42,38,0.3)]"
+        >
+          <span class="relative z-10 flex items-center justify-center gap-3">
+            Schedule Assessment
+            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </span>
+          <div class="absolute inset-0 bg-bronze transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+        </a>
+
+        <a
+          href="/investment"
+          class="group inline-block px-10 py-5 border border-charcoal/30 text-charcoal tracking-[0.1em] uppercase text-sm hover:bg-charcoal hover:text-cream transition-all duration-300"
+        >
+          <span class="flex items-center justify-center gap-3">
+            View Investment Guide
+            <svg class="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

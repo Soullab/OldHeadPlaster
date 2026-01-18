@@ -1,0 +1,171 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+
+const documents = [
+  { id: '1', name: 'Finish Specifications.pdf', project: 'Greenwich Estate', type: 'spec', size: '2.4 MB', uploadedBy: 'Daragh', date: 'Dec 15, 2024', shared: ['All Team'] },
+  { id: '2', name: 'Sample Board Photos.zip', project: 'Greenwich Estate', type: 'photo', size: '45 MB', uploadedBy: 'Daragh', date: 'Jan 5, 2025', shared: ['Lisa Harrison', 'Sarah Chen'] },
+  { id: '3', name: 'Lighting Recommendations.pdf', project: 'Greenwich Estate', type: 'spec', size: '1.2 MB', uploadedBy: 'Sarah Chen', date: 'Dec 20, 2024', shared: ['All Team'] },
+  { id: '4', name: 'Master Suite Progress - Jan 17.jpg', project: 'Greenwich Estate', type: 'photo', size: '3.8 MB', uploadedBy: 'Daragh', date: 'Jan 17, 2025', shared: ['All Team'] },
+  { id: '5', name: 'Westport Samples.zip', project: 'Westport Modern', type: 'photo', size: '28 MB', uploadedBy: 'Daragh', date: 'Jan 10, 2025', shared: ['David Chen', 'James Wong'] },
+  { id: '6', name: 'Microcement Specs.pdf', project: 'Westport Modern', type: 'spec', size: '1.8 MB', uploadedBy: 'Daragh', date: 'Jan 8, 2025', shared: ['James Wong'] },
+  { id: '7', name: 'Historic Preservation Guidelines.pdf', project: 'Darien Historic', type: 'spec', size: '5.2 MB', uploadedBy: 'Robert Mills', date: 'Jan 12, 2025', shared: ['All Team'] },
+  { id: '8', name: 'Original Plaster Analysis.pdf', project: 'Darien Historic', type: 'report', size: '3.1 MB', uploadedBy: 'Daragh', date: 'Jan 15, 2025', shared: ['Patricia Wright', 'Robert Mills'] }
+];
+
+const typeIcons = {
+  spec: { icon: '📄', color: 'bg-blue-500/20 text-blue-400' },
+  photo: { icon: '📷', color: 'bg-purple-500/20 text-purple-400' },
+  report: { icon: '📊', color: 'bg-emerald-500/20 text-emerald-400' },
+  contract: { icon: '📝', color: 'bg-amber-500/20 text-amber-400' }
+};
+---
+
+<AdminLayout title="Documents" currentPage="documents">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-8">
+    <div class="flex items-center gap-4">
+      <div class="relative">
+        <input
+          type="search"
+          placeholder="Search documents..."
+          class="w-64 bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 pl-10 text-sm text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50"
+        />
+        <svg class="w-4 h-4 text-cream/40 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+
+      <select class="bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-sm text-cream/70 focus:outline-none focus:border-brass/50">
+        <option value="all">All Projects</option>
+        <option value="greenwich-estate">Greenwich Estate</option>
+        <option value="westport-modern">Westport Modern</option>
+        <option value="darien-historic">Darien Historic</option>
+      </select>
+
+      <select class="bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-sm text-cream/70 focus:outline-none focus:border-brass/50">
+        <option value="all">All Types</option>
+        <option value="spec">Specifications</option>
+        <option value="photo">Photos</option>
+        <option value="report">Reports</option>
+        <option value="contract">Contracts</option>
+      </select>
+    </div>
+
+    <button class="flex items-center gap-2 px-4 py-2 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+      </svg>
+      Upload
+    </button>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid grid-cols-4 gap-4 mb-8">
+    <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-4 text-center">
+      <div class="text-2xl font-semibold text-cream">8</div>
+      <div class="text-sm text-cream/50">Total Files</div>
+    </div>
+    <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-4 text-center">
+      <div class="text-2xl font-semibold text-blue-400">4</div>
+      <div class="text-sm text-cream/50">Specifications</div>
+    </div>
+    <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-4 text-center">
+      <div class="text-2xl font-semibold text-purple-400">3</div>
+      <div class="text-sm text-cream/50">Photos</div>
+    </div>
+    <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-4 text-center">
+      <div class="text-2xl font-semibold text-emerald-400">1</div>
+      <div class="text-sm text-cream/50">Reports</div>
+    </div>
+  </div>
+
+  <!-- Drop Zone -->
+  <div class="mb-8 border-2 border-dashed border-charcoal-border rounded-xl p-8 text-center hover:border-brass/30 transition-colors cursor-pointer bg-charcoal-light/50">
+    <svg class="w-12 h-12 text-cream/20 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+    </svg>
+    <p class="text-cream/50 mb-1">Drag and drop files here, or click to browse</p>
+    <p class="text-sm text-cream/30">Support for PDF, images, and ZIP files up to 100MB</p>
+  </div>
+
+  <!-- Documents Grid -->
+  <div class="bg-charcoal-light border border-charcoal-border rounded-lg overflow-hidden">
+    <table class="w-full">
+      <thead>
+        <tr class="border-b border-charcoal-border">
+          <th class="text-left text-xs text-cream/40 font-medium uppercase tracking-wider px-6 py-4">Document</th>
+          <th class="text-left text-xs text-cream/40 font-medium uppercase tracking-wider px-6 py-4">Project</th>
+          <th class="text-left text-xs text-cream/40 font-medium uppercase tracking-wider px-6 py-4">Shared With</th>
+          <th class="text-left text-xs text-cream/40 font-medium uppercase tracking-wider px-6 py-4">Uploaded</th>
+          <th class="text-right text-xs text-cream/40 font-medium uppercase tracking-wider px-6 py-4">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-charcoal-border">
+        {documents.map((doc) => {
+          const typeInfo = typeIcons[doc.type] || typeIcons.spec;
+          return (
+            <tr class="hover:bg-charcoal-border/30 transition-colors">
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-4">
+                  <div class={`w-10 h-10 rounded-lg flex items-center justify-center ${typeInfo.color}`}>
+                    <span class="text-lg">{typeInfo.icon}</span>
+                  </div>
+                  <div>
+                    <div class="text-cream font-medium">{doc.name}</div>
+                    <div class="text-sm text-cream/50">{doc.size}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <a href={`/admin/projects/${doc.project.toLowerCase().replace(' ', '-')}`} class="text-sm text-brass hover:text-brass-light transition-colors">
+                  {doc.project}
+                </a>
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex flex-wrap gap-1">
+                  {doc.shared.map((person) => (
+                    <span class="text-xs px-2 py-0.5 bg-charcoal rounded text-cream/50">
+                      {person}
+                    </span>
+                  ))}
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="text-sm text-cream/70">{doc.date}</div>
+                <div class="text-xs text-cream/40">by {doc.uploadedBy}</div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex items-center justify-end gap-1">
+                  <button
+                    class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal rounded-lg transition-colors"
+                    title="Download"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                  </button>
+                  <button
+                    class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal rounded-lg transition-colors"
+                    title="Share"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                  </button>
+                  <button
+                    class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal rounded-lg transition-colors"
+                    title="Delete"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+</AdminLayout>

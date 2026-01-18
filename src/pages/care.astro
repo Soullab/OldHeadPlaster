@@ -1,0 +1,284 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const carouselImages = [
+  { src: '/images/Website/20241024_135059.jpg', alt: 'Microcement bathroom with calacatta marble' },
+  { src: '/images/Website/20220311_162443.jpg', alt: 'Fireplace with crown molding transition' },
+  { src: '/images/Website/20241011_173659~4.jpg', alt: 'Marbled plaster close-up' },
+  { src: '/images/Website/20220124_163453.jpg', alt: 'Dark venetian with depth' },
+  { src: '/images/Website/20200910_093606~2.jpg', alt: 'Metallic patina texture' },
+  { src: '/images/Website/20221012_132132.jpg', alt: 'Gray plaster room with oval window' },
+  { src: '/images/Website/20220309_151608.jpg', alt: 'Tadelakt bathroom seamless finish' },
+  { src: '/images/Website/20240913_170334.jpg', alt: 'Shower niches with perfect corners' },
+];
+
+const finishCare = [
+  {
+    name: 'Venetian Plaster',
+    finishes: ['Mayo Pearl', 'Louisburgh Silk', 'Stone Whisper'],
+    daily: 'Dust with soft, dry cloth as needed. Light marks often buff out with gentle pressure.',
+    cleaning: 'Dampen a soft cloth with plain water. Wipe gently. Never use harsh chemicals, abrasives, or acidic cleaners.',
+    longterm: 'Polished finishes can be re-waxed every 3-5 years to refresh sheen. Matte finishes require no treatment.',
+    note: 'Lime-based plaster is naturally alkaline and antimicrobial. Minor scuffs often "heal" as the lime continues to carbonate.'
+  },
+  {
+    name: 'Limewash',
+    finishes: ['Sea Mist'],
+    daily: 'No regular maintenance required. The finish naturally resists dust and mold.',
+    cleaning: 'Spot clean with a damp cloth. For marks, lightly dampen with lime water and allow to dry.',
+    longterm: 'Can be refreshed with an additional thin coat every 5-10 years if desired. The finish improves with age.',
+    note: 'Limewash is a living finish — it breathes, regulates humidity, and develops character over time. This is a feature, not a flaw.'
+  },
+  {
+    name: 'Marmorino',
+    finishes: ['Carrara Veil'],
+    daily: 'Wipe with dry or slightly damp cloth.',
+    cleaning: 'Clean with damp cloth and mild soap if needed. Rinse with clean water.',
+    longterm: 'Can be sealed for additional protection in high-use areas. Touch-ups blend seamlessly.',
+    note: 'More forgiving than polished Venetian. The stone-like surface is naturally durable.'
+  },
+  {
+    name: 'Microcement',
+    finishes: ['Harbor Concrete'],
+    daily: 'Sweep or vacuum floors. Wipe surfaces with damp cloth.',
+    cleaning: 'Clean with pH-neutral soap and water. Avoid acidic cleaners (vinegar, citrus).',
+    longterm: 'Reseal every 2-3 years in wet areas, 3-5 years in dry areas. We provide touch-up service.',
+    note: 'Microcement is sealed with a protective topcoat. The sealer does the work — the material underneath is protected.'
+  },
+  {
+    name: 'Tadelakt',
+    finishes: ['Moroccan Seal'],
+    daily: 'Rinse with water after use in wet areas. Wipe dry to prevent water spots.',
+    cleaning: 'Clean with damp cloth. Avoid abrasives. The olive oil soap burnish can be refreshed periodically.',
+    longterm: 'Re-burnish with olive oil soap annually in wet areas to maintain water resistance.',
+    note: 'Traditional tadelakt is waterproof through compression and olive oil soap, not synthetic sealers. It requires slightly more attention than sealed finishes.'
+  }
+];
+
+const faqs = [
+  {
+    question: 'How long will decorative plaster last?',
+    answer: 'Properly applied and maintained, decorative plaster lasts indefinitely. We have projects from our first years still looking beautiful. The key is correct substrate preparation and appropriate finish selection for the environment.'
+  },
+  {
+    question: 'Can decorative plaster be repaired if damaged?',
+    answer: 'Yes. Most damage can be repaired seamlessly by a skilled applicator. We offer touch-up service for all our installations and can address chips, cracks, or wear.'
+  },
+  {
+    question: 'Is decorative plaster suitable for high-humidity areas?',
+    answer: 'It depends on the finish. Microcement and Tadelakt are designed for wet areas. Lime-based finishes actually benefit from some humidity — they breathe and regulate moisture. However, direct water contact on unsealed Venetian plaster is not recommended.'
+  },
+  {
+    question: 'What about children and pets?',
+    answer: 'Our finishes are durable and many are more forgiving than painted walls. Microcement in particular is extremely resilient. For homes with active families, we recommend matte or satin finishes that hide minor imperfections better than high-polish surfaces.'
+  },
+  {
+    question: 'Are your finishes safe? What about VOCs?',
+    answer: 'Our lime-based plasters are made from natural materials: slaked lime, marble dust, and natural pigments. They\'re naturally low-VOC and continue to absorb CO2 as they cure. Microcement contains Portland cement and requires sealing, but we use low-VOC sealers. We\'re happy to discuss specific material choices for chemically sensitive clients.'
+  },
+  {
+    question: 'How do I clean marks off my walls?',
+    answer: 'For most marks: dampen a soft cloth with plain water and wipe gently. For stubborn marks on sealed surfaces (microcement): use mild soap and water. Never use abrasive cleaners, magic erasers, or acidic products on any decorative plaster.'
+  }
+];
+---
+
+<Layout title="Care & Longevity" description="How to care for your decorative plaster finish. Maintenance guides for Venetian plaster, limewash, microcement, and more. We stand behind our work.">
+  <!-- Hero -->
+  <section class="relative py-24 md:py-32 bg-charcoal overflow-hidden">
+    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E');"></div>
+
+    <div class="relative max-w-4xl mx-auto px-6 text-center">
+      <div class="flex items-center justify-center gap-4 mb-6">
+        <div class="w-12 h-px bg-bronze"></div>
+        <p class="text-bronze text-sm tracking-[0.25em] uppercase font-medium">Care & Longevity</p>
+        <div class="w-12 h-px bg-bronze"></div>
+      </div>
+
+      <h1 class="text-cream mb-6">Your Finish, For Decades</h1>
+
+      <p class="text-cream/70 text-xl leading-relaxed max-w-2xl mx-auto">
+        Decorative plaster isn't paint — it's a permanent material that improves with age. Here's how to protect your investment and keep it looking beautiful for years to come.
+      </p>
+    </div>
+  </section>
+
+  <!-- Image Carousel -->
+  <div class="bg-charcoal py-4 overflow-hidden">
+    <div class="carousel-track flex gap-4 animate-scroll">
+      {[...carouselImages, ...carouselImages].map((img) => (
+        <div class="flex-shrink-0 w-72 h-48 overflow-hidden">
+          <img
+            src={img.src}
+            alt={img.alt}
+            class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+            loading="lazy"
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Promise -->
+  <section class="py-12 bg-bronze">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <p class="text-charcoal text-lg font-heading">
+        We stand behind every installation. If you have questions about care or need touch-up service, we're here.
+      </p>
+    </div>
+  </section>
+
+  <!-- Care by Finish Type -->
+  <section class="py-20 bg-cream">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-charcoal mb-4">Care by Finish Type</h2>
+        <p class="text-charcoal/60 max-w-xl mx-auto">
+          Each finish has its own characteristics. Find your finish below for specific guidance.
+        </p>
+      </div>
+
+      <div class="space-y-8">
+        {finishCare.map((category) => (
+          <div class="bg-stone/30 border border-stone/50 overflow-hidden">
+            <div class="bg-charcoal px-6 py-4 flex items-center justify-between">
+              <div>
+                <h3 class="text-cream text-xl font-heading">{category.name}</h3>
+                <p class="text-cream/50 text-sm">{category.finishes.join(' / ')}</p>
+              </div>
+            </div>
+
+            <div class="p-6 md:p-8">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
+                <div>
+                  <h4 class="text-sm tracking-[0.15em] uppercase text-charcoal/50 mb-3">Daily Care</h4>
+                  <p class="text-charcoal/70">{category.daily}</p>
+                </div>
+                <div>
+                  <h4 class="text-sm tracking-[0.15em] uppercase text-charcoal/50 mb-3">Cleaning</h4>
+                  <p class="text-charcoal/70">{category.cleaning}</p>
+                </div>
+                <div>
+                  <h4 class="text-sm tracking-[0.15em] uppercase text-charcoal/50 mb-3">Long-Term</h4>
+                  <p class="text-charcoal/70">{category.longterm}</p>
+                </div>
+              </div>
+
+              <div class="pt-6 border-t border-stone/50">
+                <p class="text-charcoal/60 text-sm italic">
+                  <strong class="text-charcoal not-italic">Note:</strong> {category.note}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Universal Rules -->
+  <section class="py-20 bg-stone relative overflow-hidden">
+    <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E');"></div>
+
+    <div class="relative max-w-4xl mx-auto px-6">
+      <h2 class="text-charcoal text-center mb-12">The Golden Rules</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Do -->
+        <div class="bg-cream p-8 border border-stone/50">
+          <h3 class="text-lg font-heading text-charcoal mb-6 flex items-center gap-3">
+            <svg class="w-6 h-6 text-bronze" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Always
+          </h3>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3 text-charcoal/70">
+              <div class="w-1.5 h-1.5 rounded-full bg-bronze mt-2"></div>
+              Use soft, lint-free cloths
+            </li>
+            <li class="flex items-start gap-3 text-charcoal/70">
+              <div class="w-1.5 h-1.5 rounded-full bg-bronze mt-2"></div>
+              Test cleaning methods in an inconspicuous area first
+            </li>
+            <li class="flex items-start gap-3 text-charcoal/70">
+              <div class="w-1.5 h-1.5 rounded-full bg-bronze mt-2"></div>
+              Wipe up spills promptly
+            </li>
+            <li class="flex items-start gap-3 text-charcoal/70">
+              <div class="w-1.5 h-1.5 rounded-full bg-bronze mt-2"></div>
+              Contact us if you're unsure
+            </li>
+          </ul>
+        </div>
+
+        <!-- Don't -->
+        <div class="bg-cream p-8 border border-stone/50">
+          <h3 class="text-lg font-heading text-charcoal mb-6 flex items-center gap-3">
+            <svg class="w-6 h-6 text-charcoal/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Never
+          </h3>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3 text-charcoal/70">
+              <div class="w-1.5 h-1.5 rounded-full bg-charcoal/30 mt-2"></div>
+              Use abrasive cleaners or scrub pads
+            </li>
+            <li class="flex items-start gap-3 text-charcoal/70">
+              <div class="w-1.5 h-1.5 rounded-full bg-charcoal/30 mt-2"></div>
+              Use acidic products (vinegar, citrus cleaners)
+            </li>
+            <li class="flex items-start gap-3 text-charcoal/70">
+              <div class="w-1.5 h-1.5 rounded-full bg-charcoal/30 mt-2"></div>
+              Use "magic erasers" or melamine foam
+            </li>
+            <li class="flex items-start gap-3 text-charcoal/70">
+              <div class="w-1.5 h-1.5 rounded-full bg-charcoal/30 mt-2"></div>
+              Attempt repairs without consulting us
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-20 bg-cream">
+    <div class="max-w-4xl mx-auto px-6">
+      <h2 class="text-charcoal text-center mb-12">Common Questions</h2>
+
+      <div class="space-y-6">
+        {faqs.map((faq) => (
+          <div class="border-b border-stone/50 pb-6">
+            <h3 class="text-lg font-heading text-charcoal mb-3">{faq.question}</h3>
+            <p class="text-charcoal/70 leading-relaxed">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Touch-Up Service -->
+  <section class="py-16 bg-charcoal">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h2 class="text-cream mb-4">Need Touch-Up or Repair?</h2>
+      <p class="text-cream/60 mb-8 max-w-xl mx-auto">
+        We provide touch-up service for all our installations. Whether it's a small chip from moving furniture or wear in a high-traffic area, we can restore your finish.
+      </p>
+
+      <a
+        href="/contact?type=repair"
+        class="group relative inline-block px-10 py-5 bg-bronze text-charcoal font-medium tracking-[0.1em] uppercase text-sm overflow-hidden transition-all duration-500 hover:shadow-[0_8px_30px_rgba(201,136,33,0.4)]"
+      >
+        <span class="relative z-10 flex items-center justify-center gap-3">
+          Request Touch-Up Service
+          <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </span>
+        <div class="absolute inset-0 bg-cream transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+      </a>
+    </div>
+  </section>
+</Layout>

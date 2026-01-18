@@ -1,0 +1,319 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const steps = [
+  {
+    num: '01',
+    title: 'Discovery',
+    subtitle: 'Understanding Light, Architecture & Intent',
+    description: 'Every project begins with a conversation — either on-site or at our Material Library. We walk through your space, noting light conditions, substrate realities, and your vision.',
+    deliverable: 'Project Direction Brief',
+    image: '/images/Website/20221006_155436.jpg',
+    details: [
+      '45–90 minute consultation',
+      'Lighting and substrate assessment',
+      'Style and finish preferences',
+      'Timeline and scope alignment'
+    ]
+  },
+  {
+    num: '02',
+    title: 'Concept',
+    subtitle: 'From Inspiration to Direction',
+    description: 'We distill your inspiration into 2–3 clear directions. No Pinterest chaos — just curated concepts with reference images, finish recommendations, and palette suggestions.',
+    deliverable: 'Concept Board',
+    image: '/images/Website/20200625_194628.jpg',
+    details: [
+      '2–3 curated design directions',
+      'Reference imagery and mood',
+      'Recommended finishes and sheens',
+      'Suggested color palette'
+    ]
+  },
+  {
+    num: '03',
+    title: 'Sampling',
+    subtitle: 'The Luxury of Certainty',
+    description: 'This is where we separate from the rest. Custom sample boards — each named, documented, and QR-coded — tested in your actual space, under your actual light.',
+    deliverable: 'Sample Kit & QR Library',
+    image: '/images/Website/20210731_193331.jpg',
+    details: [
+      'Full-scale sample boards',
+      'QR codes linking to specifications',
+      'Multiple lighting condition photos',
+      'Recommended pairings and applications'
+    ],
+    highlight: true
+  },
+  {
+    num: '04',
+    title: 'Specification',
+    subtitle: 'Locking the Decision',
+    description: 'Your approved finish is documented with precision: color codes, sheen levels, square footage, substrate prep requirements. No ambiguity. No surprises.',
+    deliverable: 'Finish Specification Sheet',
+    image: '/images/Website/20220209_103205.jpg',
+    details: [
+      'Final finish documentation',
+      'Room-by-room specifications',
+      'Substrate preparation plan',
+      'Protection and ventilation notes'
+    ]
+  },
+  {
+    num: '05',
+    title: 'Application',
+    subtitle: 'The Craft',
+    description: 'Impeccable execution with a calm client experience. Daily progress updates, photo documentation, and the patience each coat demands. We never rush.',
+    deliverable: 'Progress Documentation',
+    image: '/images/Website/20220909_134537.jpg',
+    details: [
+      'Site prep and substrate readiness',
+      'Daily progress rhythm',
+      'Photo updates for off-site clients',
+      'Detail finishing and edge perfection'
+    ]
+  },
+  {
+    num: '06',
+    title: 'Reveal',
+    subtitle: 'The Unveiling',
+    description: 'Final walkthrough in correct lighting. Touch-ups if needed. Care instructions for long-term beauty. Your finish is presented like the work of art it is.',
+    deliverable: 'Care Card & Guarantee',
+    image: '/images/Website/20230428_101918.jpg',
+    details: [
+      'Final inspection walkthrough',
+      'Touch-ups and refinements',
+      'Care and maintenance guide',
+      'Warranty documentation'
+    ]
+  }
+];
+
+// Best visual photos for carousel
+const carouselImages = [
+  { src: '/images/Website/20241024_135059.jpg', alt: 'Microcement bathroom with calacatta marble' },
+  { src: '/images/Website/20220311_162443.jpg', alt: 'Fireplace with crown molding transition' },
+  { src: '/images/Website/20241011_173659~4.jpg', alt: 'Marbled plaster close-up' },
+  { src: '/images/Website/20220124_163453.jpg', alt: 'Dark venetian with depth' },
+  { src: '/images/Website/20200910_093606~2.jpg', alt: 'Metallic patina texture' },
+  { src: '/images/Website/20221012_132132.jpg', alt: 'Gray plaster room with oval window' },
+  { src: '/images/Website/20220309_151608.jpg', alt: 'Tadelakt bathroom seamless finish' },
+  { src: '/images/Website/20240913_170334.jpg', alt: 'Shower niches with perfect corners' },
+];
+---
+
+<Layout title="The Process" description="The Old Head signature process: Discovery, Concept, Sampling, Specification, Application, and Reveal. Luxury certainty meets artisan flexibility.">
+  <!-- Hero -->
+  <section class="relative py-28 md:py-36 bg-charcoal overflow-hidden">
+    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E');"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6 text-center">
+      <div class="flex items-center justify-center gap-4 mb-6">
+        <div class="w-12 h-px bg-bronze"></div>
+        <p class="text-bronze text-sm tracking-[0.25em] uppercase font-medium">The Old Head Process</p>
+        <div class="w-12 h-px bg-bronze"></div>
+      </div>
+
+      <h1 class="text-cream mb-8">
+        Luxury Certainty.<br/>
+        <span class="text-bronze">Artisan Flexibility.</span>
+      </h1>
+
+      <p class="text-cream/60 text-xl max-w-2xl mx-auto leading-relaxed">
+        High-end clients don't want more options — they want confidence that the finish will be right, the process will be clean, and nothing will surprise them.
+      </p>
+    </div>
+  </section>
+
+  <!-- Hero Carousel -->
+  <div class="bg-charcoal py-4 overflow-hidden border-t border-charcoal-border">
+    <div class="carousel-track flex gap-4 animate-scroll">
+      {[...carouselImages, ...carouselImages].map((img) => (
+        <div class="flex-shrink-0 w-72 h-48 overflow-hidden">
+          <img
+            src={img.src}
+            alt={img.alt}
+            class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+            loading="lazy"
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Process Steps -->
+  {steps.map((step, index) => (
+    <section
+      class:list={[
+        'py-20 md:py-28 scroll-mt-20',
+        step.highlight ? 'bg-charcoal' : index % 2 === 0 ? 'bg-cream' : 'bg-stone'
+      ]}
+      id={step.title.toLowerCase()}
+    >
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <!-- Content -->
+          <div class:list={[index % 2 === 1 && !step.highlight ? 'lg:order-2' : '']}>
+            <div class="flex items-center gap-6 mb-6">
+              <span class:list={[
+                'text-6xl md:text-7xl font-heading',
+                step.highlight ? 'text-bronze' : 'text-bronze/30'
+              ]}>{step.num}</span>
+              <div>
+                <h2 class:list={[
+                  'text-3xl md:text-4xl font-heading mb-1',
+                  step.highlight ? 'text-cream' : 'text-charcoal'
+                ]}>{step.title}</h2>
+                <p class:list={[
+                  'text-sm tracking-[0.15em] uppercase',
+                  step.highlight ? 'text-bronze' : 'text-bronze'
+                ]}>{step.subtitle}</p>
+              </div>
+            </div>
+
+            <p class:list={[
+              'text-lg leading-relaxed mb-8',
+              step.highlight ? 'text-cream' : 'text-charcoal'
+            ]}>
+              {step.description}
+            </p>
+
+            <ul class="space-y-3 mb-8">
+              {step.details.map((detail) => (
+                <li class:list={[
+                  'flex items-start gap-3',
+                  step.highlight ? 'text-cream' : 'text-charcoal'
+                ]}>
+                  <svg class="w-5 h-5 text-bronze flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>{detail}</span>
+                </li>
+              ))}
+            </ul>
+
+            <!-- Deliverable -->
+            <div class:list={[
+              'inline-flex items-center gap-3 px-5 py-3',
+              step.highlight ? 'bg-cream/10' : 'bg-charcoal/5'
+            ]}>
+              <svg class:list={[
+                'w-5 h-5',
+                step.highlight ? 'text-bronze' : 'text-bronze'
+              ]} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span class:list={[
+                'text-sm tracking-wide',
+                step.highlight ? 'text-cream' : 'text-charcoal'
+              ]}>
+                <span class="font-medium">Deliverable:</span> {step.deliverable}
+              </span>
+            </div>
+          </div>
+
+          <!-- Visual -->
+          <div class:list={[
+            'aspect-square lg:aspect-[4/5] relative overflow-hidden group',
+            index % 2 === 1 && !step.highlight ? 'lg:order-1' : ''
+          ]}>
+            <img
+              src={step.image}
+              alt={`${step.title} - ${step.subtitle}`}
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class:list={[
+              'absolute inset-0',
+              step.highlight
+                ? 'bg-gradient-to-t from-charcoal/40 to-transparent'
+                : 'bg-gradient-to-t from-charcoal/20 to-transparent'
+            ]}></div>
+            <!-- Decorative frame -->
+            <div class:list={[
+              'absolute inset-6 border',
+              step.highlight ? 'border-cream/20' : 'border-charcoal/10'
+            ]}></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <!-- The Difference -->
+  <section class="py-20 bg-charcoal">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <div class="flex items-center justify-center gap-4 mb-4">
+          <div class="w-8 h-px bg-bronze"></div>
+          <p class="text-bronze text-sm tracking-[0.2em] uppercase font-medium">The Difference</p>
+          <div class="w-8 h-px bg-bronze"></div>
+        </div>
+        <h2 class="text-cream">Why This Matters</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div class="text-center">
+          <div class="w-16 h-16 border border-cream/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-7 h-7 text-bronze" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-heading text-cream mb-3">No Surprises</h3>
+          <p class="text-cream/80 leading-relaxed">
+            Every decision is documented before work begins. You know exactly what you're getting, in writing.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div class="w-16 h-16 border border-cream/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-7 h-7 text-bronze" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-heading text-cream mb-3">Protected Investment</h3>
+          <p class="text-cream/80 leading-relaxed">
+            Proper specification means no costly do-overs. The right finish is selected once, executed once, and lasts.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div class="w-16 h-16 border border-cream/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-7 h-7 text-bronze" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-heading text-cream mb-3">Portfolio-Quality Results</h3>
+          <p class="text-cream/80 leading-relaxed">
+            Every project is documented, refined, and completed to a standard we're proud to show. Your space becomes a reference.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="relative py-24 bg-charcoal overflow-hidden">
+    <div class="absolute inset-0 opacity-5" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E');"></div>
+
+    <div class="relative max-w-4xl mx-auto px-6 text-center">
+      <h2 class="text-cream mb-4">Ready to Begin?</h2>
+      <p class="text-cream/60 mb-10 max-w-xl mx-auto leading-relaxed">
+        It starts with a conversation. Tell us about your project and we'll schedule a discovery consultation.
+      </p>
+
+      <a
+        href="/contact"
+        class="group relative inline-block px-12 py-5 bg-bronze text-charcoal font-medium tracking-[0.1em] uppercase text-sm overflow-hidden transition-all duration-500 hover:shadow-[0_8px_30px_rgba(201,136,33,0.4)]"
+      >
+        <span class="relative z-10 flex items-center justify-center gap-3">
+          Inquire About Your Project
+          <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </span>
+        <div class="absolute inset-0 bg-cream transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+      </a>
+    </div>
+  </section>
+</Layout>

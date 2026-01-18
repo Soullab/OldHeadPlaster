@@ -1,0 +1,584 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Define all pages and their image slots
+const pages = [
+  {
+    id: 'homepage',
+    name: 'Homepage',
+    sections: [
+      { id: 'hero', name: 'Hero Image', description: 'Main hero background image', size: 'large' },
+      { id: 'about-intro', name: 'About Intro', description: 'Background for intro section', size: 'medium' },
+      { id: 'finish-1', name: 'Finish Card 1', description: 'Venetian Plaster sample', size: 'small' },
+      { id: 'finish-2', name: 'Finish Card 2', description: 'Microcement sample', size: 'small' },
+      { id: 'finish-3', name: 'Finish Card 3', description: 'Lime Wash sample', size: 'small' },
+      { id: 'carousel-1', name: 'Carousel 1', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-2', name: 'Carousel 2', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-3', name: 'Carousel 3', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-4', name: 'Carousel 4', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-5', name: 'Carousel 5', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-6', name: 'Carousel 6', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-7', name: 'Carousel 7', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-8', name: 'Carousel 8', description: 'Scrolling carousel image', size: 'small' },
+    ]
+  },
+  {
+    id: 'preparation',
+    name: 'Preparation Page',
+    sections: [
+      { id: 'hero', name: 'Hero Image', description: 'Preparation process hero', size: 'large' },
+      { id: 'why-prep', name: 'Why Prep Matters', description: 'Section background', size: 'medium' },
+      { id: 'risk-1', name: 'Substrate Risk 1', description: 'Cracking example', size: 'small' },
+      { id: 'risk-2', name: 'Substrate Risk 2', description: 'Delamination example', size: 'small' },
+      { id: 'risk-3', name: 'Substrate Risk 3', description: 'Staining example', size: 'small' },
+      { id: 'carousel-1', name: 'Carousel 1', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-2', name: 'Carousel 2', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-3', name: 'Carousel 3', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-4', name: 'Carousel 4', description: 'Scrolling carousel image', size: 'small' },
+    ]
+  },
+  {
+    id: 'finishes',
+    name: 'Finishes Page',
+    sections: [
+      { id: 'hero', name: 'Hero Image', description: 'Finishes overview hero', size: 'large' },
+      { id: 'venetian', name: 'Venetian Plaster', description: 'Venetian plaster example', size: 'medium' },
+      { id: 'microcement', name: 'Microcement', description: 'Microcement example', size: 'medium' },
+      { id: 'limewash', name: 'Lime Wash', description: 'Lime wash example', size: 'medium' },
+      { id: 'tadelakt', name: 'Tadelakt', description: 'Tadelakt example', size: 'medium' },
+      { id: 'carousel-1', name: 'Carousel 1', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-2', name: 'Carousel 2', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-3', name: 'Carousel 3', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-4', name: 'Carousel 4', description: 'Scrolling carousel image', size: 'small' },
+    ]
+  },
+  {
+    id: 'work',
+    name: 'Portfolio Page',
+    sections: [
+      { id: 'hero', name: 'Hero Image', description: 'Portfolio hero (spiral staircase)', size: 'large' },
+      { id: 'project-1', name: 'Project 1', description: 'Greenwich Colonial', size: 'medium' },
+      { id: 'project-2', name: 'Project 2', description: 'Madison Beach House', size: 'medium' },
+      { id: 'project-3', name: 'Project 3', description: 'Westport Modern', size: 'medium' },
+      { id: 'project-4', name: 'Project 4', description: 'New Haven Historic', size: 'medium' },
+      { id: 'project-5', name: 'Project 5', description: 'Guilford Estate', size: 'medium' },
+      { id: 'project-6', name: 'Project 6', description: 'Branford Townhouse', size: 'medium' },
+      { id: 'project-7', name: 'Project 7', description: 'Old Saybrook Inn', size: 'medium' },
+      { id: 'project-8', name: 'Project 8', description: 'Essex Victorian', size: 'medium' },
+      { id: 'quote-image', name: 'Quote Section', description: 'Architect quote background', size: 'medium' },
+      { id: 'carousel-1', name: 'Carousel 1', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-2', name: 'Carousel 2', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-3', name: 'Carousel 3', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-4', name: 'Carousel 4', description: 'Scrolling carousel image', size: 'small' },
+    ]
+  },
+  {
+    id: 'showroom',
+    name: 'Material Library',
+    sections: [
+      { id: 'hero', name: 'Hero Image', description: 'Material library hero', size: 'large' },
+      { id: 'feature-1', name: 'Feature Card 1', description: 'Full-Scale Boards', size: 'small' },
+      { id: 'feature-2', name: 'Feature Card 2', description: 'QR-Coded Specs', size: 'small' },
+      { id: 'feature-3', name: 'Feature Card 3', description: 'Controlled Lighting', size: 'small' },
+      { id: 'feature-4', name: 'Feature Card 4', description: 'Custom Samples', size: 'small' },
+      { id: 'trade-image', name: 'For Trade Section', description: 'Sample boards image', size: 'medium' },
+      { id: 'carousel-1', name: 'Carousel 1', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-2', name: 'Carousel 2', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-3', name: 'Carousel 3', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-4', name: 'Carousel 4', description: 'Scrolling carousel image', size: 'small' },
+    ]
+  },
+  {
+    id: 'about',
+    name: 'About Page',
+    sections: [
+      { id: 'hero', name: 'Hero Portrait', description: 'Daragh portrait or at work', size: 'large' },
+      { id: 'story-1', name: 'Story Image 1', description: 'Early work or Ireland', size: 'medium' },
+      { id: 'story-2', name: 'Story Image 2', description: 'Workshop or tools', size: 'medium' },
+      { id: 'carousel-1', name: 'Carousel 1', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-2', name: 'Carousel 2', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-3', name: 'Carousel 3', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-4', name: 'Carousel 4', description: 'Scrolling carousel image', size: 'small' },
+    ]
+  },
+  {
+    id: 'professionals',
+    name: 'For Professionals',
+    sections: [
+      { id: 'hero', name: 'Hero Image', description: 'Professional project hero', size: 'large' },
+      { id: 'challenge', name: 'The Challenge', description: 'Background for challenge section', size: 'large' },
+      { id: 'benefit-1', name: 'Benefit Card 1', description: 'Technical precision', size: 'small' },
+      { id: 'benefit-2', name: 'Benefit Card 2', description: 'Clear communication', size: 'small' },
+      { id: 'benefit-3', name: 'Benefit Card 3', description: 'Schedule reliability', size: 'small' },
+      { id: 'process-bg', name: 'Process Background', description: 'Trade process section', size: 'medium' },
+      { id: 'material-library', name: 'Material Library', description: 'Sample boards display', size: 'medium' },
+      { id: 'carousel-1', name: 'Carousel 1', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-2', name: 'Carousel 2', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-3', name: 'Carousel 3', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-4', name: 'Carousel 4', description: 'Scrolling carousel image', size: 'small' },
+    ]
+  },
+  {
+    id: 'contact',
+    name: 'Contact Page',
+    sections: [
+      { id: 'hero', name: 'Hero Background', description: 'Contact page atmosphere', size: 'large' },
+      { id: 'carousel-1', name: 'Carousel 1', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-2', name: 'Carousel 2', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-3', name: 'Carousel 3', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-4', name: 'Carousel 4', description: 'Scrolling carousel image', size: 'small' },
+    ]
+  },
+  {
+    id: 'care',
+    name: 'Care Page',
+    sections: [
+      { id: 'hero', name: 'Hero Background', description: 'Care & maintenance hero', size: 'large' },
+      { id: 'carousel-1', name: 'Carousel 1', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-2', name: 'Carousel 2', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-3', name: 'Carousel 3', description: 'Scrolling carousel image', size: 'small' },
+      { id: 'carousel-4', name: 'Carousel 4', description: 'Scrolling carousel image', size: 'small' },
+    ]
+  },
+];
+---
+
+<Layout title="Image Wireframes - Old Head Plaster" description="Interactive wireframe tool for planning website images">
+  <div class="min-h-screen bg-stone">
+    <!-- Header -->
+    <div class="bg-charcoal py-8 sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-cream text-2xl font-heading">Image Wireframes</h1>
+            <p class="text-cream/60 text-sm">Click any image slot to assign a photo</p>
+          </div>
+          <div class="flex gap-4">
+            <button id="export-btn" class="px-6 py-3 bg-bronze text-charcoal text-sm font-medium tracking-wide uppercase hover:bg-bronze/90 transition-colors">
+              Export Mapping
+            </button>
+            <button id="clear-btn" class="px-6 py-3 border border-cream/30 text-cream text-sm font-medium tracking-wide uppercase hover:bg-cream/10 transition-colors">
+              Clear All
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page Tabs -->
+    <div class="bg-charcoal/50 border-b border-cream/10">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="flex gap-1 overflow-x-auto py-2" id="page-tabs">
+          {pages.map((page, index) => (
+            <button
+              class:list={[
+                'page-tab px-4 py-2 text-sm whitespace-nowrap transition-all',
+                index === 0 ? 'bg-bronze text-charcoal' : 'text-cream/70 hover:text-cream hover:bg-cream/10'
+              ]}
+              data-page={page.id}
+            >
+              {page.name}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Wireframe Content -->
+    <div class="max-w-7xl mx-auto px-6 py-12">
+      {pages.map((page, pageIndex) => (
+        <div
+          class:list={['page-content', pageIndex === 0 ? 'block' : 'hidden']}
+          data-page-content={page.id}
+        >
+          <div class="mb-8">
+            <h2 class="text-charcoal text-3xl font-heading mb-2">{page.name}</h2>
+            <p class="text-charcoal/60">{page.sections.length} image slots to fill</p>
+          </div>
+
+          <!-- Wireframe Grid -->
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {page.sections.map((section) => (
+              <div
+                class:list={[
+                  'image-slot group cursor-pointer',
+                  section.size === 'large' ? 'col-span-2 row-span-2' : '',
+                  section.size === 'medium' ? 'col-span-2 md:col-span-1' : ''
+                ]}
+                data-page={page.id}
+                data-slot={section.id}
+              >
+                <div class:list={[
+                  'relative border-2 border-dashed border-charcoal/30 bg-cream hover:border-bronze hover:bg-bronze/5 transition-all overflow-hidden',
+                  section.size === 'large' ? 'aspect-video' : 'aspect-square'
+                ]}>
+                  <!-- Placeholder -->
+                  <div class="slot-placeholder absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+                    <svg class="w-12 h-12 text-charcoal/30 mb-3 group-hover:text-bronze transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span class="text-charcoal font-medium text-sm">{section.name}</span>
+                    <span class="text-charcoal/50 text-xs mt-1">{section.description}</span>
+                    <span class="text-bronze text-xs mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Click to add image</span>
+                  </div>
+
+                  <!-- Preview (hidden until image assigned) -->
+                  <div class="slot-preview absolute inset-0 hidden">
+                    <img class="preview-image w-full h-full object-cover" src="" alt="" />
+                    <div class="absolute inset-0 bg-charcoal/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span class="text-cream text-sm font-medium">Click to change</span>
+                    </div>
+                    <button class="remove-image absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center hover:bg-red-600">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Label -->
+                <div class="mt-2">
+                  <span class="text-xs text-charcoal/40 uppercase tracking-wide">{section.size}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Upload Modal -->
+    <div id="upload-modal" class="fixed inset-0 bg-charcoal/80 backdrop-blur-sm z-50 hidden items-center justify-center">
+      <div class="bg-cream max-w-lg w-full mx-4 p-8 shadow-2xl">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-heading text-charcoal">Add Image</h3>
+          <button id="close-modal" class="text-charcoal/50 hover:text-charcoal">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div id="modal-slot-info" class="mb-6 p-4 bg-stone">
+          <p class="text-charcoal font-medium" id="modal-slot-name"></p>
+          <p class="text-charcoal/60 text-sm" id="modal-slot-desc"></p>
+        </div>
+
+        <!-- Upload Options -->
+        <div class="space-y-4">
+          <!-- File Upload -->
+          <div>
+            <label class="block text-sm text-charcoal/70 mb-2">Upload from computer</label>
+            <input type="file" id="file-input" accept="image/*" class="w-full text-sm text-charcoal file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-bronze file:text-charcoal file:font-medium file:cursor-pointer hover:file:bg-bronze/90" />
+          </div>
+
+          <div class="flex items-center gap-4">
+            <div class="flex-1 h-px bg-charcoal/20"></div>
+            <span class="text-charcoal/40 text-sm">or</span>
+            <div class="flex-1 h-px bg-charcoal/20"></div>
+          </div>
+
+          <!-- URL Input -->
+          <div>
+            <label class="block text-sm text-charcoal/70 mb-2">Image URL or path</label>
+            <div class="flex gap-2">
+              <input type="text" id="url-input" placeholder="/images/Website/example.jpg" class="flex-1 px-4 py-2 border border-charcoal/20 bg-white text-charcoal focus:border-bronze focus:outline-none" />
+              <button id="url-submit" class="px-4 py-2 bg-charcoal text-cream font-medium hover:bg-charcoal/90 transition-colors">Add</button>
+            </div>
+            <p class="text-xs text-charcoal/50 mt-1">Use paths like /images/Website/filename.jpg</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="export-modal" class="fixed inset-0 bg-charcoal/80 backdrop-blur-sm z-50 hidden items-center justify-center">
+      <div class="bg-cream max-w-2xl w-full mx-4 p-8 shadow-2xl max-h-[80vh] overflow-auto">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-heading text-charcoal">Image Mapping Export</h3>
+          <button id="close-export-modal" class="text-charcoal/50 hover:text-charcoal">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <p class="text-charcoal/70 mb-4">Copy this mapping to share with the developer:</p>
+
+        <pre id="export-content" class="bg-charcoal text-cream p-4 text-sm overflow-auto max-h-96 font-mono"></pre>
+
+        <button id="copy-export" class="mt-4 w-full py-3 bg-bronze text-charcoal font-medium uppercase tracking-wide hover:bg-bronze/90 transition-colors">
+          Copy to Clipboard
+        </button>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="fixed bottom-0 left-0 right-0 bg-charcoal border-t border-cream/10 py-4">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-cream/70 text-sm">Overall Progress</span>
+          <span class="text-cream text-sm font-medium" id="progress-text">0 / 0 images assigned</span>
+        </div>
+        <div class="h-2 bg-charcoal/50 rounded-full overflow-hidden">
+          <div id="progress-bar" class="h-full bg-bronze transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script define:vars={{ pages }}>
+    // State
+    let imageMapping = JSON.parse(localStorage.getItem('oldhead-wireframes') || '{}');
+    let currentSlot = null;
+
+    // DOM Elements
+    const modal = document.getElementById('upload-modal');
+    const exportModal = document.getElementById('export-modal');
+    const fileInput = document.getElementById('file-input');
+    const urlInput = document.getElementById('url-input');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+
+    // Initialize
+    function init() {
+      setupTabNavigation();
+      setupSlotClicks();
+      setupModal();
+      setupExport();
+      restoreImages();
+      updateProgress();
+    }
+
+    // Tab Navigation
+    function setupTabNavigation() {
+      document.querySelectorAll('.page-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          const pageId = tab.dataset.page;
+
+          // Update tabs
+          document.querySelectorAll('.page-tab').forEach(t => {
+            t.classList.remove('bg-bronze', 'text-charcoal');
+            t.classList.add('text-cream/70');
+          });
+          tab.classList.add('bg-bronze', 'text-charcoal');
+          tab.classList.remove('text-cream/70');
+
+          // Update content
+          document.querySelectorAll('.page-content').forEach(content => {
+            content.classList.add('hidden');
+          });
+          document.querySelector(`[data-page-content="${pageId}"]`).classList.remove('hidden');
+        });
+      });
+    }
+
+    // Slot Clicks
+    function setupSlotClicks() {
+      document.querySelectorAll('.image-slot').forEach(slot => {
+        slot.addEventListener('click', (e) => {
+          if (e.target.closest('.remove-image')) {
+            e.stopPropagation();
+            removeImage(slot);
+            return;
+          }
+
+          currentSlot = slot;
+          const page = slot.dataset.page;
+          const slotId = slot.dataset.slot;
+
+          // Find slot info
+          const pageData = pages.find(p => p.id === page);
+          const slotData = pageData.sections.find(s => s.id === slotId);
+
+          document.getElementById('modal-slot-name').textContent = slotData.name;
+          document.getElementById('modal-slot-desc').textContent = slotData.description;
+
+          modal.classList.remove('hidden');
+          modal.classList.add('flex');
+        });
+      });
+    }
+
+    // Modal
+    function setupModal() {
+      document.getElementById('close-modal').addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+
+      // File upload
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            assignImage(e.target.result);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // URL submit
+      document.getElementById('url-submit').addEventListener('click', () => {
+        const url = urlInput.value.trim();
+        if (url) {
+          assignImage(url);
+        }
+      });
+
+      urlInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const url = urlInput.value.trim();
+          if (url) {
+            assignImage(url);
+          }
+        }
+      });
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      fileInput.value = '';
+      urlInput.value = '';
+      currentSlot = null;
+    }
+
+    function assignImage(src) {
+      if (!currentSlot) return;
+
+      const page = currentSlot.dataset.page;
+      const slotId = currentSlot.dataset.slot;
+      const key = `${page}__${slotId}`;
+
+      // Save to mapping
+      imageMapping[key] = src;
+      localStorage.setItem('oldhead-wireframes', JSON.stringify(imageMapping));
+
+      // Update UI
+      updateSlotUI(currentSlot, src);
+      updateProgress();
+      closeModal();
+    }
+
+    function removeImage(slot) {
+      const page = slot.dataset.page;
+      const slotId = slot.dataset.slot;
+      const key = `${page}__${slotId}`;
+
+      delete imageMapping[key];
+      localStorage.setItem('oldhead-wireframes', JSON.stringify(imageMapping));
+
+      // Reset UI
+      const placeholder = slot.querySelector('.slot-placeholder');
+      const preview = slot.querySelector('.slot-preview');
+      placeholder.classList.remove('hidden');
+      preview.classList.add('hidden');
+
+      updateProgress();
+    }
+
+    function updateSlotUI(slot, src) {
+      const placeholder = slot.querySelector('.slot-placeholder');
+      const preview = slot.querySelector('.slot-preview');
+      const img = slot.querySelector('.preview-image');
+
+      img.src = src;
+      placeholder.classList.add('hidden');
+      preview.classList.remove('hidden');
+    }
+
+    function restoreImages() {
+      Object.entries(imageMapping).forEach(([key, src]) => {
+        const [page, slotId] = key.split('__');
+        const slot = document.querySelector(`[data-page="${page}"][data-slot="${slotId}"]`);
+        if (slot) {
+          updateSlotUI(slot, src);
+        }
+      });
+    }
+
+    // Progress
+    function updateProgress() {
+      let total = 0;
+      let filled = 0;
+
+      pages.forEach(page => {
+        page.sections.forEach(section => {
+          total++;
+          const key = `${page.id}__${section.id}`;
+          if (imageMapping[key]) filled++;
+        });
+      });
+
+      const percent = total > 0 ? (filled / total) * 100 : 0;
+      progressBar.style.width = `${percent}%`;
+      progressText.textContent = `${filled} / ${total} images assigned`;
+    }
+
+    // Export
+    function setupExport() {
+      document.getElementById('export-btn').addEventListener('click', () => {
+        const formatted = {};
+
+        pages.forEach(page => {
+          formatted[page.id] = {};
+          page.sections.forEach(section => {
+            const key = `${page.id}__${section.id}`;
+            if (imageMapping[key]) {
+              formatted[page.id][section.id] = imageMapping[key];
+            }
+          });
+          if (Object.keys(formatted[page.id]).length === 0) {
+            delete formatted[page.id];
+          }
+        });
+
+        document.getElementById('export-content').textContent = JSON.stringify(formatted, null, 2);
+        exportModal.classList.remove('hidden');
+        exportModal.classList.add('flex');
+      });
+
+      document.getElementById('close-export-modal').addEventListener('click', () => {
+        exportModal.classList.add('hidden');
+        exportModal.classList.remove('flex');
+      });
+
+      exportModal.addEventListener('click', (e) => {
+        if (e.target === exportModal) {
+          exportModal.classList.add('hidden');
+          exportModal.classList.remove('flex');
+        }
+      });
+
+      document.getElementById('copy-export').addEventListener('click', () => {
+        const content = document.getElementById('export-content').textContent;
+        navigator.clipboard.writeText(content).then(() => {
+          const btn = document.getElementById('copy-export');
+          btn.textContent = 'Copied!';
+          setTimeout(() => {
+            btn.textContent = 'Copy to Clipboard';
+          }, 2000);
+        });
+      });
+
+      document.getElementById('clear-btn').addEventListener('click', () => {
+        if (confirm('Clear all assigned images?')) {
+          imageMapping = {};
+          localStorage.removeItem('oldhead-wireframes');
+          document.querySelectorAll('.image-slot').forEach(slot => {
+            const placeholder = slot.querySelector('.slot-placeholder');
+            const preview = slot.querySelector('.slot-preview');
+            placeholder.classList.remove('hidden');
+            preview.classList.add('hidden');
+          });
+          updateProgress();
+        }
+      });
+    }
+
+    // Initialize on load
+    init();
+  </script>
+</Layout>

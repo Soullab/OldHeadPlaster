@@ -1,0 +1,52 @@
+name: OldHeadScanner
+options:
+  bundleIdPrefix: com.oldheadplaster
+  deploymentTarget:
+    iOS: "16.0"
+  xcodeVersion: "15.0"
+
+settings:
+  base:
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.9"
+    GENERATE_INFOPLIST_FILE: NO
+
+targets:
+  OldHeadScanner:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+      - path: Models
+      - path: Services
+      - path: Views
+      - path: Resources
+    settings:
+      base:
+        INFOPLIST_FILE: Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.oldheadplaster.scanner
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_STYLE: Automatic
+    info:
+      path: Info.plist
+      properties:
+        NSCameraUsageDescription: "Old Head Scanner uses the camera and LiDAR sensor to scan rooms and measure wall surfaces for plaster estimates."
+        UILaunchStoryboardName: LaunchScreen
+        UIRequiredDeviceCapabilities:
+          - armv7
+          - arkit
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        ITSAppUsesNonExemptEncryption: false
+
+schemes:
+  OldHeadScanner:
+    build:
+      targets:
+        OldHeadScanner: all
+    run:
+      config: Debug
+    archive:
+      config: Release

@@ -1,0 +1,435 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const credentials = [
+  { value: '20+', label: 'Years Experience' },
+  { value: '500+', label: 'Projects Completed' },
+  { value: 'EPA', label: 'Lead-Safe Certified' },
+  { value: 'CT', label: 'Licensed & Insured' },
+];
+
+const services = [
+  {
+    title: 'Venetian Plaster',
+    description: 'Multi-layer polished plaster with depth and luminosity. The signature of refined interiors.',
+    image: '/images/finishes/mayo-pearl/hero.jpg',
+    link: '/finishes/mayo-pearl'
+  },
+  {
+    title: 'Lime Wash',
+    description: 'Breathable, natural finish with subtle movement. Perfect for historic and contemporary spaces.',
+    image: '/images/finishes/sea-mist/hero.jpg',
+    link: '/finishes/sea-mist'
+  },
+  {
+    title: 'Microcement',
+    description: 'Seamless, durable surfaces for floors, walls, and wet areas. Modern without compromise.',
+    image: '/images/finishes/harbor-concrete/hero.jpg',
+    link: '/finishes/harbor-concrete'
+  },
+  {
+    title: 'Tadelakt',
+    description: 'Traditional Moroccan waterproof plaster. Ideal for bathrooms and feature walls.',
+    image: '/images/finishes/harbor-concrete/02.jpg',
+    link: '/finishes'
+  },
+];
+
+const processSteps = [
+  { num: '01', title: 'Discovery', desc: 'Understanding your vision and requirements', image: '/images/Website/20221006_155436.jpg' },
+  { num: '02', title: 'Concept', desc: 'Material selection and finish direction', image: '/images/Website/20200625_194628.jpg' },
+  { num: '03', title: 'Sampling', desc: 'Full-scale samples for approval', image: '/images/Website/20210731_193331.jpg' },
+  { num: '04', title: 'Specification', desc: 'Detailed documentation for your records', image: '/images/Website/20220209_103205.jpg' },
+  { num: '05', title: 'Application', desc: 'Expert execution with minimal disruption', image: '/images/Website/20220909_134537.jpg' },
+  { num: '06', title: 'Reveal', desc: 'Final walkthrough and care guidance', image: '/images/Website/20230428_101918.jpg' },
+];
+
+// Best visual photos for carousels
+const carouselImages = [
+  { src: '/images/Website/20241024_135059.jpg', alt: 'Microcement bathroom with calacatta marble' },
+  { src: '/images/Website/20220311_162443.jpg', alt: 'Fireplace with crown molding transition' },
+  { src: '/images/Website/20241011_173659~4.jpg', alt: 'Marbled plaster close-up' },
+  { src: '/images/Website/20220124_163453.jpg', alt: 'Dark venetian with depth' },
+  { src: '/images/Website/20200910_093606~2.jpg', alt: 'Metallic patina texture' },
+  { src: '/images/Website/20221012_132132.jpg', alt: 'Gray plaster room with oval window' },
+  { src: '/images/Website/20220309_151608.jpg', alt: 'Tadelakt bathroom seamless finish' },
+  { src: '/images/Website/20240913_170334.jpg', alt: 'Shower niches with perfect corners' },
+];
+---
+
+<Layout title="Connecticut's Premier Decorative Plaster Specialist">
+  <!-- Hero Section -->
+  <section class="min-h-[90vh] flex items-center bg-charcoal relative">
+    <!-- Background texture -->
+    <div
+      class="absolute inset-0 bg-cover bg-center opacity-25"
+      style="background-image: url('/images/hero-texture.jpg');"
+    ></div>
+    <!-- Overlay for text readability -->
+    <div class="absolute inset-0 bg-gradient-to-b from-charcoal/50 via-charcoal/40 to-charcoal/70"></div>
+    <div class="max-w-3xl mx-auto px-8 pt-8 pb-24 text-center relative z-10">
+      <!-- The Headland Mark - Hero Moment -->
+      <img
+        src="/images/headland-mark.svg"
+        alt="Old Head Plaster - Est. County Mayo"
+        class="h-20 sm:h-24 md:h-28 w-auto mx-auto mb-16 sm:mb-24 md:mb-48 mt-20 md:mt-8"
+      />
+
+      <h1 class="text-ivory text-4xl md:text-5xl lg:text-6xl font-normal leading-[1.1] mb-8">
+        The Finish<br />
+        <span class="text-brass italic">Architects Specify</span>
+      </h1>
+
+      <p class="text-ivory/40 text-lg max-w-md mx-auto mb-12 leading-relaxed">
+        Trusted by architects and interior designers for high-end residential,
+        hospitality, and historic restoration projects across Connecticut.
+      </p>
+
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a
+          href="/process"
+          class="inline-block px-8 py-4 bg-brass text-charcoal text-sm tracking-[0.15em] uppercase hover:bg-brass-light transition-colors"
+        >
+          Our Process
+        </a>
+        <a
+          href="/professionals"
+          class="inline-block px-8 py-4 border border-ivory/20 text-ivory/80 text-sm tracking-[0.15em] uppercase hover:border-ivory/40 hover:text-ivory transition-colors"
+        >
+          For Architects & Designers
+        </a>
+      </div>
+
+      <!-- Credentials -->
+      <div class="flex flex-wrap justify-center items-center gap-x-10 gap-y-4 mt-48 pt-8 border-t border-charcoal-border">
+        {credentials.map((cred, index) => (
+          <>
+            <div class="text-center">
+              <span class="text-lg text-brass">{cred.value}</span>
+              <span class="text-ivory/40 text-xs ml-2">{cred.label}</span>
+            </div>
+            {index < credentials.length - 1 && (
+              <span class="hidden sm:block w-px h-5 bg-charcoal-border"></span>
+            )}
+          </>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Hero Carousel - Auto-scrolling showcase -->
+  <div class="bg-charcoal py-4 overflow-hidden">
+    <div class="carousel-track flex gap-4 animate-scroll">
+      {[...carouselImages, ...carouselImages].map((img) => (
+        <div class="flex-shrink-0 w-72 h-48 overflow-hidden">
+          <img
+            src={img.src}
+            alt={img.alt}
+            class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+            loading="lazy"
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Introduction -->
+  <section class="section-padding bg-charcoal">
+    <div class="max-w-3xl mx-auto px-8 text-center">
+      <p class="text-ivory/70 text-lg leading-relaxed mb-8">
+        Old Head Plaster brings Irish craftsmanship to Connecticut's
+        finest homes. Every surface tells a story of tradition
+        meeting modern precision.
+      </p>
+      <p class="text-ivory/50 leading-relaxed">
+        We take on a limited number of projects each year to ensure every
+        client receives our complete attention.
+      </p>
+    </div>
+  </section>
+
+  <!-- Photo Showcase: What's Possible -->
+  <section class="py-16 bg-charcoal-light">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <p class="text-brass text-sm tracking-[0.25em] uppercase mb-4">Portfolio</p>
+        <h2 class="text-ivory text-3xl md:text-4xl font-heading">What's Possible</h2>
+      </div>
+
+      <!-- Masonry-style grid -->
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+        <!-- Large feature image - Spiral Staircase Showstopper -->
+        <div class="col-span-2 row-span-2">
+          <a href="/work" class="block relative aspect-square overflow-hidden group">
+            <img
+              src="/images/20241206_145032-1.jpg"
+              alt="Spiral staircase with seamless curved plaster walls"
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="eager"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <p class="text-brass text-xs tracking-wider uppercase">Architectural Plaster</p>
+              <p class="text-ivory text-lg font-heading">Seamless Curves</p>
+            </div>
+          </a>
+        </div>
+
+        <!-- Microcement bathroom -->
+        <div class="col-span-1">
+          <a href="/finishes/harbor-concrete" class="block relative aspect-square overflow-hidden group">
+            <img
+              src="/images/finishes/harbor-concrete/hero.jpg"
+              alt="Seamless microcement bathroom"
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/40 transition-colors duration-300"></div>
+          </a>
+        </div>
+
+        <!-- Limewash texture -->
+        <div class="col-span-1">
+          <a href="/finishes/sea-mist" class="block relative aspect-square overflow-hidden group">
+            <img
+              src="/images/finishes/sea-mist/hero.jpg"
+              alt="Organic limewash texture"
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/40 transition-colors duration-300"></div>
+          </a>
+        </div>
+
+        <!-- Stone whisper fireplace -->
+        <div class="col-span-1">
+          <a href="/finishes/stone-whisper" class="block relative aspect-square overflow-hidden group">
+            <img
+              src="/images/finishes/stone-whisper/hero.jpg"
+              alt="Matte Venetian on fireplace"
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/40 transition-colors duration-300"></div>
+          </a>
+        </div>
+
+        <!-- Living room wide shot -->
+        <div class="col-span-1">
+          <a href="/work" class="block relative aspect-square overflow-hidden group">
+            <img
+              src="/images/finishes/louisburgh-silk/01.jpg"
+              alt="Complete living room with plaster walls"
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/40 transition-colors duration-300"></div>
+          </a>
+        </div>
+
+        <!-- Marmorino sample -->
+        <div class="col-span-1">
+          <a href="/finishes/carrara-veil" class="block relative aspect-square overflow-hidden group">
+            <img
+              src="/images/finishes/carrara-veil/hero.jpg"
+              alt="Marmorino with veined effect"
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/40 transition-colors duration-300"></div>
+          </a>
+        </div>
+
+        <!-- Shower detail -->
+        <div class="col-span-1">
+          <a href="/finishes/harbor-concrete" class="block relative aspect-square overflow-hidden group">
+            <img
+              src="/images/finishes/harbor-concrete/01.jpg"
+              alt="Microcement shower with perfect corners"
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/40 transition-colors duration-300"></div>
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-10 text-center">
+        <a
+          href="/work"
+          class="inline-block px-8 py-4 border border-ivory/20 text-ivory/80 text-sm tracking-[0.15em] uppercase hover:border-brass hover:text-brass transition-colors"
+        >
+          View All Projects
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="section-padding bg-charcoal">
+    <div class="max-w-5xl mx-auto px-8">
+      <h2 class="section-title">Our Finishes</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {services.map((service) => (
+          <a href={service.link} class="group relative block aspect-[4/3] overflow-hidden">
+            <img
+              src={service.image}
+              alt={service.title}
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/60 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-6">
+              <h3 class="text-ivory text-xl font-heading mb-2 group-hover:text-brass transition-colors">{service.title}</h3>
+              <p class="text-ivory/60 text-sm leading-relaxed">{service.description}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <div class="mt-10 text-center">
+        <a
+          href="/finishes"
+          class="text-ivory/50 text-sm tracking-wide hover:text-ivory transition-colors"
+        >
+          View all finishes &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- For Professionals -->
+  <section class="section-padding bg-charcoal-light">
+    <div class="max-w-5xl mx-auto px-8">
+      <div class="card">
+        <h3 class="card-title">For Architects & Designers</h3>
+        <div class="md:flex md:items-center md:justify-between gap-8">
+          <div class="mb-6 md:mb-0">
+            <h4 class="text-ivory text-xl mb-3">Specification Support & Trade Services</h4>
+            <p class="text-ivory/60 text-sm leading-relaxed max-w-xl">
+              Custom sampling, finish schedules, and site consultations.
+              We speak your language and meet your standards.
+            </p>
+          </div>
+          <a
+            href="/professionals"
+            class="inline-block px-6 py-3 bg-brass text-charcoal text-sm tracking-[0.1em] uppercase hover:bg-brass-light transition-colors whitespace-nowrap"
+          >
+            Learn More
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="section-padding bg-charcoal">
+    <div class="max-w-5xl mx-auto px-8">
+      <h2 class="section-title">The Process</h2>
+
+      <div class="mb-8">
+        <p class="text-center text-ivory/70 text-lg mb-2">The Luxury of Certainty</p>
+        <p class="text-center text-ivory/50 text-sm max-w-2xl mx-auto">
+          High-end clients don't want more options — they want confidence that
+          the finish will be right, the process will be clean, and nothing will surprise them.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        {processSteps.map((step) => (
+          <div class="group relative aspect-[3/4] overflow-hidden">
+            <img
+              src={step.image}
+              alt={step.title}
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div class="absolute inset-0 bg-charcoal/70 group-hover:bg-charcoal/60 transition-colors"></div>
+            <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+              <div class="text-2xl text-brass/70 mb-2">{step.num}</div>
+              <div class="text-ivory text-xs tracking-[0.15em] uppercase mb-2">{step.title}</div>
+              <div class="text-ivory/60 text-xs leading-relaxed">{step.desc}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-10 text-center">
+        <a
+          href="/process"
+          class="inline-block px-8 py-4 bg-brass text-charcoal text-sm tracking-[0.15em] uppercase hover:bg-brass-light transition-colors"
+        >
+          Explore Our Process
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="section-padding bg-charcoal-light">
+    <div class="max-w-3xl mx-auto px-8 text-center">
+      <div class="text-brass/30 text-4xl mb-6">"</div>
+
+      <blockquote class="text-ivory/80 text-xl leading-relaxed mb-8">
+        Daragh is who we call when the finish is non-negotiable. His process
+        removes all the guesswork — we specify with confidence knowing
+        execution will be flawless.
+      </blockquote>
+
+      <div class="flex items-center justify-center gap-4">
+        <div class="w-8 h-px bg-brass/30"></div>
+        <cite class="text-ivory/50 text-sm not-italic">
+          <span class="text-ivory/70">Sarah Chen, AIA</span> — Chen Architecture
+        </cite>
+        <div class="w-8 h-px bg-brass/30"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Material Library -->
+  <section class="section-padding bg-charcoal">
+    <div class="max-w-3xl mx-auto px-8 text-center">
+      <p class="text-brass text-sm tracking-[0.25em] uppercase mb-6">Madison, Connecticut</p>
+
+      <h2 class="text-ivory text-2xl md:text-3xl mb-6">The Material Library</h2>
+
+      <p class="text-ivory/60 mb-2">
+        Full-scale finish samples. QR-coded specifications. Natural light testing.
+      </p>
+      <p class="text-ivory/40 text-sm mb-10">By appointment only.</p>
+    </div>
+
+    <!-- Material Library Carousel -->
+    <div class="overflow-hidden mb-10">
+      <div class="carousel-track-reverse flex gap-4 animate-scroll-reverse">
+        {[...carouselImages, ...carouselImages].map((img) => (
+          <div class="flex-shrink-0 w-80 h-56 overflow-hidden">
+            <img
+              src={img.src}
+              alt={img.alt}
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="text-center">
+      <a
+        href="/showroom"
+        class="inline-block px-8 py-4 bg-brass text-charcoal text-sm tracking-[0.15em] uppercase hover:bg-brass-light transition-colors"
+      >
+        Request a Consultation
+      </a>
+    </div>
+  </section>
+
+  <!-- Availability -->
+  <section class="py-6 bg-charcoal-light border-t border-charcoal-border">
+    <div class="max-w-5xl mx-auto px-8 text-center">
+      <p class="text-ivory/40 text-sm">
+        Currently accepting projects for <span class="text-brass">Q2 2026</span>
+      </p>
+    </div>
+  </section>
+</Layout>

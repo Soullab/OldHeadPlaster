@@ -1,0 +1,107 @@
+---
+const currentYear = new Date().getFullYear();
+
+const mainLinks = [
+  { href: '/finishes', label: 'Finishes' },
+  { href: '/work', label: 'Work' },
+  { href: '/process', label: 'Process' },
+  { href: '/professionals', label: 'For Trade' },
+  { href: '/showroom', label: 'Material Library' },
+];
+
+const resourceLinks = [
+  { href: '/about', label: 'About Daragh' },
+  { href: '/care', label: 'Care & Maintenance' },
+  { href: '/investment', label: 'Typical Investment' },
+  { href: '/contact', label: 'Contact' },
+];
+---
+
+<footer class="bg-charcoal-light border-t border-charcoal-border">
+  <!-- Main Footer -->
+  <div class="max-w-5xl mx-auto px-8 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+      <!-- Brand -->
+      <div class="lg:col-span-1">
+        <a href="/" class="block mb-6">
+          <img
+            src="/images/headland-mark.svg"
+            alt="Old Head Plaster"
+            class="h-14 w-auto opacity-80 hover:opacity-100 transition-opacity"
+          />
+        </a>
+        <p class="text-ivory/40 text-sm leading-relaxed">
+          Irish craftsmanship.<br />
+          Connecticut excellence.
+        </p>
+      </div>
+
+      <!-- Navigation -->
+      <div>
+        <h4 class="text-xs text-brass tracking-[0.2em] uppercase mb-6">Navigation</h4>
+        <ul class="space-y-3">
+          {mainLinks.map(({ href, label }) => (
+            <li>
+              <a href={href} class="text-sm text-ivory/50 hover:text-ivory transition-colors">
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div>
+        <h4 class="text-xs text-brass tracking-[0.2em] uppercase mb-6">Resources</h4>
+        <ul class="space-y-3">
+          {resourceLinks.map(({ href, label }) => (
+            <li>
+              <a href={href} class="text-sm text-ivory/50 hover:text-ivory transition-colors">
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h4 class="text-xs text-brass tracking-[0.2em] uppercase mb-6">Contact</h4>
+        <div class="space-y-3 text-sm">
+          <p>
+            <a href="tel:+18605747004" class="text-ivory/50 hover:text-ivory transition-colors">
+              860-574-7004
+            </a>
+          </p>
+          <p>
+            <a href="mailto:daragh@oldheadplaster.com" class="text-ivory/50 hover:text-ivory transition-colors">
+              daragh@oldheadplaster.com
+            </a>
+          </p>
+          <p class="text-ivory/40 text-xs pt-2">
+            Madison, Connecticut<br />
+            Serving Fairfield & New Haven Counties
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="border-t border-charcoal-border">
+    <div class="max-w-5xl mx-auto px-8 py-6">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <p class="text-xs text-ivory/30">
+          &copy; {currentYear} Old Head Plaster
+        </p>
+        <div class="flex items-center gap-4 text-xs text-ivory/30">
+          <span>EPA Lead-Safe Certified</span>
+          <span class="text-charcoal-border">|</span>
+          <span>CT Licensed & Insured</span>
+          <span class="text-charcoal-border">|</span>
+          <a href="/admin" class="hover:text-brass transition-colors">Project Hub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

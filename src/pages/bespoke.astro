@@ -1,0 +1,181 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const whiteGloveFeatures = [
+  {
+    title: 'Material Library Experience',
+    description: 'Begin your journey in our curated Material Library. Touch authentic Venetian plaster, feel the silk of polished lime, see how light transforms each finish. This tactile exploration shapes your vision.',
+    icon: 'library'
+  },
+  {
+    title: 'Architect & Contractor Collaboration',
+    description: 'We join your team early — coordinating with architects on substrate specifications, advising contractors on drywall finishing, even consulting on lighting design. The foundation determines everything.',
+    icon: 'team'
+  },
+  {
+    title: 'Cohesive Vision',
+    description: 'At estate scale, we orchestrate a symphony of finishes. Polished Venetian in formal spaces, soft lime wash in bedrooms, Tadelakt in bathrooms, Microcement in modern areas. Each room contributes to a larger story.',
+    icon: 'vision'
+  },
+  {
+    title: 'Dedicated Project Management',
+    description: 'Your project receives a single point of contact from consultation through completion. Weekly progress reports, photo documentation, and direct access to Daragh throughout the 3-6 month journey.',
+    icon: 'dedicated'
+  }
+];
+
+const processSteps = [
+  { phase: 'Design Phase', duration: '2-4 weeks', activities: 'Material Library visit, architectural review, concept development, finish mapping by room' },
+  { phase: 'Sampling Phase', duration: '3-6 weeks', activities: 'Custom sample boards for each finish type, on-site lighting tests, client approval sessions' },
+  { phase: 'Preparation Phase', duration: '1-2 weeks', activities: 'Substrate coordination with contractor, protection of surrounding finishes, primer application' },
+  { phase: 'Application Phase', duration: '8-16 weeks', activities: 'Room-by-room execution, daily progress documentation, quality checkpoints' },
+  { phase: 'Completion Phase', duration: '1-2 weeks', activities: 'Final walkthrough, touch-ups, care documentation, photography' }
+];
+---
+
+<Layout title="Bespoke Experience | Old Head Plaster">
+  <!-- Hero -->
+  <section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-charcoal"></div>
+    <div class="absolute inset-0 opacity-20" style="background-image: url('/images/hero-texture.jpg'); background-size: cover;"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+      <p class="text-bronze tracking-[0.3em] uppercase text-sm mb-6">Estate-Scale Artistry</p>
+      <h1 class="font-heading text-5xl md:text-7xl text-cream mb-8 leading-tight">
+        The Bespoke<br/>Experience
+      </h1>
+      <p class="text-xl text-cream/70 max-w-2xl mx-auto leading-relaxed">
+        For homes of 3,000 square feet and beyond, we offer something different:
+        a white-glove partnership that transforms your entire residence into a cohesive work of art.
+      </p>
+    </div>
+  </section>
+
+  <!-- Introduction -->
+  <section class="py-24 bg-charcoal-light">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="prose prose-invert prose-lg mx-auto">
+        <p class="text-cream/80 text-xl leading-relaxed">
+          When you're building or renovating at estate scale, per-square-foot pricing becomes
+          irrelevant. What matters is vision, coordination, and the kind of craftsmanship that
+          transforms a house into a legacy.
+        </p>
+        <p class="text-cream/70 leading-relaxed">
+          A Bespoke project isn't just larger — it's fundamentally different. We become part of
+          your design team, working alongside your architect, interior designer, and general
+          contractor to ensure every surface receives the attention it deserves.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- White Glove Features -->
+  <section class="py-24 bg-charcoal">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="font-heading text-4xl text-cream mb-4">White Glove Treatment</h2>
+        <p class="text-cream/60 max-w-2xl mx-auto">What sets the Bespoke experience apart</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        {whiteGloveFeatures.map((feature) => (
+          <div class="bg-charcoal-light border border-cream/10 p-8 rounded-lg hover:border-bronze/30 transition-colors">
+            <h3 class="font-heading text-2xl text-cream mb-4">{feature.title}</h3>
+            <p class="text-cream/70 leading-relaxed">{feature.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Finish Symphony -->
+  <section class="py-24 bg-charcoal-light">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <p class="text-bronze tracking-[0.2em] uppercase text-sm mb-4">Creating Flow</p>
+          <h2 class="font-heading text-4xl text-cream mb-6">A Symphony of Finishes</h2>
+          <p class="text-cream/70 leading-relaxed mb-6">
+            At estate scale, variety creates richness. We map finish types to the function and
+            feeling of each space:
+          </p>
+          <ul class="space-y-4 text-cream/70">
+            <li class="flex items-start gap-3">
+              <span class="text-bronze mt-1">—</span>
+              <span><strong class="text-cream">Formal Spaces:</strong> High-polish Venetian for drama and light reflection</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-bronze mt-1">—</span>
+              <span><strong class="text-cream">Private Quarters:</strong> Soft lime wash for warmth and tranquility</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-bronze mt-1">—</span>
+              <span><strong class="text-cream">Bathrooms:</strong> Tadelakt for seamless waterproofing and spa luxury</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-bronze mt-1">—</span>
+              <span><strong class="text-cream">Modern Areas:</strong> Microcement for contemporary flow</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-bronze mt-1">—</span>
+              <span><strong class="text-cream">Transitional Spaces:</strong> Subtle textures that connect without competing</span>
+            </li>
+          </ul>
+        </div>
+        <div class="bg-charcoal p-8 rounded-lg border border-cream/10">
+          <p class="text-bronze tracking-[0.2em] uppercase text-sm mb-6">Typical Timeline</p>
+          <div class="space-y-6">
+            {processSteps.map((step) => (
+              <div class="border-l-2 border-bronze/30 pl-4">
+                <div class="flex justify-between items-start mb-1">
+                  <h4 class="text-cream font-medium">{step.phase}</h4>
+                  <span class="text-bronze text-sm">{step.duration}</span>
+                </div>
+                <p class="text-cream/60 text-sm">{step.activities}</p>
+              </div>
+            ))}
+          </div>
+          <div class="mt-8 pt-6 border-t border-cream/10">
+            <p class="text-cream/50 text-sm">Total project duration: 3-6 months depending on scope</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Early Collaboration -->
+  <section class="py-24 bg-charcoal">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <p class="text-bronze tracking-[0.2em] uppercase text-sm mb-4">For Architects & Builders</p>
+      <h2 class="font-heading text-4xl text-cream mb-6">The Earlier, The Better</h2>
+      <p class="text-cream/70 leading-relaxed mb-8 max-w-2xl mx-auto">
+        The substrate determines everything. We've seen too many projects compromised by
+        drywall finished to the wrong level, primers that don't bond, or lighting that
+        flattens rather than celebrates the plaster.
+      </p>
+      <p class="text-cream/70 leading-relaxed max-w-2xl mx-auto">
+        Bring us in during design development, and we'll ensure every specification
+        supports the final finish. No surprises. No compromises.
+      </p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-24 bg-charcoal-light">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h2 class="font-heading text-4xl text-cream mb-6">Begin Your Bespoke Journey</h2>
+      <p class="text-cream/70 mb-8 max-w-xl mx-auto">
+        It starts with a conversation. Visit our Material Library, walk us through your vision,
+        and discover what's possible when craft meets scale.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/contact" class="inline-block px-8 py-4 bg-bronze text-charcoal font-medium tracking-wide hover:bg-bronze-light transition-colors">
+          Schedule a Consultation
+        </a>
+        <a href="/process" class="inline-block px-8 py-4 border border-cream/30 text-cream font-medium tracking-wide hover:border-cream hover:bg-cream/5 transition-colors">
+          View Our Process
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

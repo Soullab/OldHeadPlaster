@@ -1,0 +1,594 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+
+export const prerender = false;
+
+const { id } = Astro.params;
+
+// Sample project data - would come from database
+const projects = {
+  'greenwich-estate': {
+    id: 'greenwich-estate',
+    name: 'Greenwich Estate',
+    client: 'Harrison Family',
+    address: '247 Round Hill Road, Greenwich, CT 06831',
+    status: 'active',
+    phase: 'Application Phase',
+    progress: 65,
+    sqft: 4200,
+    finishes: ['Venetian Plaster', 'Tadelakt', 'Lime Wash'],
+    startDate: 'Nov 15, 2024',
+    estCompletion: 'Mar 30, 2025',
+    notes: 'Estate renovation. Master suite and formal living areas. Client prefers warmer tones.',
+    team: [
+      { id: '1', name: 'Lisa Harrison', role: 'Client', company: '', email: 'lisa@harrison.com', phone: '203-555-0101', channel: 'both' },
+      { id: '2', name: 'Sarah Chen', role: 'Architect', company: 'Chen Design Group', email: 'sarah@chendesign.com', phone: '203-555-0102', channel: 'email' },
+      { id: '3', name: 'Mark Thompson', role: 'General Contractor', company: 'Thompson Builders', email: 'mark@thompsonbuilders.com', phone: '203-555-0103', channel: 'sms' },
+      { id: '4', name: 'Emily Ross', role: 'Interior Designer', company: 'Ross Interiors', email: 'emily@rossinteriors.com', phone: '203-555-0104', channel: 'both' }
+    ],
+    milestones: [
+      { id: '1', phase: 'Design Phase', status: 'completed', startDate: 'Nov 15', endDate: 'Dec 5', tasks: ['Material Library visit', 'Architectural review', 'Finish mapping'] },
+      { id: '2', phase: 'Sampling Phase', status: 'completed', startDate: 'Dec 6', endDate: 'Jan 10', tasks: ['Custom samples for each room', 'Lighting tests', 'Client approval'] },
+      { id: '3', phase: 'Preparation Phase', status: 'completed', startDate: 'Jan 11', endDate: 'Jan 20', tasks: ['Substrate coordination', 'Surface protection', 'Primer application'] },
+      { id: '4', phase: 'Application Phase', status: 'in-progress', startDate: 'Jan 21', endDate: 'Mar 15', tasks: ['Master suite', 'Formal living', 'Dining room', 'Powder room'] },
+      { id: '5', phase: 'Completion Phase', status: 'pending', startDate: 'Mar 16', endDate: 'Mar 30', tasks: ['Final walkthrough', 'Touch-ups', 'Care documentation'] }
+    ],
+    updates: [
+      { id: '1', date: 'Jan 17, 2:30 PM', author: 'Daragh', recipients: ['All Team'], channel: 'email', subject: 'Master Suite Progress', preview: 'First coat of Venetian complete in master bedroom. Cure time 24hrs before second application.', status: 'delivered' },
+      { id: '2', date: 'Jan 15, 10:00 AM', author: 'Daragh', recipients: ['Mark Thompson'], channel: 'sms', subject: 'Drywall Ready', preview: 'Drywall in master suite is ready for inspection. Please confirm access for tomorrow AM.', status: 'delivered' },
+      { id: '3', date: 'Jan 12, 4:15 PM', author: 'Daragh', recipients: ['Lisa Harrison', 'Sarah Chen'], channel: 'both', subject: 'Preparation Complete', preview: 'All surfaces prepped and primed. Beginning application phase Monday.', status: 'delivered' },
+      { id: '4', date: 'Jan 8, 11:30 AM', author: 'Daragh', recipients: ['All Team'], channel: 'email', subject: 'Sample Approval Confirmed', preview: 'Thank you for approving the final samples. Formal living: Warm Ivory. Master: Pearl.', status: 'delivered' }
+    ],
+    files: [
+      { id: '1', name: 'Finish Specifications.pdf', type: 'spec', size: '2.4 MB', uploadedBy: 'Daragh', date: 'Dec 15, 2024' },
+      { id: '2', name: 'Sample Board Photos.zip', type: 'photo', size: '45 MB', uploadedBy: 'Daragh', date: 'Jan 5, 2025' },
+      { id: '3', name: 'Lighting Recommendations.pdf', type: 'spec', size: '1.2 MB', uploadedBy: 'Sarah Chen', date: 'Dec 20, 2024' },
+      { id: '4', name: 'Master Suite Progress - Jan 17.jpg', type: 'photo', size: '3.8 MB', uploadedBy: 'Daragh', date: 'Jan 17, 2025' }
+    ]
+  }
+};
+
+const project = projects[id] || projects['greenwich-estate'];
+
+const statusColors = {
+  completed: 'bg-emerald-500',
+  'in-progress': 'bg-brass',
+  pending: 'bg-charcoal-border'
+};
+
+const channelIcons = {
+  email: '✉️',
+  sms: '📱',
+  both: '📧📱'
+};
+---
+
+<AdminLayout title={project.name} currentPage="projects">
+  <!-- Project Header -->
+  <div class="mb-8">
+    <div class="flex items-start justify-between">
+      <div>
+        <div class="flex items-center gap-4 mb-2">
+          <a href="/admin/projects" class="text-cream/50 hover:text-cream transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+          </a>
+          <h1 class="text-2xl text-cream font-medium">{project.name}</h1>
+          <span class="text-xs px-2 py-0.5 rounded-full border bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+            {project.status}
+          </span>
+        </div>
+        <p class="text-sm text-cream/50">{project.client} · {project.address}</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="px-4 py-2 border border-charcoal-border text-cream/70 text-sm rounded-lg hover:border-brass/50 hover:text-cream transition-colors">
+          Edit Project
+        </button>
+        <button
+          id="send-update-btn"
+          class="flex items-center gap-2 px-4 py-2 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+          </svg>
+          Send Update
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-6 mb-8">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <span class="text-sm text-cream/60">Current Phase:</span>
+        <span class="text-cream font-medium ml-2">{project.phase}</span>
+      </div>
+      <div class="text-right">
+        <span class="text-sm text-cream/60">Est. Completion:</span>
+        <span class="text-brass font-medium ml-2">{project.estCompletion}</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="flex-1 h-3 bg-charcoal rounded-full overflow-hidden">
+        <div class="h-full bg-brass rounded-full transition-all" style={`width: ${project.progress}%`}></div>
+      </div>
+      <span class="text-brass font-medium">{project.progress}%</span>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="border-b border-charcoal-border mb-8">
+    <nav class="flex gap-8" id="project-tabs">
+      <button data-tab="directory" class="tab-btn pb-4 text-sm text-brass border-b-2 border-brass">
+        Directory
+      </button>
+      <button data-tab="timeline" class="tab-btn pb-4 text-sm text-cream/50 hover:text-cream border-b-2 border-transparent">
+        Timeline
+      </button>
+      <button data-tab="updates" class="tab-btn pb-4 text-sm text-cream/50 hover:text-cream border-b-2 border-transparent">
+        Updates
+      </button>
+      <button data-tab="files" class="tab-btn pb-4 text-sm text-cream/50 hover:text-cream border-b-2 border-transparent">
+        Files
+      </button>
+      <button data-tab="log" class="tab-btn pb-4 text-sm text-cream/50 hover:text-cream border-b-2 border-transparent">
+        Activity Log
+      </button>
+    </nav>
+  </div>
+
+  <!-- Tab Content -->
+  <div id="tab-content">
+    <!-- Directory Tab -->
+    <div id="directory-tab" class="tab-panel">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg font-medium text-cream">Project Team</h2>
+        <button class="text-sm text-brass hover:text-brass-light transition-colors">+ Add Contact</button>
+      </div>
+
+      <div class="grid gap-4">
+        {project.team.map((member) => (
+          <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-5 hover:border-brass/30 transition-colors">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-brass/20 flex items-center justify-center">
+                  <span class="text-brass font-medium">{member.name.split(' ').map(n => n[0]).join('')}</span>
+                </div>
+                <div>
+                  <h3 class="text-cream font-medium">{member.name}</h3>
+                  <p class="text-sm text-cream/50">{member.role}{member.company && ` · ${member.company}`}</p>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-6">
+                <div class="text-right">
+                  <p class="text-sm text-cream/70">{member.email}</p>
+                  <p class="text-sm text-cream/50">{member.phone}</p>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <span class="text-xs px-2 py-1 bg-charcoal rounded text-cream/50">
+                    {member.channel === 'both' ? 'Email + SMS' : member.channel === 'email' ? 'Email only' : 'SMS only'}
+                  </span>
+                </div>
+
+                <div class="flex items-center gap-1">
+                  <button
+                    class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal rounded-lg transition-colors"
+                    title="Send Email"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </button>
+                  <button
+                    class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal rounded-lg transition-colors"
+                    title="Send SMS"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Timeline Tab -->
+    <div id="timeline-tab" class="tab-panel hidden">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg font-medium text-cream">Project Timeline</h2>
+        <button class="text-sm text-brass hover:text-brass-light transition-colors">Edit Milestones</button>
+      </div>
+
+      <div class="space-y-6">
+        {project.milestones.map((milestone, index) => (
+          <div class="flex gap-6">
+            <!-- Timeline indicator -->
+            <div class="flex flex-col items-center">
+              <div class={`w-4 h-4 rounded-full ${statusColors[milestone.status]}`}></div>
+              {index < project.milestones.length - 1 && (
+                <div class="w-0.5 flex-1 bg-charcoal-border mt-2"></div>
+              )}
+            </div>
+
+            <!-- Content -->
+            <div class="flex-1 pb-8">
+              <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-5">
+                <div class="flex items-start justify-between mb-3">
+                  <div>
+                    <h3 class="text-cream font-medium">{milestone.phase}</h3>
+                    <p class="text-sm text-cream/50">{milestone.startDate} - {milestone.endDate}</p>
+                  </div>
+                  <span class={`text-xs px-2 py-1 rounded ${
+                    milestone.status === 'completed' ? 'bg-emerald-500/20 text-emerald-400' :
+                    milestone.status === 'in-progress' ? 'bg-brass/20 text-brass' :
+                    'bg-charcoal text-cream/40'
+                  }`}>
+                    {milestone.status === 'completed' ? 'Completed' :
+                     milestone.status === 'in-progress' ? 'In Progress' : 'Upcoming'}
+                  </span>
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+                  {milestone.tasks.map((task) => (
+                    <span class="text-xs px-2 py-1 bg-charcoal rounded text-cream/60">{task}</span>
+                  ))}
+                </div>
+
+                {milestone.status === 'in-progress' && (
+                  <div class="mt-4 pt-4 border-t border-charcoal-border">
+                    <button class="text-sm text-brass hover:text-brass-light transition-colors">
+                      Mark Phase Complete & Notify Team →
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Updates Tab -->
+    <div id="updates-tab" class="tab-panel hidden">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg font-medium text-cream">Project Updates</h2>
+        <button
+          id="compose-update-btn"
+          class="flex items-center gap-2 px-4 py-2 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          Compose Update
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        {project.updates.map((update) => (
+          <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-5">
+            <div class="flex items-start justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-brass/20 flex items-center justify-center">
+                  <span class="text-brass text-sm font-medium">D</span>
+                </div>
+                <div>
+                  <h3 class="text-cream font-medium">{update.subject}</h3>
+                  <p class="text-sm text-cream/50">To: {update.recipients.join(', ')}</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-xs text-cream/40">{update.date}</span>
+                <div class="flex items-center gap-2 mt-1">
+                  <span class={`text-xs px-2 py-0.5 rounded ${
+                    update.channel === 'email' ? 'bg-blue-500/20 text-blue-400' :
+                    update.channel === 'sms' ? 'bg-purple-500/20 text-purple-400' :
+                    'bg-emerald-500/20 text-emerald-400'
+                  }`}>
+                    {update.channel === 'both' ? 'Email + SMS' : update.channel.toUpperCase()}
+                  </span>
+                  <span class="text-xs text-emerald-400">✓ {update.status}</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-sm text-cream/70">{update.preview}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Files Tab -->
+    <div id="files-tab" class="tab-panel hidden">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg font-medium text-cream">Project Files</h2>
+        <button class="flex items-center gap-2 px-4 py-2 border border-charcoal-border text-cream/70 text-sm rounded-lg hover:border-brass/50 hover:text-cream transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+          </svg>
+          Upload File
+        </button>
+      </div>
+
+      <div class="grid gap-3">
+        {project.files.map((file) => (
+          <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-4 flex items-center justify-between hover:border-brass/30 transition-colors">
+            <div class="flex items-center gap-4">
+              <div class={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                file.type === 'photo' ? 'bg-purple-500/20' : 'bg-blue-500/20'
+              }`}>
+                {file.type === 'photo' ? (
+                  <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                ) : (
+                  <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                )}
+              </div>
+              <div>
+                <h3 class="text-cream font-medium text-sm">{file.name}</h3>
+                <p class="text-xs text-cream/50">{file.size} · Uploaded by {file.uploadedBy} · {file.date}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal rounded-lg transition-colors" title="Download">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              </button>
+              <button class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal rounded-lg transition-colors" title="Share">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Activity Log Tab -->
+    <div id="log-tab" class="tab-panel hidden">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg font-medium text-cream">Activity Log</h2>
+        <select class="bg-charcoal-light border border-charcoal-border rounded-lg px-3 py-1.5 text-sm text-cream/70 focus:outline-none focus:border-brass/50">
+          <option>All Activity</option>
+          <option>Messages Only</option>
+          <option>Milestones Only</option>
+          <option>Files Only</option>
+        </select>
+      </div>
+
+      <div class="space-y-4">
+        <div class="flex gap-4">
+          <div class="text-xs text-cream/40 w-24 pt-0.5">Today</div>
+          <div class="flex-1 space-y-3">
+            <div class="flex items-start gap-3 text-sm">
+              <span class="text-emerald-400">✉️</span>
+              <span class="text-cream/70">Email sent to <span class="text-cream">All Team</span>: "Master Suite Progress"</span>
+              <span class="text-cream/40 ml-auto">2:30 PM</span>
+            </div>
+            <div class="flex items-start gap-3 text-sm">
+              <span class="text-purple-400">📷</span>
+              <span class="text-cream/70">Photo uploaded: <span class="text-cream">Master Suite Progress - Jan 17.jpg</span></span>
+              <span class="text-cream/40 ml-auto">2:15 PM</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <div class="text-xs text-cream/40 w-24 pt-0.5">Jan 15</div>
+          <div class="flex-1 space-y-3">
+            <div class="flex items-start gap-3 text-sm">
+              <span class="text-blue-400">📱</span>
+              <span class="text-cream/70">SMS sent to <span class="text-cream">Mark Thompson</span>: "Drywall Ready"</span>
+              <span class="text-cream/40 ml-auto">10:00 AM</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <div class="text-xs text-cream/40 w-24 pt-0.5">Jan 12</div>
+          <div class="flex-1 space-y-3">
+            <div class="flex items-start gap-3 text-sm">
+              <span class="text-emerald-400">✉️📱</span>
+              <span class="text-cream/70">Email + SMS sent to <span class="text-cream">Lisa Harrison, Sarah Chen</span>: "Preparation Complete"</span>
+              <span class="text-cream/40 ml-auto">4:15 PM</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <div class="text-xs text-cream/40 w-24 pt-0.5">Jan 8</div>
+          <div class="flex-1 space-y-3">
+            <div class="flex items-start gap-3 text-sm">
+              <span class="text-brass">🎯</span>
+              <span class="text-cream/70">Milestone completed: <span class="text-cream">Sampling Phase</span></span>
+              <span class="text-cream/40 ml-auto">11:30 AM</span>
+            </div>
+            <div class="flex items-start gap-3 text-sm">
+              <span class="text-emerald-400">✉️</span>
+              <span class="text-cream/70">Email sent to <span class="text-cream">All Team</span>: "Sample Approval Confirmed"</span>
+              <span class="text-cream/40 ml-auto">11:30 AM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Send Update Modal -->
+  <div id="update-modal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+    <div class="bg-charcoal-light border border-charcoal-border rounded-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+      <div class="p-6 border-b border-charcoal-border flex items-center justify-between">
+        <h2 class="text-xl text-cream font-medium">Send Project Update</h2>
+        <button id="close-modal" class="text-cream/50 hover:text-cream transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <!-- Recipients -->
+        <div>
+          <label class="block text-sm text-cream/60 mb-2">Recipients</label>
+          <div class="space-y-2">
+            {project.team.map((member) => (
+              <label class="flex items-center gap-3 p-3 bg-charcoal rounded-lg cursor-pointer hover:bg-charcoal-border/50 transition-colors">
+                <input type="checkbox" class="w-4 h-4 accent-brass" />
+                <span class="text-cream">{member.name}</span>
+                <span class="text-cream/40 text-sm">({member.role})</span>
+                <span class="ml-auto text-xs px-2 py-0.5 bg-charcoal-light rounded text-cream/50">
+                  {member.channel === 'both' ? 'Email + SMS' : member.channel}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <!-- Channel Override -->
+        <div>
+          <label class="block text-sm text-cream/60 mb-2">Send via</label>
+          <div class="flex gap-3">
+            <label class="flex items-center gap-2 px-4 py-2 bg-charcoal rounded-lg cursor-pointer hover:bg-charcoal-border/50 transition-colors">
+              <input type="radio" name="channel" value="preferred" checked class="accent-brass" />
+              <span class="text-cream text-sm">Preferred Channel</span>
+            </label>
+            <label class="flex items-center gap-2 px-4 py-2 bg-charcoal rounded-lg cursor-pointer hover:bg-charcoal-border/50 transition-colors">
+              <input type="radio" name="channel" value="email" class="accent-brass" />
+              <span class="text-cream text-sm">Email Only</span>
+            </label>
+            <label class="flex items-center gap-2 px-4 py-2 bg-charcoal rounded-lg cursor-pointer hover:bg-charcoal-border/50 transition-colors">
+              <input type="radio" name="channel" value="sms" class="accent-brass" />
+              <span class="text-cream text-sm">SMS Only</span>
+            </label>
+            <label class="flex items-center gap-2 px-4 py-2 bg-charcoal rounded-lg cursor-pointer hover:bg-charcoal-border/50 transition-colors">
+              <input type="radio" name="channel" value="both" class="accent-brass" />
+              <span class="text-cream text-sm">Both</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Template -->
+        <div>
+          <label class="block text-sm text-cream/60 mb-2">Use Template (optional)</label>
+          <select class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-brass/50">
+            <option value="">No template - write custom message</option>
+            <option value="sampling-complete">Sampling Complete</option>
+            <option value="ready-for-visit">Ready for Site Visit</option>
+            <option value="drywall-spec">Drywall Spec Reminder</option>
+            <option value="schedule-update">Schedule Update</option>
+            <option value="phase-complete">Phase Complete</option>
+          </select>
+        </div>
+
+        <!-- Subject -->
+        <div>
+          <label class="block text-sm text-cream/60 mb-2">Subject</label>
+          <input
+            type="text"
+            placeholder="Enter subject line..."
+            class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-2 text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50"
+          />
+        </div>
+
+        <!-- Message -->
+        <div>
+          <label class="block text-sm text-cream/60 mb-2">Message</label>
+          <textarea
+            rows="5"
+            placeholder="Type your update message..."
+            class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-3 text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50 resize-none"
+          ></textarea>
+        </div>
+
+        <!-- Attachments -->
+        <div>
+          <label class="block text-sm text-cream/60 mb-2">Attachments</label>
+          <div class="border-2 border-dashed border-charcoal-border rounded-lg p-6 text-center hover:border-brass/30 transition-colors cursor-pointer">
+            <svg class="w-8 h-8 text-cream/30 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+            <p class="text-sm text-cream/50">Drop files here or click to upload</p>
+            <p class="text-xs text-cream/30 mt-1">Photos, PDFs, specs</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-6 border-t border-charcoal-border flex items-center justify-between">
+        <button class="text-sm text-cream/50 hover:text-cream transition-colors">
+          Save as Draft
+        </button>
+        <div class="flex items-center gap-3">
+          <button id="cancel-modal" class="px-4 py-2 text-cream/70 text-sm hover:text-cream transition-colors">
+            Cancel
+          </button>
+          <button class="px-6 py-2 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors">
+            Send Update
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</AdminLayout>
+
+<script>
+  // Tab switching
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.dataset.tab;
+
+      // Update buttons
+      tabBtns.forEach(b => {
+        b.classList.remove('text-brass', 'border-brass');
+        b.classList.add('text-cream/50', 'border-transparent');
+      });
+      btn.classList.remove('text-cream/50', 'border-transparent');
+      btn.classList.add('text-brass', 'border-brass');
+
+      // Update panels
+      tabPanels.forEach(panel => {
+        panel.classList.add('hidden');
+      });
+      document.getElementById(`${tabId}-tab`)?.classList.remove('hidden');
+    });
+  });
+
+  // Modal
+  const modal = document.getElementById('update-modal');
+  const sendUpdateBtn = document.getElementById('send-update-btn');
+  const composeUpdateBtn = document.getElementById('compose-update-btn');
+  const closeModalBtn = document.getElementById('close-modal');
+  const cancelModalBtn = document.getElementById('cancel-modal');
+
+  function openModal() {
+    modal?.classList.remove('hidden');
+    modal?.classList.add('flex');
+  }
+
+  function closeModal() {
+    modal?.classList.add('hidden');
+    modal?.classList.remove('flex');
+  }
+
+  sendUpdateBtn?.addEventListener('click', openModal);
+  composeUpdateBtn?.addEventListener('click', openModal);
+  closeModalBtn?.addEventListener('click', closeModal);
+  cancelModalBtn?.addEventListener('click', closeModal);
+
+  // Close on backdrop click
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+</script>

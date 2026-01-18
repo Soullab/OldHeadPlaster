@@ -1,0 +1,275 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+
+// Sample project data (would come from database in production)
+const projects = [
+  {
+    id: 'greenwich-estate',
+    name: 'Greenwich Estate',
+    client: 'Harrison Family',
+    status: 'active',
+    phase: 'Application Phase',
+    progress: 65,
+    sqft: 4200,
+    finishes: ['Venetian Plaster', 'Tadelakt', 'Lime Wash'],
+    lastUpdate: '2 hours ago',
+    nextMilestone: 'Master Suite Completion',
+    dueDate: 'Jan 28'
+  },
+  {
+    id: 'westport-modern',
+    name: 'Westport Modern',
+    client: 'Chen Residence',
+    status: 'active',
+    phase: 'Sampling Phase',
+    progress: 30,
+    sqft: 2800,
+    finishes: ['Microcement', 'Polished Lime'],
+    lastUpdate: '1 day ago',
+    nextMilestone: 'Sample Approval',
+    dueDate: 'Jan 22'
+  },
+  {
+    id: 'darien-restoration',
+    name: 'Darien Historic',
+    client: 'Wright Estate',
+    status: 'pending',
+    phase: 'Design Phase',
+    progress: 15,
+    sqft: 5600,
+    finishes: ['Historic Lime', 'Venetian'],
+    lastUpdate: '3 days ago',
+    nextMilestone: 'Material Library Visit',
+    dueDate: 'Feb 5'
+  }
+];
+
+const recentMessages = [
+  { from: 'Sarah Chen', role: 'Architect', project: 'Westport Modern', preview: 'The lighting specs look great. Can we schedule...', time: '2h ago', unread: true },
+  { from: 'Mark Thompson', role: 'GC', project: 'Greenwich Estate', preview: 'Drywall in master suite is ready for inspection', time: '4h ago', unread: true },
+  { from: 'Lisa Harrison', role: 'Client', project: 'Greenwich Estate', preview: 'We loved the sample boards. Moving forward with...', time: '1d ago', unread: false }
+];
+
+const upcomingTasks = [
+  { task: 'Substrate inspection', project: 'Greenwich Estate', date: 'Today, 2:00 PM' },
+  { task: 'Sample presentation', project: 'Westport Modern', date: 'Tomorrow, 10:00 AM' },
+  { task: 'Material Library tour', project: 'Darien Historic', date: 'Wed, Jan 22' }
+];
+
+const statusColors = {
+  active: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+  pending: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+  completed: 'bg-blue-500/20 text-blue-400 border-blue-500/30'
+};
+---
+
+<AdminLayout title="Dashboard" currentPage="dashboard">
+  <!-- Stats Overview -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-6">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-cream/50 text-sm">Active Projects</span>
+        <span class="text-emerald-400">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+        </span>
+      </div>
+      <div class="text-3xl font-semibold text-cream">3</div>
+      <div class="text-xs text-cream/40 mt-1">12,600 sq ft total</div>
+    </div>
+
+    <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-6">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-cream/50 text-sm">Messages</span>
+        <span class="text-brass">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </span>
+      </div>
+      <div class="text-3xl font-semibold text-cream">2</div>
+      <div class="text-xs text-cream/40 mt-1">Unread this week</div>
+    </div>
+
+    <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-6">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-cream/50 text-sm">Stakeholders</span>
+        <span class="text-blue-400">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </span>
+      </div>
+      <div class="text-3xl font-semibold text-cream">8</div>
+      <div class="text-xs text-cream/40 mt-1">Across all projects</div>
+    </div>
+
+    <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-6">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-cream/50 text-sm">This Week</span>
+        <span class="text-purple-400">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </span>
+      </div>
+      <div class="text-3xl font-semibold text-cream">3</div>
+      <div class="text-xs text-cream/40 mt-1">Scheduled meetings</div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Projects -->
+    <div class="lg:col-span-2 space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-medium text-cream">Active Projects</h2>
+        <a href="/admin/projects" class="text-sm text-brass hover:text-brass-light transition-colors">View all</a>
+      </div>
+
+      <div class="space-y-4">
+        {projects.map((project) => (
+          <a href={`/admin/projects/${project.id}`} class="block bg-charcoal-light border border-charcoal-border rounded-lg p-6 hover:border-brass/30 transition-all group">
+            <div class="flex items-start justify-between mb-4">
+              <div>
+                <div class="flex items-center gap-3 mb-1">
+                  <h3 class="text-cream font-medium group-hover:text-brass transition-colors">{project.name}</h3>
+                  <span class={`text-xs px-2 py-0.5 rounded-full border ${statusColors[project.status]}`}>
+                    {project.status}
+                  </span>
+                </div>
+                <p class="text-sm text-cream/50">{project.client} · {project.sqft.toLocaleString()} sq ft</p>
+              </div>
+              <span class="text-xs text-cream/40">{project.lastUpdate}</span>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mb-4">
+              <div class="flex items-center justify-between text-xs mb-2">
+                <span class="text-cream/60">{project.phase}</span>
+                <span class="text-brass">{project.progress}%</span>
+              </div>
+              <div class="h-2 bg-charcoal rounded-full overflow-hidden">
+                <div class="h-full bg-brass rounded-full transition-all" style={`width: ${project.progress}%`}></div>
+              </div>
+            </div>
+
+            <!-- Finishes & Next Milestone -->
+            <div class="flex items-center justify-between">
+              <div class="flex gap-2">
+                {project.finishes.slice(0, 2).map((finish) => (
+                  <span class="text-xs px-2 py-1 bg-charcoal rounded text-cream/60">{finish}</span>
+                ))}
+                {project.finishes.length > 2 && (
+                  <span class="text-xs px-2 py-1 bg-charcoal rounded text-cream/40">+{project.finishes.length - 2}</span>
+                )}
+              </div>
+              <div class="text-right">
+                <div class="text-xs text-cream/40">Next: {project.nextMilestone}</div>
+                <div class="text-xs text-brass">{project.dueDate}</div>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="space-y-8">
+      <!-- Recent Messages -->
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-medium text-cream">Messages</h2>
+          <a href="/admin/messages" class="text-sm text-brass hover:text-brass-light transition-colors">View all</a>
+        </div>
+
+        <div class="bg-charcoal-light border border-charcoal-border rounded-lg divide-y divide-charcoal-border">
+          {recentMessages.map((msg) => (
+            <a href="/admin/messages" class="block p-4 hover:bg-charcoal-border/30 transition-colors">
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-full bg-brass/20 flex items-center justify-center flex-shrink-0">
+                  <span class="text-brass text-xs font-medium">{msg.from.charAt(0)}</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-sm text-cream font-medium truncate">{msg.from}</span>
+                    {msg.unread && (
+                      <span class="w-2 h-2 rounded-full bg-brass flex-shrink-0"></span>
+                    )}
+                  </div>
+                  <p class="text-xs text-cream/40 mb-1">{msg.role} · {msg.project}</p>
+                  <p class="text-sm text-cream/60 truncate">{msg.preview}</p>
+                </div>
+                <span class="text-xs text-cream/40 flex-shrink-0">{msg.time}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Upcoming Tasks -->
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-medium text-cream">Upcoming</h2>
+          <a href="/admin/schedule" class="text-sm text-brass hover:text-brass-light transition-colors">Calendar</a>
+        </div>
+
+        <div class="bg-charcoal-light border border-charcoal-border rounded-lg divide-y divide-charcoal-border">
+          {upcomingTasks.map((task) => (
+            <div class="p-4">
+              <div class="flex items-start justify-between">
+                <div>
+                  <p class="text-sm text-cream">{task.task}</p>
+                  <p class="text-xs text-cream/40 mt-1">{task.project}</p>
+                </div>
+                <span class="text-xs text-brass">{task.date}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div>
+        <h2 class="text-lg font-medium text-cream mb-4">Quick Actions</h2>
+        <div class="space-y-2">
+          <a href="/admin/projects/new" class="flex items-center gap-3 p-4 bg-charcoal-light border border-charcoal-border rounded-lg hover:border-brass/30 transition-colors">
+            <span class="w-10 h-10 rounded-lg bg-brass/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-brass" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4" />
+              </svg>
+            </span>
+            <div>
+              <p class="text-sm text-cream font-medium">New Project</p>
+              <p class="text-xs text-cream/40">Start a new bespoke project</p>
+            </div>
+          </a>
+
+          <a href="/admin/messages/compose" class="flex items-center gap-3 p-4 bg-charcoal-light border border-charcoal-border rounded-lg hover:border-brass/30 transition-colors">
+            <span class="w-10 h-10 rounded-lg bg-brass/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-brass" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+            </span>
+            <div>
+              <p class="text-sm text-cream font-medium">Send Update</p>
+              <p class="text-xs text-cream/40">Email or SMS stakeholders</p>
+            </div>
+          </a>
+
+          <a href="/admin/documents/upload" class="flex items-center gap-3 p-4 bg-charcoal-light border border-charcoal-border rounded-lg hover:border-brass/30 transition-colors">
+            <span class="w-10 h-10 rounded-lg bg-brass/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-brass" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+            </span>
+            <div>
+              <p class="text-sm text-cream font-medium">Upload Document</p>
+              <p class="text-xs text-cream/40">Share specs or photos</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</AdminLayout>

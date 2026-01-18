@@ -1,0 +1,545 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export function getStaticPaths() {
+  const finishes = [
+    {
+      slug: 'mayo-pearl',
+      name: 'Mayo Pearl',
+      type: 'Venetian Polished',
+      tagline: 'The signature. Marble-level glow with controlled movement.',
+      description: 'Our flagship finish — the one architects specify when they want unmistakable luxury. Mayo Pearl is a traditional Venetian plaster burnished to a high polish, creating depth and luminosity that changes throughout the day. Named for the pearl-gray light that falls on the Atlantic coast of County Mayo.',
+      sheen: 'High',
+      movement: 'Medium',
+      texture: 'Smooth, with subtle trowel marks',
+      composition: 'Natural lime putty, marble dust, natural pigments',
+      thickness: '2-3mm (3 coats)',
+      curing: '21-28 days to full cure',
+      bestLight: 'Evening / raking light',
+      bestRooms: ['Foyers', 'Powder rooms', 'Dining rooms', 'Feature walls', 'Fireplaces'],
+      notRecommended: ['High-humidity bathrooms (use Moroccan Seal instead)', 'Exterior applications'],
+      care: [
+        'Dust with soft, dry cloth monthly',
+        'Clean marks with damp cloth — no chemicals',
+        'Avoid abrasive materials',
+        'Can be re-waxed every 3-5 years to refresh sheen'
+      ],
+      pairsWith: ['Natural stone', 'Warm metals (brass, bronze)', 'Dark woods', 'Linen textures'],
+      projects: ['Greenwich Colonial Restoration', 'Guilford Estate'],
+      colorways: [
+        { name: 'Pearl (Original)', description: 'Warm ivory with gray undertones' },
+        { name: 'Atlantic Graphite', description: 'Deep charcoal with silver movement' },
+        { name: 'Bone', description: 'Clean off-white, minimal warmth' },
+        { name: 'Custom', description: 'Color-matched to your specification' }
+      ]
+    },
+    {
+      slug: 'louisburgh-silk',
+      name: 'Louisburgh Silk',
+      type: 'Venetian Satin',
+      tagline: 'Soft, refined radiance that reads expensive without shouting.',
+      description: 'The understated sibling of Mayo Pearl. Louisburgh Silk delivers the same depth and material richness, but with a softer, satin finish that doesn\'t compete with furnishings. Named for the silk-like quality of morning light in Louisburgh village.',
+      sheen: 'Satin',
+      movement: 'Subtle to Medium',
+      texture: 'Smooth, slightly more open than polished',
+      composition: 'Natural lime putty, marble dust, natural pigments',
+      thickness: '2-3mm (3 coats)',
+      curing: '21-28 days to full cure',
+      bestLight: 'Morning / soft natural light',
+      bestRooms: ['Living rooms', 'Bedrooms', 'Libraries', 'Hallways', 'Ceilings'],
+      notRecommended: ['High-traffic commercial', 'Wet areas'],
+      care: [
+        'Dust with soft cloth as needed',
+        'Spot clean with barely damp cloth',
+        'Natural lime surface is self-healing for minor scuffs',
+        'No waxing required — maintains sheen naturally'
+      ],
+      pairsWith: ['Soft textiles', 'Natural oak', 'Cool metals (nickel, chrome)', 'Contemporary art'],
+      projects: ['Guilford Estate', 'Branford Townhouse'],
+      colorways: [
+        { name: 'Silk (Original)', description: 'Warm neutral with gentle glow' },
+        { name: 'Cloud', description: 'Soft white with slight warmth' },
+        { name: 'Driftwood', description: 'Greige with organic movement' },
+        { name: 'Custom', description: 'Color-matched to your specification' }
+      ]
+    },
+    {
+      slug: 'stone-whisper',
+      name: 'Stone Whisper',
+      type: 'Venetian Matte',
+      tagline: 'Depth without shine — modern restraint with old-world soul.',
+      description: 'For clients who want the depth and texture of Venetian plaster without reflective sheen. Stone Whisper has the quiet presence of ancient limestone — material richness that reveals itself slowly. Perfect for contemporary interiors that need warmth without ornamentation.',
+      sheen: 'Matte',
+      movement: 'Subtle',
+      texture: 'Smooth with natural variation',
+      composition: 'Natural lime putty, fine aggregates, natural pigments',
+      thickness: '2-3mm (3 coats)',
+      curing: '21-28 days to full cure',
+      bestLight: 'Midday / even ambient light',
+      bestRooms: ['Large living spaces', 'Modern homes', 'Ceilings', 'Long corridors', 'Historic properties'],
+      notRecommended: ['Small, dark rooms (needs light to read)', 'Wet areas'],
+      care: [
+        'Minimal maintenance required',
+        'Dust occasionally with soft brush',
+        'Clean with dry or barely damp cloth',
+        'Matte finish naturally hides minor imperfections'
+      ],
+      pairsWith: ['Concrete', 'Raw steel', 'Natural wood', 'Monochromatic palettes'],
+      projects: ['Branford Townhouse'],
+      colorways: [
+        { name: 'Whisper (Original)', description: 'Warm gray with stone-like depth' },
+        { name: 'Chalk', description: 'Soft matte white' },
+        { name: 'Ash', description: 'Cool gray with subtle blue undertone' },
+        { name: 'Custom', description: 'Color-matched to your specification' }
+      ]
+    },
+    {
+      slug: 'sea-mist',
+      name: 'Sea Mist',
+      type: 'Limewash',
+      tagline: 'Breathable mineral softness with natural variation — effortless, calm, lived-in.',
+      description: 'Traditional limewash for clients who want organic, imperfect beauty. Sea Mist is a mineral finish that breathes, regulates humidity, and develops character over time. The natural mottling creates a surface that looks like it\'s always been there.',
+      sheen: 'Low / Velvet',
+      movement: 'Organic (natural mottling)',
+      texture: 'Soft, chalky, slightly open',
+      composition: 'Slaked lime, water, natural pigments',
+      thickness: '0.5-1mm (3-5 coats)',
+      curing: '7-14 days',
+      bestLight: 'Morning / soft diffused light',
+      bestRooms: ['Bedrooms', 'Dining rooms', 'Studios', 'Historic homes', 'Coastal properties'],
+      notRecommended: ['High-traffic areas (marks more easily)', 'Bathrooms', 'Kitchens'],
+      care: [
+        'Naturally antimicrobial — self-cleaning properties',
+        'Touch up marks by lightly dampening with lime water',
+        'Can be refreshed with additional coat',
+        'Avoid harsh chemicals — lime is naturally alkaline'
+      ],
+      pairsWith: ['Linen', 'Raw wood', 'Terracotta', 'Natural fibers', 'Antiques'],
+      projects: ['Madison Beach House'],
+      colorways: [
+        { name: 'Mist (Original)', description: 'Soft white with coastal gray undertones' },
+        { name: 'Salt', description: 'Pure white with natural variation' },
+        { name: 'Dune', description: 'Warm sand with organic movement' },
+        { name: 'Custom', description: 'Any earth-tone pigment compatible' }
+      ]
+    },
+    {
+      slug: 'carrara-veil',
+      name: 'Carrara Veil',
+      type: 'Marmorino',
+      tagline: 'The designer\'s "quiet plaster" — smooth, elegant, and endlessly versatile.',
+      description: 'Marmorino is the middle ground: smoother and more refined than limewash, softer and less dramatic than polished Venetian. Carrara Veil is our take on this classic Italian finish — named for the veiled luminosity it shares with Carrara marble.',
+      sheen: 'Soft Satin',
+      movement: 'Subtle',
+      texture: 'Smooth, stone-like',
+      composition: 'Lime putty, crushed marble, natural pigments',
+      thickness: '2-3mm (2-3 coats)',
+      curing: '14-21 days',
+      bestLight: 'Midday / consistent lighting',
+      bestRooms: ['Living rooms', 'Bathrooms (with proper ventilation)', 'Hallways', 'Commercial spaces'],
+      notRecommended: ['Direct water contact (use Tadelakt for wet areas)'],
+      care: [
+        'Wipe with damp cloth as needed',
+        'More forgiving than polished Venetian',
+        'Can be sealed for additional protection',
+        'Touch-ups blend seamlessly'
+      ],
+      pairsWith: ['Marble', 'Neutral palettes', 'Contemporary furniture', 'Gallery walls'],
+      projects: [],
+      colorways: [
+        { name: 'Veil (Original)', description: 'Soft white with warm gray veiling' },
+        { name: 'Alabaster', description: 'Creamy white with subtle depth' },
+        { name: 'Fog', description: 'Cool gray with refined movement' },
+        { name: 'Custom', description: 'Color-matched to your specification' }
+      ]
+    },
+    {
+      slug: 'harbor-concrete',
+      name: 'Harbor Concrete',
+      type: 'Microcement',
+      tagline: 'Seamless architectural minimalism — monolithic surfaces with modern clarity.',
+      description: 'For clients who want the industrial poetry of concrete without the weight or cold. Harbor Concrete is a polymer-modified cementitious coating that can be applied over almost any substrate — creating seamless floors, walls, countertops, and wet areas.',
+      sheen: 'Matte to Satin (selectable)',
+      movement: 'Minimal',
+      texture: 'Smooth, uniform, industrial',
+      composition: 'Portland cement, polymers, fine aggregates, pigments',
+      thickness: '2-4mm',
+      curing: '7 days before use, 28 days full cure',
+      bestLight: 'Midday / even lighting',
+      bestRooms: ['Kitchens', 'Bathrooms', 'Floors', 'Showers', 'Feature walls', 'Commercial spaces'],
+      notRecommended: ['Exterior (without specific formulation)', 'Historic restoration'],
+      care: [
+        'Sealed surface — wipe clean with mild soap and water',
+        'Reseal every 2-3 years in wet areas',
+        'Avoid abrasive cleaners',
+        'Highly durable — designed for daily use'
+      ],
+      pairsWith: ['Wood', 'Black steel', 'White fixtures', 'Minimalist design'],
+      projects: ['Westport Modern Kitchen', 'Old Saybrook Inn'],
+      colorways: [
+        { name: 'Harbor (Original)', description: 'Medium gray with concrete character' },
+        { name: 'Slate', description: 'Dark charcoal, architectural' },
+        { name: 'Bone', description: 'Warm off-white' },
+        { name: 'Custom', description: 'Any RAL color available' }
+      ]
+    }
+  ];
+
+  return finishes.map((finish) => ({
+    params: { slug: finish.slug },
+    props: { finish },
+  }));
+}
+
+const { finish } = Astro.props;
+const slug = Astro.params.slug;
+
+// Convention-based image paths
+const heroSrc = `/images/finishes/${slug}/hero.jpg`;
+const gallerySrcs = [
+  `/images/finishes/${slug}/01.jpg`,
+  `/images/finishes/${slug}/02.jpg`,
+  `/images/finishes/${slug}/03.jpg`,
+];
+---
+
+<Layout title={`${finish.name} — ${finish.type}`} description={`${finish.name}: ${finish.tagline} ${finish.type} finish by Old Head Plaster. Sheen: ${finish.sheen}. Best for: ${finish.bestRooms.slice(0, 3).join(', ')}.`}>
+  <!-- Back Link -->
+  <div class="bg-cream py-4 border-b border-stone/50">
+    <div class="max-w-7xl mx-auto px-6">
+      <a href="/finishes" class="group inline-flex items-center gap-3 text-charcoal/60 hover:text-charcoal transition-colors duration-300">
+        <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+        </svg>
+        <span class="relative">
+          All Finishes
+          <span class="absolute bottom-0 left-0 w-0 h-px bg-charcoal group-hover:w-full transition-all duration-300"></span>
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="relative py-16 md:py-24 bg-charcoal overflow-hidden">
+    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E');"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-8 h-px bg-bronze"></div>
+            <p class="text-bronze text-sm tracking-[0.2em] uppercase font-medium">{finish.type}</p>
+          </div>
+
+          <h1 class="text-cream mb-4">{finish.name}</h1>
+          <p class="text-cream/70 text-xl leading-relaxed mb-8">{finish.tagline}</p>
+
+          <!-- Quick Specs -->
+          <div class="grid grid-cols-3 gap-4 mb-8">
+            <div class="border border-cream/20 p-4">
+              <p class="text-cream/50 text-xs tracking-wide uppercase mb-1">Sheen</p>
+              <p class="text-cream font-medium">{finish.sheen}</p>
+            </div>
+            <div class="border border-cream/20 p-4">
+              <p class="text-cream/50 text-xs tracking-wide uppercase mb-1">Movement</p>
+              <p class="text-cream font-medium">{finish.movement}</p>
+            </div>
+            <div class="border border-cream/20 p-4">
+              <p class="text-cream/50 text-xs tracking-wide uppercase mb-1">Best Light</p>
+              <p class="text-cream font-medium">{finish.bestLight}</p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-4">
+            <a
+              href="/contact?finish={finish.slug}"
+              class="group relative inline-block px-8 py-4 bg-bronze text-charcoal font-medium tracking-[0.1em] uppercase text-sm overflow-hidden transition-all duration-500 hover:shadow-[0_8px_30px_rgba(201,136,33,0.4)]"
+            >
+              <span class="relative z-10">Request Sample Board</span>
+              <div class="absolute inset-0 bg-cream transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+            </a>
+            <a
+              href="/showroom"
+              class="inline-block px-8 py-4 border border-cream/30 text-cream tracking-[0.1em] uppercase text-sm hover:bg-cream hover:text-charcoal transition-all duration-300"
+            >
+              See in Showroom
+            </a>
+          </div>
+        </div>
+
+        <!-- Hero Image -->
+        <div class="relative">
+          <div class="aspect-square relative overflow-hidden rounded-sm">
+            <img
+              src={heroSrc}
+              alt={`${finish.name} finish example`}
+              class="w-full h-full object-cover"
+              loading="eager"
+              decoding="async"
+            />
+
+            <!-- Finish type badge -->
+            <div class="absolute bottom-4 left-4 right-4 bg-charcoal/90 backdrop-blur-sm p-4">
+              <p class="text-cream/50 text-xs tracking-wide uppercase mb-1">Finish Type</p>
+              <p class="text-cream font-medium">{finish.type}</p>
+            </div>
+          </div>
+
+          <!-- QR indicator -->
+          <div class="absolute -top-3 -right-3 w-16 h-16 bg-cream flex items-center justify-center shadow-lg">
+            <svg class="w-8 h-8 text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Description -->
+  <section class="py-16 bg-cream">
+    <div class="max-w-4xl mx-auto px-6">
+      <p class="text-charcoal/80 text-xl leading-relaxed">
+        {finish.description}
+      </p>
+    </div>
+  </section>
+
+  <!-- Gallery: In Real Spaces -->
+  <section class="py-16 bg-stone/30">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-8 h-px bg-bronze"></div>
+        <h2 class="text-2xl font-heading text-charcoal">In Real Spaces</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {gallerySrcs.map((src, index) => (
+          <div class="aspect-[4/3] relative overflow-hidden group">
+            <img
+              src={src}
+              alt={`${finish.name} example ${index + 1}`}
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+              decoding="async"
+              onerror="this.parentElement.style.display='none'"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Specifications -->
+  <section class="py-16 bg-stone/30">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- Specs Column -->
+        <div class="lg:col-span-2">
+          <h2 class="text-2xl font-heading text-charcoal mb-8">Technical Specifications</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-cream p-6 border border-stone/50">
+              <h3 class="text-sm tracking-[0.15em] uppercase text-charcoal/50 mb-4">Composition</h3>
+              <p class="text-charcoal">{finish.composition}</p>
+            </div>
+            <div class="bg-cream p-6 border border-stone/50">
+              <h3 class="text-sm tracking-[0.15em] uppercase text-charcoal/50 mb-4">Texture</h3>
+              <p class="text-charcoal">{finish.texture}</p>
+            </div>
+            <div class="bg-cream p-6 border border-stone/50">
+              <h3 class="text-sm tracking-[0.15em] uppercase text-charcoal/50 mb-4">Thickness</h3>
+              <p class="text-charcoal">{finish.thickness}</p>
+            </div>
+            <div class="bg-cream p-6 border border-stone/50">
+              <h3 class="text-sm tracking-[0.15em] uppercase text-charcoal/50 mb-4">Curing Time</h3>
+              <p class="text-charcoal">{finish.curing}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Colorways -->
+        <div>
+          <h2 class="text-2xl font-heading text-charcoal mb-8">Available Colorways</h2>
+
+          <div class="space-y-4">
+            {finish.colorways.map((color) => (
+              <div class="bg-cream p-4 border border-stone/50 flex items-start gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-plaster to-stone shrink-0"></div>
+                <div>
+                  <p class="text-charcoal font-medium">{color.name}</p>
+                  <p class="text-charcoal/60 text-sm">{color.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Best Rooms + Pairs With -->
+  <section class="py-16 bg-cream">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        <!-- Best Rooms -->
+        <div>
+          <h3 class="text-lg font-heading text-charcoal mb-4 flex items-center gap-3">
+            <svg class="w-5 h-5 text-bronze" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Best For
+          </h3>
+          <ul class="space-y-2">
+            {finish.bestRooms.map((room) => (
+              <li class="text-charcoal/70 flex items-center gap-2">
+                <div class="w-1.5 h-1.5 rounded-full bg-bronze"></div>
+                {room}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Not Recommended -->
+        <div>
+          <h3 class="text-lg font-heading text-charcoal mb-4 flex items-center gap-3">
+            <svg class="w-5 h-5 text-charcoal/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Not Recommended
+          </h3>
+          <ul class="space-y-2">
+            {finish.notRecommended.map((item) => (
+              <li class="text-charcoal/50 flex items-start gap-2">
+                <div class="w-1.5 h-1.5 rounded-full bg-charcoal/30 mt-2 shrink-0"></div>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Pairs With -->
+        <div>
+          <h3 class="text-lg font-heading text-charcoal mb-4 flex items-center gap-3">
+            <svg class="w-5 h-5 text-bronze" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+            Pairs Beautifully With
+          </h3>
+          <ul class="space-y-2">
+            {finish.pairsWith.map((item) => (
+              <li class="text-charcoal/70 flex items-center gap-2">
+                <div class="w-1.5 h-1.5 rounded-full bg-bronze"></div>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Care Instructions -->
+  <section class="py-16 bg-stone/30">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-8 h-px bg-bronze"></div>
+        <h2 class="text-2xl font-heading text-charcoal">Care & Maintenance</h2>
+      </div>
+
+      <div class="bg-cream p-8 border border-stone/50">
+        <ul class="space-y-4">
+          {finish.care.map((instruction) => (
+            <li class="flex items-start gap-4 text-charcoal/70">
+              <svg class="w-5 h-5 text-bronze shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>{instruction}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div class="mt-6 pt-6 border-t border-stone/50">
+          <a href="/care" class="text-bronze hover:text-charcoal transition-colors text-sm inline-flex items-center gap-2">
+            Full care guide
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Projects -->
+  {finish.projects.length > 0 && (
+    <section class="py-16 bg-cream">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="flex items-center gap-4 mb-8">
+          <div class="w-8 h-px bg-bronze"></div>
+          <h2 class="text-2xl font-heading text-charcoal">See This Finish In Action</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {finish.projects.map((projectTitle) => (
+            <a href={`/work/${projectTitle.toLowerCase().replace(/ /g, '-')}`} class="group block">
+              <div class="aspect-[16/10] bg-gradient-to-br from-plaster to-stone relative overflow-hidden mb-4">
+                <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E');"></div>
+                <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/20 transition-colors duration-300"></div>
+              </div>
+              <h3 class="text-lg font-heading text-charcoal group-hover:text-bronze transition-colors">{projectTitle}</h3>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CTA -->
+  <section class="relative py-24 bg-charcoal overflow-hidden">
+    <div class="absolute inset-0 opacity-5" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E');"></div>
+
+    <div class="relative max-w-4xl mx-auto px-6 text-center">
+      <h2 class="text-cream mb-4">Experience {finish.name} in Person</h2>
+      <p class="text-cream/60 mb-10 max-w-xl mx-auto leading-relaxed">
+        Photos only tell part of the story. See this finish in controlled lighting, touch the texture, and understand how it will transform your space.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={`/contact?finish=${finish.slug}`}
+          class="group relative inline-block px-10 py-5 bg-bronze text-charcoal font-medium tracking-[0.1em] uppercase text-sm overflow-hidden transition-all duration-500 hover:shadow-[0_8px_30px_rgba(201,136,33,0.4)]"
+        >
+          <span class="relative z-10 flex items-center justify-center gap-3">
+            Request Sample Board
+            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </span>
+          <div class="absolute inset-0 bg-cream transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+        </a>
+
+        <a
+          href="/showroom"
+          class="group inline-block px-10 py-5 border border-cream/30 text-cream tracking-[0.1em] uppercase text-sm hover:bg-cream/10 hover:border-cream/50 transition-all duration-300"
+        >
+          <span class="flex items-center justify-center gap-3">
+            Book Showroom Visit
+            <svg class="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- QR Note -->
+  <section class="py-6 bg-stone/50 border-t border-stone">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <p class="text-charcoal/50 text-sm">
+        <strong class="text-charcoal">QR-Ready Page:</strong> This page is linked from our physical sample boards. Scan the QR code on any {finish.name} sample to return here for full specifications.
+      </p>
+    </div>
+  </section>
+</Layout>

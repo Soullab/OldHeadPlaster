@@ -1,0 +1,456 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const finishes = [
+  {
+    number: '01',
+    slug: 'mayo-pearl',
+    name: 'Mayo Pearl',
+    type: 'Venetian Polished',
+    intent: 'Marble-level glow with controlled movement — classic, luminous, unmistakably high-end.',
+    sheen: 'High',
+    movement: 'Medium',
+    bestLight: 'Evening'
+  },
+  {
+    number: '02',
+    slug: 'louisburgh-silk',
+    name: 'Louisburgh Silk',
+    type: 'Venetian Satin',
+    intent: 'A soft, refined radiance that reads expensive without shouting.',
+    sheen: 'Satin',
+    movement: 'Subtle–Medium',
+    bestLight: 'Morning'
+  },
+  {
+    number: '03',
+    slug: 'stone-whisper',
+    name: 'Stone Whisper',
+    type: 'Venetian Matte',
+    intent: 'Depth without shine — modern restraint with old-world soul.',
+    sheen: 'Matte',
+    movement: 'Subtle',
+    bestLight: 'Midday'
+  },
+  {
+    number: '04',
+    slug: 'sea-mist',
+    name: 'Sea Mist',
+    type: 'Limewash',
+    intent: 'Breathable mineral softness with natural variation — effortless, calm, lived-in.',
+    sheen: 'Low',
+    movement: 'Organic',
+    bestLight: 'Morning'
+  },
+  {
+    number: '05',
+    slug: 'carrara-veil',
+    name: 'Carrara Veil',
+    type: 'Marmorino',
+    intent: 'The designer\'s "quiet plaster" — smooth, elegant, and endlessly versatile.',
+    sheen: 'Soft Satin',
+    movement: 'Subtle',
+    bestLight: 'Midday'
+  },
+  {
+    number: '06',
+    slug: 'harbor-concrete',
+    name: 'Harbor Concrete',
+    type: 'Microcement',
+    intent: 'Seamless architectural minimalism — monolithic surfaces with modern clarity.',
+    sheen: 'Matte–Satin',
+    movement: 'Minimal',
+    bestLight: 'Midday'
+  }
+];
+
+const roomGuide = [
+  {
+    room: 'Powder Room / Foyer',
+    finishes: ['Mayo Pearl', 'Moroccan Seal', 'Bronze Burnish'],
+    note: 'High-impact drama in compact spaces'
+  },
+  {
+    room: 'Living / Bedroom',
+    finishes: ['Louisburgh Silk', 'Stone Whisper', 'Sea Mist'],
+    note: 'Refined calm for everyday living'
+  },
+  {
+    room: 'Bath / Wet Areas',
+    finishes: ['Moroccan Seal', 'Harbor Concrete'],
+    note: 'Water-resistant, seamless elegance'
+  },
+  {
+    room: 'Hallways / Stairwells',
+    finishes: ['Stone Whisper', 'Wind Carved'],
+    note: 'Subtle depth in transitional spaces'
+  }
+];
+
+const designerSpecials = [
+  {
+    name: 'Bronze Burnish',
+    description: 'Gilded sheen glaze over select Venetian'
+  },
+  {
+    name: 'Mayo Drift',
+    description: 'Venetian strié / linear trowel movement'
+  },
+  {
+    name: 'Heritage Repair',
+    description: 'Historic restoration + reproduction plasterwork'
+  }
+];
+
+// Best visual photos for carousel
+const carouselImages = [
+  { src: '/images/Website/20241024_135059.jpg', alt: 'Microcement bathroom with calacatta marble' },
+  { src: '/images/Website/20220311_162443.jpg', alt: 'Fireplace with crown molding transition' },
+  { src: '/images/Website/20241011_173659~4.jpg', alt: 'Marbled plaster close-up' },
+  { src: '/images/Website/20220124_163453.jpg', alt: 'Dark venetian with depth' },
+  { src: '/images/Website/20200910_093606~2.jpg', alt: 'Metallic patina texture' },
+  { src: '/images/Website/20221012_132132.jpg', alt: 'Gray plaster room with oval window' },
+  { src: '/images/Website/20220309_151608.jpg', alt: 'Tadelakt bathroom seamless finish' },
+  { src: '/images/Website/20240913_170334.jpg', alt: 'Shower niches with perfect corners' },
+];
+---
+
+<Layout title="Most Sought-After Finishes" description="A curated collection of the decorative plaster finishes designers specify most. Venetian plaster, limewash, marmorino, and microcement — each available as a QR-coded sample board.">
+  <!-- Hero -->
+  <section class="relative py-24 md:py-32 bg-charcoal overflow-hidden">
+    <div class="absolute inset-0">
+      <img
+        src="/images/Website/20241011_173659~4.jpg"
+        alt="Marbled plaster close-up showing depth and movement"
+        class="w-full h-full object-cover"
+        loading="eager"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-charcoal/90 via-charcoal/70 to-charcoal/30"></div>
+    </div>
+
+    <div class="relative max-w-7xl mx-auto px-6">
+      <div class="max-w-3xl">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-12 h-px bg-bronze"></div>
+          <p class="text-bronze text-sm tracking-[0.25em] uppercase font-medium">Curated Collection</p>
+        </div>
+
+        <h1 class="text-cream mb-6 leading-[1.1]">Most Sought-After<br/>Finishes</h1>
+
+        <p class="text-cream/70 text-xl leading-relaxed mb-10">
+          The finishes designers specify over and over — each available as a QR-coded sample board
+          in our Material Library. Experience them in morning, midday, and evening light before you decide.
+        </p>
+
+        <div class="flex flex-wrap gap-4">
+          <a
+            href="/contact?type=showroom"
+            class="group relative inline-block px-8 py-4 bg-cream text-charcoal font-medium tracking-[0.1em] uppercase text-sm overflow-hidden transition-all duration-500 hover:shadow-[0_8px_30px_rgba(255,255,255,0.3)]"
+          >
+            <span class="relative z-10">Book Showroom Visit</span>
+            <div class="absolute inset-0 bg-bronze transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+          </a>
+          <a
+            href="/contact?type=samples"
+            class="inline-block px-8 py-4 border border-cream/50 text-cream tracking-[0.1em] uppercase text-sm hover:bg-cream hover:text-charcoal transition-all duration-300"
+          >
+            Request Sample Kit
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hero Carousel -->
+  <div class="bg-charcoal py-4 overflow-hidden border-t border-charcoal-border">
+    <div class="carousel-track flex gap-4 animate-scroll">
+      {[...carouselImages, ...carouselImages].map((img) => (
+        <div class="flex-shrink-0 w-72 h-48 overflow-hidden">
+          <img
+            src={img.src}
+            alt={img.alt}
+            class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+            loading="lazy"
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- The Top 6 Grid -->
+  <section class="py-20 md:py-28 bg-cream">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <div class="flex items-center justify-center gap-4 mb-4">
+          <div class="w-8 h-px bg-bronze"></div>
+          <p class="text-bronze text-sm tracking-[0.2em] uppercase font-medium">The Foundations Collection</p>
+          <div class="w-8 h-px bg-bronze"></div>
+        </div>
+        <h2 class="text-charcoal">Six Finishes. Infinite Possibility.</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {finishes.map((finish) => (
+          <a href={`/finishes/${finish.slug}`} class="group block bg-stone/30 border border-stone hover:border-bronze/30 transition-colors duration-500">
+            <!-- Image area -->
+            <div class="aspect-[4/3] relative overflow-hidden">
+              <img
+                src={`/images/finishes/${finish.slug}/hero.jpg`}
+                alt={`${finish.name} finish`}
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+              />
+
+              <!-- Number badge -->
+              <div class="absolute top-4 left-4">
+                <span class="text-5xl font-heading text-cream/30 drop-shadow-lg">{finish.number}</span>
+              </div>
+
+              <!-- View indicator on hover -->
+              <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/20 transition-colors duration-300 flex items-center justify-center">
+                <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-cream font-medium tracking-wide uppercase text-sm">View Finish</span>
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6">
+              <div class="mb-4">
+                <p class="text-bronze text-xs tracking-[0.2em] uppercase mb-1">{finish.type}</p>
+                <h3 class="text-2xl font-heading text-charcoal">{finish.name}</h3>
+              </div>
+
+              <p class="text-charcoal/70 leading-relaxed mb-6">
+                {finish.intent}
+              </p>
+
+              <!-- Specs -->
+              <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm mb-6 pb-6 border-b border-stone">
+                <div class="flex items-center gap-2">
+                  <span class="text-charcoal/50">Sheen:</span>
+                  <span class="text-charcoal font-medium">{finish.sheen}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-charcoal/50">Movement:</span>
+                  <span class="text-charcoal font-medium">{finish.movement}</span>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between">
+                <span class="text-charcoal/50 text-sm">Best light: {finish.bestLight}</span>
+                <span class="inline-flex items-center gap-2 text-bronze group-hover:text-charcoal transition-colors text-sm font-medium">
+                  View Details
+                  <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Choose by Room -->
+  <section class="py-20 bg-stone relative overflow-hidden">
+    <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E');"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <div class="flex items-center justify-center gap-4 mb-4">
+          <div class="w-8 h-px bg-bronze"></div>
+          <p class="text-bronze text-sm tracking-[0.2em] uppercase font-medium">Quick Guide</p>
+          <div class="w-8 h-px bg-bronze"></div>
+        </div>
+        <h2 class="text-charcoal mb-4">Choose by Room</h2>
+        <p class="text-charcoal/60 max-w-xl mx-auto">
+          Every space has its ideal finish. Here's where our clients use each.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {roomGuide.map((room) => (
+          <div class="bg-cream p-6 border border-stone/50">
+            <h3 class="text-lg font-heading text-charcoal mb-2">{room.room}</h3>
+            <p class="text-charcoal/50 text-sm mb-4">{room.note}</p>
+
+            <ul class="space-y-2 mb-6">
+              {room.finishes.map((finish) => (
+                <li class="flex items-center gap-2 text-charcoal">
+                  <div class="w-1.5 h-1.5 rounded-full bg-bronze"></div>
+                  <span>{finish}</span>
+                </li>
+              ))}
+            </ul>
+
+            <a
+              href={`/contact?room=${encodeURIComponent(room.room)}`}
+              class="text-bronze text-sm font-medium hover:text-charcoal transition-colors inline-flex items-center gap-1"
+            >
+              Discuss this room
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- The Sampling Promise -->
+  <section class="py-20 md:py-28 bg-cream">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <!-- Visual - Sample Board -->
+        <div class="aspect-[4/5] relative">
+          <!-- Finish texture background -->
+          <img
+            src="/images/Website/20241011_173659~4.jpg"
+            alt="Marbled plaster sample board"
+            class="absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+          />
+
+          <!-- QR Code in corner -->
+          <div class="absolute top-6 right-6 w-24 h-24 bg-cream rounded shadow-lg p-1">
+            <img
+              src="/images/qr-code-showroom.svg"
+              alt="QR code - scan for specifications"
+              class="w-full h-full"
+            />
+          </div>
+
+          <!-- Sample board info overlay -->
+          <div class="absolute bottom-8 right-8 left-8">
+            <div class="bg-charcoal/90 backdrop-blur-sm p-6">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="w-16 h-16 bg-cream rounded overflow-hidden">
+                  <img
+                    src="/images/qr-code-showroom.svg"
+                    alt="QR code"
+                    class="w-full h-full"
+                  />
+                </div>
+                <div>
+                  <p class="text-cream font-medium">QR-Coded Sample</p>
+                  <p class="text-cream/60 text-sm">Scan for full specifications</p>
+                </div>
+              </div>
+              <div class="text-cream/70 text-sm space-y-1">
+                <p>Photos in multiple lighting</p>
+                <p>Application video</p>
+                <p>Care + maintenance notes</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Corner accents -->
+          <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-bronze/30"></div>
+          <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-bronze/30"></div>
+        </div>
+
+        <div>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-8 h-px bg-bronze"></div>
+            <p class="text-bronze text-sm tracking-[0.2em] uppercase font-medium">The Sampling Promise</p>
+          </div>
+
+          <h2 class="text-charcoal mb-6 text-3xl md:text-4xl font-heading leading-tight">
+            "You don't choose plaster<br/>from a thumbnail."
+          </h2>
+
+          <div class="space-y-4 text-charcoal/70 leading-relaxed mb-8">
+            <p>
+              That's why we create <strong class="text-charcoal">large-format sample boards</strong> — 12" x 12" minimum — and show them in controlled lighting conditions: morning, midday, and evening.
+            </p>
+            <p>
+              Each sample has a <strong class="text-charcoal">QR code</strong> linking to its specification page: photos in multiple lighting conditions, application video, substrate requirements, and care notes.
+            </p>
+            <p>
+              You see exactly what you're getting. No surprises, no guesswork.
+            </p>
+          </div>
+
+          <a
+            href="/contact?type=showroom"
+            class="group relative inline-block px-8 py-4 bg-charcoal text-cream font-medium tracking-[0.1em] uppercase text-sm overflow-hidden transition-all duration-500 hover:shadow-[0_8px_30px_rgba(45,42,38,0.3)]"
+          >
+            <span class="relative z-10 flex items-center gap-3">
+              Book Showroom Consult
+              <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </span>
+            <div class="absolute inset-0 bg-bronze transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Designer-Only Specials -->
+  <section class="py-12 bg-charcoal">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row md:items-center gap-8">
+        <div class="md:w-1/3">
+          <p class="text-bronze text-sm tracking-[0.2em] uppercase font-medium mb-2">For the Trade</p>
+          <h3 class="text-cream text-xl font-heading">Designer-Only Finishes</h3>
+          <p class="text-cream/50 text-sm mt-1">Available by request</p>
+        </div>
+
+        <div class="md:w-2/3 flex flex-wrap gap-6 md:gap-10">
+          {designerSpecials.map((special) => (
+            <div class="flex items-start gap-3">
+              <div class="w-1 h-1 rounded-full bg-bronze mt-2"></div>
+              <div>
+                <p class="text-cream font-medium">{special.name}</p>
+                <p class="text-cream/50 text-sm">{special.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 bg-stone relative overflow-hidden">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-16 bg-gradient-to-b from-charcoal/20 to-transparent"></div>
+
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h2 class="text-charcoal mb-4">Not Sure Which Finish?</h2>
+      <p class="text-charcoal/60 mb-10 max-w-xl mx-auto leading-relaxed">
+        That's what the showroom is for. See them in person, touch the textures, watch how light moves across each surface. We'll help you find the right match.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/contact?type=showroom"
+          class="group relative inline-block px-10 py-5 bg-charcoal text-cream font-medium tracking-[0.1em] uppercase text-sm overflow-hidden transition-all duration-500 hover:shadow-[0_8px_30px_rgba(45,42,38,0.3)]"
+        >
+          <span class="relative z-10 flex items-center justify-center gap-3">
+            Schedule Visit
+            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </span>
+          <div class="absolute inset-0 bg-bronze transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+        </a>
+
+        <a
+          href="/professionals"
+          class="group inline-block px-10 py-5 border border-charcoal/30 text-charcoal tracking-[0.1em] uppercase text-sm hover:bg-charcoal hover:text-cream transition-all duration-300"
+        >
+          <span class="flex items-center justify-center gap-3">
+            Trade Resources
+            <svg class="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,343 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const carouselImages = [
+  { src: '/images/Website/20241024_135059.jpg', alt: 'Microcement bathroom with calacatta marble' },
+  { src: '/images/Website/20220311_162443.jpg', alt: 'Fireplace with crown molding transition' },
+  { src: '/images/Website/20241011_173659~4.jpg', alt: 'Marbled plaster close-up' },
+  { src: '/images/Website/20220124_163453.jpg', alt: 'Dark venetian with depth' },
+  { src: '/images/Website/20200910_093606~2.jpg', alt: 'Metallic patina texture' },
+  { src: '/images/Website/20221012_132132.jpg', alt: 'Gray plaster room with oval window' },
+  { src: '/images/Website/20220309_151608.jpg', alt: 'Tadelakt bathroom seamless finish' },
+  { src: '/images/Website/20240913_170334.jpg', alt: 'Shower niches with perfect corners' },
+];
+
+const projects = [
+  {
+    title: 'Greenwich Colonial Restoration',
+    category: 'Venetian Plaster',
+    year: '2024',
+    slug: 'greenwich-colonial',
+    scope: '2,400 sq ft',
+    type: 'Private Residence',
+    architect: 'Chen Architecture',
+    featured: true,
+    image: '/images/Website/20241024_135059.jpg'
+  },
+  {
+    title: 'Madison Beach House',
+    category: 'Lime Wash',
+    year: '2024',
+    slug: 'madison-beach-house',
+    scope: '3,800 sq ft',
+    type: 'Private Residence',
+    architect: 'Studio North Design',
+    image: '/images/Website/20221012_132132.jpg'
+  },
+  {
+    title: 'Westport Modern Kitchen',
+    category: 'Microcement',
+    year: '2023',
+    slug: 'westport-modern',
+    scope: '650 sq ft',
+    type: 'Kitchen & Bath',
+    architect: 'Kline Interiors',
+    image: '/images/Website/20240913_170334.jpg'
+  },
+  {
+    title: 'New Haven Historic Restoration',
+    category: 'Historic Restoration',
+    year: '2023',
+    slug: 'new-haven-restoration',
+    scope: '4,200 sq ft',
+    type: 'National Register Property',
+    featured: true,
+    image: '/images/Website/20220311_162443.jpg'
+  },
+  {
+    title: 'Guilford Estate',
+    category: 'Venetian Plaster',
+    year: '2023',
+    slug: 'guilford-estate',
+    scope: '5,600 sq ft',
+    type: 'Private Residence',
+    architect: 'Robert A.M. Stern Architects',
+    image: '/images/Website/20220124_163453.jpg'
+  },
+  {
+    title: 'Branford Townhouse',
+    category: 'Lime Wash',
+    year: '2022',
+    slug: 'branford-townhouse',
+    scope: '1,800 sq ft',
+    type: 'Private Residence',
+    image: '/images/Website/20241011_173659~4.jpg'
+  },
+  {
+    title: 'Old Saybrook Inn',
+    category: 'Microcement',
+    year: '2022',
+    slug: 'old-saybrook-retreat',
+    scope: '2,100 sq ft',
+    type: 'Hospitality',
+    architect: 'Atelier North',
+    image: '/images/Website/20220309_151608.jpg'
+  },
+  {
+    title: 'Essex Victorian Revival',
+    category: 'Historic Restoration',
+    year: '2022',
+    slug: 'essex-victorian',
+    scope: '3,400 sq ft',
+    type: 'National Register Property',
+    image: '/images/Website/20200910_093606~2.jpg'
+  },
+];
+
+const categories = ['All', 'Venetian Plaster', 'Microcement', 'Lime Wash', 'Historic Restoration'];
+
+const stats = [
+  { value: '500+', label: 'Projects completed' },
+  { value: '1.2M', label: 'Square feet finished' },
+  { value: '20+', label: 'Years of practice' },
+];
+---
+
+<Layout title="Selected Projects" description="Portfolio of decorative plaster projects for architects and discerning homeowners. Venetian plaster, microcement, lime wash, and historic restoration across Connecticut and the tri-state area.">
+  <!-- Hero with Spiral Staircase -->
+  <section class="relative min-h-[70vh] flex items-end bg-charcoal overflow-hidden">
+    <!-- Background Image -->
+    <div class="absolute inset-0">
+      <img
+        src="/images/20241206_145032-1.jpg"
+        alt="Spiral staircase with seamless curved plaster"
+        class="w-full h-full object-cover"
+        loading="eager"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/60 to-charcoal/20"></div>
+    </div>
+
+    <div class="relative max-w-7xl mx-auto px-6 py-16 md:py-24 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-end">
+        <div>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-px bg-bronze"></div>
+            <p class="text-bronze text-sm tracking-[0.25em] uppercase font-medium">Selected Projects</p>
+          </div>
+          <h1 class="text-cream mb-6 leading-[1.1]">Work That Speaks<br/>for Itself</h1>
+          <p class="text-cream/80 text-xl max-w-xl leading-relaxed">
+            A curated selection from over 500 projects. Each represents the intersection
+            of architectural vision and material mastery — the kind of work that becomes
+            a reference for future specifications.
+          </p>
+        </div>
+
+        <!-- Stats -->
+        <div class="flex flex-wrap gap-8 lg:gap-12 lg:justify-end">
+          {stats.map((stat) => (
+            <div class="text-right">
+              <div class="text-4xl md:text-5xl font-heading text-bronze mb-1">{stat.value}</div>
+              <div class="text-cream/70 text-sm tracking-wide">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Image Carousel -->
+  <div class="bg-charcoal py-4 overflow-hidden">
+    <div class="carousel-track flex gap-4 animate-scroll">
+      {[...carouselImages, ...carouselImages].map((img) => (
+        <div class="flex-shrink-0 w-72 h-48 overflow-hidden">
+          <img
+            src={img.src}
+            alt={img.alt}
+            class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+            loading="lazy"
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Filter -->
+  <section class="py-6 bg-charcoal border-b border-cream/10 sticky top-[73px] z-40">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-wrap gap-3">
+        {categories.map((cat, index) => (
+          <button
+            class:list={[
+              'px-5 py-2.5 text-sm tracking-[0.1em] uppercase transition-all duration-300 relative overflow-hidden group',
+              index === 0
+                ? 'bg-bronze text-charcoal shadow-md'
+                : 'bg-transparent text-cream/70 hover:text-cream border border-cream/30 hover:border-cream/50'
+            ]}
+            data-filter={cat.toLowerCase().replace(' ', '-')}
+          >
+            <span class="relative z-10">{cat}</span>
+            {index !== 0 && (
+              <div class="absolute inset-0 bg-cream/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
+            )}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Grid -->
+  <section class="section-padding bg-cream">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+        {projects.map((project, index) => (
+          <a
+            href={`/work/${project.slug}`}
+            class:list={[
+              'group block',
+              project.featured && 'md:col-span-2 lg:col-span-1'
+            ]}
+            style={`animation-delay: ${index * 100}ms`}
+          >
+            <div class="aspect-[4/5] bg-stone relative overflow-hidden mb-6">
+              <!-- Project Image -->
+              <img
+                src={project.image}
+                alt={project.title}
+                class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/40 transition-colors duration-500"></div>
+
+              <!-- Hover overlay with project name -->
+              <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                <div class="bg-cream/95 backdrop-blur-sm px-8 py-5 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 text-center max-w-[80%]">
+                  <h3 class="text-charcoal text-lg font-heading mb-2">{project.title}</h3>
+                  <span class="text-charcoal/60 text-sm tracking-[0.15em] uppercase font-medium flex items-center justify-center gap-2">
+                    View Project
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Category badge -->
+              <div class="absolute top-4 left-4">
+                <span class="bg-cream/90 backdrop-blur-sm text-charcoal/70 text-xs tracking-wider uppercase px-3 py-1.5">
+                  {project.category}
+                </span>
+              </div>
+
+              <!-- Scope badge -->
+              <div class="absolute bottom-4 right-4">
+                <span class="bg-charcoal/80 backdrop-blur-sm text-cream text-xs tracking-wide px-3 py-1.5">
+                  {project.scope}
+                </span>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-heading text-charcoal group-hover:text-bronze transition-colors duration-300">
+                  {project.title}
+                </h3>
+                <span class="text-charcoal/40 text-sm shrink-0">{project.year}</span>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-charcoal/50">
+                <span>{project.type}</span>
+                {project.architect && (
+                  <>
+                    <span class="w-1 h-1 rounded-full bg-charcoal/30"></span>
+                    <span class="text-charcoal/70">{project.architect}</span>
+                  </>
+                )}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Architect Quote -->
+  <section class="relative overflow-hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-2">
+      <!-- Image Side -->
+      <div class="relative h-64 lg:h-auto lg:min-h-[500px]">
+        <img
+          src="/images/Website/20220311_162443.jpg"
+          alt="Decorative plaster fireplace detail"
+          class="absolute inset-0 w-full h-full object-cover"
+          loading="lazy"
+        />
+        <div class="absolute inset-0 bg-charcoal/20"></div>
+      </div>
+
+      <!-- Quote Side -->
+      <div class="bg-stone py-16 lg:py-20 px-6 lg:px-16 flex items-center">
+        <div class="max-w-xl">
+          <svg class="w-12 h-12 text-bronze/30 mb-8" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+          </svg>
+
+          <blockquote class="text-charcoal text-xl md:text-2xl leading-relaxed mb-8 font-heading">
+            "Daragh's work has appeared in three of our published projects. When clients ask how we achieve that depth and luminosity, the answer is always the same: it's the plasterer."
+          </blockquote>
+
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-full bg-charcoal/10 flex items-center justify-center">
+              <span class="text-charcoal font-heading text-xl">MC</span>
+            </div>
+            <div class="text-left">
+              <p class="text-charcoal font-medium">Margaret Chen, ASID</p>
+              <p class="text-charcoal/50 text-sm">Chen Architecture, Greenwich</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="relative py-24 bg-charcoal overflow-hidden">
+    <!-- Texture -->
+    <div class="absolute inset-0 opacity-5" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E');"></div>
+
+    <div class="relative max-w-4xl mx-auto px-6 text-center">
+      <h2 class="text-cream mb-4">Discussing a Project?</h2>
+      <p class="text-cream/60 mb-10 max-w-xl mx-auto leading-relaxed">
+        Whether you're specifying a finish for a client or envisioning a transformation for your own home, I welcome the conversation.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <!-- Primary CTA -->
+        <a
+          href="/contact"
+          class="group relative inline-block px-10 py-5 bg-bronze text-charcoal font-medium tracking-[0.1em] uppercase text-sm overflow-hidden transition-all duration-500 hover:shadow-[0_8px_30px_rgba(201,136,33,0.4)]"
+        >
+          <span class="relative z-10 flex items-center justify-center gap-3">
+            Request Consultation
+            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </span>
+          <div class="absolute inset-0 bg-cream transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+        </a>
+
+        <!-- Secondary CTA -->
+        <a
+          href="/showroom"
+          class="group inline-block px-10 py-5 border border-cream/30 text-cream tracking-[0.1em] uppercase text-sm hover:bg-cream/10 hover:border-cream/50 transition-all duration-300"
+        >
+          <span class="flex items-center justify-center gap-3">
+            Material Library
+            <svg class="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,209 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+
+const projects = [
+  {
+    id: 'greenwich-estate',
+    name: 'Greenwich Estate',
+    client: 'Harrison Family',
+    status: 'active',
+    phase: 'Application Phase',
+    progress: 65,
+    sqft: 4200,
+    finishes: ['Venetian Plaster', 'Tadelakt', 'Lime Wash'],
+    team: [
+      { name: 'Sarah Chen', role: 'Architect', company: 'Chen Design Group' },
+      { name: 'Mark Thompson', role: 'General Contractor', company: 'Thompson Builders' },
+      { name: 'Lisa Harrison', role: 'Client', company: '' }
+    ],
+    startDate: 'Nov 15, 2024',
+    estCompletion: 'Mar 30, 2025'
+  },
+  {
+    id: 'westport-modern',
+    name: 'Westport Modern',
+    client: 'Chen Residence',
+    status: 'active',
+    phase: 'Sampling Phase',
+    progress: 30,
+    sqft: 2800,
+    finishes: ['Microcement', 'Polished Lime'],
+    team: [
+      { name: 'James Wong', role: 'Architect', company: 'Modern CT Architecture' },
+      { name: 'David Chen', role: 'Client', company: '' }
+    ],
+    startDate: 'Dec 5, 2024',
+    estCompletion: 'Apr 15, 2025'
+  },
+  {
+    id: 'darien-restoration',
+    name: 'Darien Historic',
+    client: 'Wright Estate',
+    status: 'pending',
+    phase: 'Design Phase',
+    progress: 15,
+    sqft: 5600,
+    finishes: ['Historic Lime', 'Venetian', 'Marmorino'],
+    team: [
+      { name: 'Patricia Wright', role: 'Client', company: '' },
+      { name: 'Robert Mills', role: 'Preservation Architect', company: 'Heritage Design' }
+    ],
+    startDate: 'Jan 10, 2025',
+    estCompletion: 'Jul 30, 2025'
+  },
+  {
+    id: 'new-canaan-residence',
+    name: 'New Canaan Residence',
+    client: 'Mitchell Family',
+    status: 'completed',
+    phase: 'Completed',
+    progress: 100,
+    sqft: 3200,
+    finishes: ['Venetian Plaster', 'Microcement'],
+    team: [
+      { name: 'Amy Mitchell', role: 'Client', company: '' },
+      { name: 'Tom Bradley', role: 'Architect', company: 'Bradley Associates' }
+    ],
+    startDate: 'Aug 1, 2024',
+    estCompletion: 'Dec 15, 2024'
+  }
+];
+
+const statusColors = {
+  active: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+  pending: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+  completed: 'bg-blue-500/20 text-blue-400 border-blue-500/30'
+};
+
+const phaseColors = {
+  'Design Phase': 'text-purple-400',
+  'Sampling Phase': 'text-amber-400',
+  'Preparation Phase': 'text-blue-400',
+  'Application Phase': 'text-emerald-400',
+  'Completion Phase': 'text-brass',
+  'Completed': 'text-cream/50'
+};
+---
+
+<AdminLayout title="Projects" currentPage="projects">
+  <!-- Header Actions -->
+  <div class="flex items-center justify-between mb-8">
+    <div class="flex items-center gap-4">
+      <div class="relative">
+        <input
+          type="search"
+          placeholder="Search projects..."
+          class="w-64 bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 pl-10 text-sm text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50"
+        />
+        <svg class="w-4 h-4 text-cream/40 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+
+      <select class="bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-sm text-cream/70 focus:outline-none focus:border-brass/50">
+        <option value="all">All Status</option>
+        <option value="active">Active</option>
+        <option value="pending">Pending</option>
+        <option value="completed">Completed</option>
+      </select>
+    </div>
+
+    <a href="/admin/projects/new" class="flex items-center gap-2 px-4 py-2 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      New Project
+    </a>
+  </div>
+
+  <!-- Projects Grid -->
+  <div class="grid gap-6">
+    {projects.map((project) => (
+      <a href={`/admin/projects/${project.id}`} class="block bg-charcoal-light border border-charcoal-border rounded-lg overflow-hidden hover:border-brass/30 transition-all group">
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-2">
+                <h3 class="text-xl text-cream font-medium group-hover:text-brass transition-colors">{project.name}</h3>
+                <span class={`text-xs px-2 py-0.5 rounded-full border ${statusColors[project.status]}`}>
+                  {project.status}
+                </span>
+              </div>
+              <p class="text-sm text-cream/50">{project.client} · {project.sqft.toLocaleString()} sq ft</p>
+            </div>
+            <div class="text-right">
+              <div class="text-xs text-cream/40 mb-1">Est. Completion</div>
+              <div class="text-sm text-brass">{project.estCompletion}</div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <!-- Progress -->
+            <div class="md:col-span-2">
+              <div class="flex items-center justify-between text-xs mb-2">
+                <span class={phaseColors[project.phase] || 'text-cream/60'}>{project.phase}</span>
+                <span class="text-brass">{project.progress}%</span>
+              </div>
+              <div class="h-2 bg-charcoal rounded-full overflow-hidden">
+                <div class="h-full bg-brass rounded-full transition-all" style={`width: ${project.progress}%`}></div>
+              </div>
+              <div class="flex gap-2 mt-3">
+                {project.finishes.map((finish) => (
+                  <span class="text-xs px-2 py-1 bg-charcoal rounded text-cream/60">{finish}</span>
+                ))}
+              </div>
+            </div>
+
+            <!-- Team -->
+            <div>
+              <div class="text-xs text-cream/40 mb-2">Team ({project.team.length})</div>
+              <div class="flex -space-x-2">
+                {project.team.slice(0, 4).map((member, i) => (
+                  <div
+                    class="w-8 h-8 rounded-full bg-brass/20 border-2 border-charcoal-light flex items-center justify-center"
+                    title={`${member.name} - ${member.role}`}
+                  >
+                    <span class="text-brass text-xs font-medium">{member.name.charAt(0)}</span>
+                  </div>
+                ))}
+                {project.team.length > 4 && (
+                  <div class="w-8 h-8 rounded-full bg-charcoal border-2 border-charcoal-light flex items-center justify-center">
+                    <span class="text-cream/50 text-xs">+{project.team.length - 4}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="flex items-center justify-end gap-2">
+              <button
+                class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal rounded-lg transition-colors"
+                title="Send Message"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
+              </button>
+              <button
+                class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal rounded-lg transition-colors"
+                title="View Timeline"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </button>
+              <button
+                class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal rounded-lg transition-colors"
+                title="Documents"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+</AdminLayout>

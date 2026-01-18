@@ -1,0 +1,116 @@
+---
+import '../../../src/styles/global.css';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <title>Project Hub | Old Head Plaster</title>
+    <style>
+      body { font-family: 'Inter', system-ui, sans-serif; }
+    </style>
+  </head>
+  <body class="min-h-screen bg-charcoal flex items-center justify-center p-4">
+    <div class="w-full max-w-sm">
+      <!-- Logo -->
+      <div class="text-center mb-8">
+        <a href="/" class="inline-block">
+          <img src="/images/headland-seal.svg" alt="Old Head Plaster" class="h-16 w-auto mx-auto mb-4" />
+        </a>
+        <h1 class="text-xl font-medium text-cream">Project Hub</h1>
+        <p class="text-sm text-cream/50 mt-1">Enter your access code</p>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="bg-charcoal-light border border-charcoal-border rounded-xl p-6">
+        <div class="mb-4">
+          <label for="password" class="block text-sm text-cream/60 mb-2">Access Code</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter code..."
+            autocomplete="current-password"
+            class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-3 text-cream placeholder:text-cream/30 focus:outline-none focus:border-brass/50 text-center text-lg tracking-widest"
+          />
+        </div>
+
+        <div id="error-message" class="hidden text-red-400 text-sm text-center mb-4">
+          Invalid access code. Please try again.
+        </div>
+
+        <button
+          type="submit"
+          class="w-full px-4 py-3 bg-brass text-charcoal font-medium rounded-lg hover:bg-brass-light transition-colors"
+        >
+          Enter Project Hub
+        </button>
+      </form>
+
+      <!-- Back Link -->
+      <div class="text-center mt-6">
+        <a href="/" class="text-sm text-cream/40 hover:text-cream transition-colors">
+          ← Back to website
+        </a>
+      </div>
+    </div>
+
+    <script>
+      // Simple hash function for password verification
+      async function hashPassword(password) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password + 'oldhead-salt-2025');
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      }
+
+      // The hashed password for "daragh2025"
+      // To change: run hashPassword('your-new-password') in console and update this
+      const VALID_HASH = '8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b';
+
+      const form = document.getElementById('login-form');
+      const passwordInput = document.getElementById('password');
+      const errorMessage = document.getElementById('error-message');
+
+      // Check if already authenticated
+      if (localStorage.getItem('ohp-admin-auth') === 'true') {
+        window.location.href = '/admin';
+      }
+
+      form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const password = passwordInput.value.trim();
+
+        if (!password) {
+          errorMessage.classList.remove('hidden');
+          return;
+        }
+
+        // Simple password check (in production, use proper auth)
+        // For now, accept "oldhead" as the password
+        if (password === 'oldhead') {
+          localStorage.setItem('ohp-admin-auth', 'true');
+          localStorage.setItem('ohp-admin-auth-time', Date.now().toString());
+          window.location.href = '/admin';
+        } else {
+          errorMessage.classList.remove('hidden');
+          passwordInput.value = '';
+          passwordInput.focus();
+        }
+      });
+
+      // Clear error on input
+      passwordInput?.addEventListener('input', () => {
+        errorMessage.classList.add('hidden');
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,173 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  currentPage?: string;
+}
+
+const { title, currentPage = 'dashboard' } = Astro.props;
+
+const navItems = [
+  { id: 'dashboard', label: 'Dashboard', href: '/admin', icon: 'grid' },
+  { id: 'projects', label: 'Projects', href: '/admin/projects', icon: 'folder' },
+  { id: 'stakeholders', label: 'Directory', href: '/admin/stakeholders', icon: 'users' },
+  { id: 'messages', label: 'Messages', href: '/admin/messages', icon: 'mail' },
+  { id: 'schedule', label: 'Schedule', href: '/admin/schedule', icon: 'calendar' },
+  { id: 'documents', label: 'Documents', href: '/admin/documents', icon: 'file' },
+];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <title>{title} | Old Head Plaster Admin</title>
+    <style>
+      body {
+        font-family: 'Inter', system-ui, sans-serif;
+      }
+    </style>
+    <script is:inline>
+      // Auth check - redirect to login if not authenticated
+      (function() {
+        const isAuth = localStorage.getItem('ohp-admin-auth') === 'true';
+        const authTime = parseInt(localStorage.getItem('ohp-admin-auth-time') || '0');
+        const maxAge = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+        if (!isAuth || (Date.now() - authTime > maxAge)) {
+          localStorage.removeItem('ohp-admin-auth');
+          localStorage.removeItem('ohp-admin-auth-time');
+          window.location.href = '/admin/login';
+        }
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen bg-charcoal">
+    <div class="flex min-h-screen">
+      <!-- Sidebar -->
+      <aside class="w-64 bg-charcoal-light border-r border-charcoal-border flex flex-col fixed h-screen">
+        <!-- Logo -->
+        <div class="p-6 border-b border-charcoal-border">
+          <a href="/admin" class="flex items-center gap-3">
+            <img src="/images/headland-seal.svg" alt="Old Head Plaster" class="h-10 w-auto" />
+            <div>
+              <div class="text-cream font-semibold text-sm">Old Head Plaster</div>
+              <div class="text-brass text-xs tracking-wide">Project Hub</div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 p-4">
+          <ul class="space-y-1">
+            {navItems.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class:list={[
+                    'flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-all',
+                    currentPage === item.id
+                      ? 'bg-brass/10 text-brass border border-brass/20'
+                      : 'text-cream/70 hover:text-cream hover:bg-charcoal-border/50'
+                  ]}
+                >
+                  <span class="w-5 h-5 flex items-center justify-center">
+                    {item.icon === 'grid' && (
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                      </svg>
+                    )}
+                    {item.icon === 'folder' && (
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                      </svg>
+                    )}
+                    {item.icon === 'users' && (
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                    )}
+                    {item.icon === 'mail' && (
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    )}
+                    {item.icon === 'calendar' && (
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    )}
+                    {item.icon === 'file' && (
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    )}
+                  </span>
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <!-- User/Settings -->
+        <div class="p-4 border-t border-charcoal-border space-y-1">
+          <a href="/" class="flex items-center gap-3 px-4 py-3 text-sm text-cream/50 hover:text-cream transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Website
+          </a>
+          <button id="logout-btn" class="w-full flex items-center gap-3 px-4 py-3 text-sm text-cream/50 hover:text-red-400 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            Log Out
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 ml-64">
+        <!-- Top Bar -->
+        <header class="sticky top-0 z-10 bg-charcoal border-b border-charcoal-border px-8 py-4">
+          <div class="flex items-center justify-between">
+            <h1 class="text-xl font-semibold text-cream">{title}</h1>
+            <div class="flex items-center gap-4">
+              <button class="p-2 text-cream/50 hover:text-cream transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+              </button>
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-brass/20 flex items-center justify-center">
+                  <span class="text-brass text-sm font-medium">D</span>
+                </div>
+                <span class="text-sm text-cream/70">Daragh</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="p-8">
+          <slot />
+        </div>
+      </main>
+    </div>
+
+    <script>
+      document.getElementById('logout-btn')?.addEventListener('click', () => {
+        localStorage.removeItem('ohp-admin-auth');
+        localStorage.removeItem('ohp-admin-auth-time');
+        window.location.href = '/admin/login';
+      });
+    </script>
+  </body>
+</html>
