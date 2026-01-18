@@ -1,61 +1,30 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 
-// Current date info
-const now = new Date();
-const currentMonth = now.toLocaleString('default', { month: 'long' });
-const currentYear = now.getFullYear();
-const currentDay = now.getDate();
-
-// Get first day of month and total days
-const firstDayOfMonth = new Date(currentYear, now.getMonth(), 1).getDay();
-const daysInMonth = new Date(currentYear, now.getMonth() + 1, 0).getDate();
-
-// Adjust for Monday start (0 = Monday, 6 = Sunday)
-const startOffset = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
-
-// Sample schedule data
-const today = new Date();
-const events = [
-  { id: '1', title: 'Substrate Inspection', project: 'Greenwich Estate', type: 'site-visit', date: 'Jan 17', time: '2:00 PM', duration: '1h', location: '247 Round Hill Rd', attendees: ['Daragh', 'Mark Thompson'] },
-  { id: '2', title: 'Sample Presentation', project: 'Westport Modern', type: 'client-meeting', date: 'Jan 18', time: '10:00 AM', duration: '2h', location: 'Material Library', attendees: ['Daragh', 'David Chen', 'James Wong'] },
-  { id: '3', title: 'Material Library Tour', project: 'Darien Historic', type: 'client-meeting', date: 'Jan 22', time: '11:00 AM', duration: '2h', location: 'Material Library', attendees: ['Daragh', 'Patricia Wright', 'Robert Mills'] },
-  { id: '4', title: 'Master Suite - Second Coat', project: 'Greenwich Estate', type: 'work', date: 'Jan 18-20', time: 'All Day', duration: '3 days', location: '247 Round Hill Rd', attendees: ['Daragh', 'Crew'] },
-  { id: '5', title: 'Drywall Review', project: 'Westport Modern', type: 'site-visit', date: 'Jan 25', time: '9:00 AM', duration: '1h', location: '89 Compo Rd', attendees: ['Daragh', 'James Wong', 'GC'] },
-  { id: '6', title: 'Progress Photos', project: 'Greenwich Estate', type: 'task', date: 'Jan 17', time: '4:00 PM', duration: '30m', location: 'On-site', attendees: ['Daragh'] }
-];
-
 const typeColors = {
   'site-visit': { bg: 'bg-blue-500/20', text: 'text-blue-400', border: 'border-blue-500/30', label: 'Site Visit' },
   'client-meeting': { bg: 'bg-emerald-500/20', text: 'text-emerald-400', border: 'border-emerald-500/30', label: 'Client Meeting' },
   'work': { bg: 'bg-brass/20', text: 'text-brass', border: 'border-brass/30', label: 'Work Session' },
   'task': { bg: 'bg-purple-500/20', text: 'text-purple-400', border: 'border-purple-500/30', label: 'Task' }
 };
-
-// Group events by date
-const eventsByDate = events.reduce((acc, event) => {
-  if (!acc[event.date]) acc[event.date] = [];
-  acc[event.date].push(event);
-  return acc;
-}, {} as Record<string, typeof events>);
 ---
 
 <AdminLayout title="Schedule" currentPage="schedule">
   <!-- Header -->
   <div class="flex items-center justify-between mb-8">
     <div class="flex items-center gap-4">
-      <button class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal-light rounded-lg transition-colors">
+      <button id="prev-month" class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal-light rounded-lg transition-colors">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7" />
         </svg>
       </button>
-      <h2 class="text-xl font-medium text-cream">{currentMonth} {currentYear}</h2>
-      <button class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal-light rounded-lg transition-colors">
+      <h2 id="month-title" class="text-xl font-medium text-cream">January 2026</h2>
+      <button id="next-month" class="p-2 text-cream/50 hover:text-cream hover:bg-charcoal-light rounded-lg transition-colors">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
         </svg>
       </button>
-      <button class="ml-4 px-3 py-1.5 text-sm text-cream/70 hover:text-cream border border-charcoal-border rounded-lg hover:border-brass/50 transition-colors">
+      <button id="today-btn" class="ml-4 px-3 py-1.5 text-sm text-cream/70 hover:text-cream border border-charcoal-border rounded-lg hover:border-brass/50 transition-colors">
         Today
       </button>
     </div>
@@ -66,7 +35,7 @@ const eventsByDate = events.reduce((acc, event) => {
         <button id="view-month" class="view-btn px-3 py-1.5 text-sm text-cream bg-charcoal rounded">Month</button>
         <button id="view-list" class="view-btn px-3 py-1.5 text-sm text-cream/50 hover:text-cream rounded transition-colors">List</button>
       </div>
-      <button class="flex items-center gap-2 px-4 py-2 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors">
+      <button id="add-event-btn" class="flex items-center gap-2 px-4 py-2 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
@@ -87,123 +56,484 @@ const eventsByDate = events.reduce((acc, event) => {
 
   <!-- Month View -->
   <div id="month-view" class="calendar-view">
-    <!-- Day Headers -->
     <div class="grid grid-cols-7 gap-1 mb-2">
       {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
         <div class="text-center py-2 text-xs text-cream/50 uppercase">{day}</div>
       ))}
     </div>
-    <!-- Calendar Grid -->
-    <div class="grid grid-cols-7 gap-1">
-      {/* Empty cells for offset */}
-      {Array.from({ length: startOffset }).map(() => (
-        <div class="min-h-[100px] bg-charcoal-light/30 rounded-lg p-2"></div>
-      ))}
-      {/* Days of month */}
-      {Array.from({ length: daysInMonth }).map((_, i) => {
-        const day = i + 1;
-        const isToday = day === currentDay;
-        const dateStr = `Jan ${day}`;
-        const dayEvents = events.filter(e => e.date === dateStr || e.date.includes(`${day}-`) || e.date.includes(`-${day}`));
-
-        return (
-          <div class={`min-h-[100px] rounded-lg p-2 border transition-colors hover:border-brass/30 ${isToday ? 'bg-brass/10 border-brass/50' : 'bg-charcoal-light border-charcoal-border'}`}>
-            <div class={`text-sm font-medium mb-1 ${isToday ? 'text-brass' : 'text-cream/70'}`}>{day}</div>
-            <div class="space-y-1">
-              {dayEvents.slice(0, 2).map((event) => {
-                const colors = typeColors[event.type] || typeColors.task;
-                return (
-                  <div class={`text-xs p-1 rounded truncate ${colors.bg} ${colors.text}`} title={event.title}>
-                    {event.title}
-                  </div>
-                );
-              })}
-              {dayEvents.length > 2 && (
-                <div class="text-xs text-cream/40">+{dayEvents.length - 2} more</div>
-              )}
-            </div>
-          </div>
-        );
-      })}
+    <div id="calendar-grid" class="grid grid-cols-7 gap-1">
+      <!-- Populated by JavaScript -->
     </div>
   </div>
 
   <!-- Week View -->
-  <div id="week-view" class="calendar-view hidden grid grid-cols-7 gap-4">
-    {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, i) => {
-      const date = 13 + i; // Jan 13-19
-      const dateStr = `Jan ${date}`;
-      const isToday = date === 17;
-      const dayEvents = events.filter(e => e.date === dateStr || e.date.includes(`${date}`));
-
-      return (
-        <div class="min-h-[400px]">
-          <!-- Day Header -->
-          <div class={`text-center py-3 rounded-t-lg ${isToday ? 'bg-brass/20' : 'bg-charcoal-light'}`}>
-            <div class="text-xs text-cream/50 uppercase">{day}</div>
-            <div class={`text-lg font-medium ${isToday ? 'text-brass' : 'text-cream'}`}>{date}</div>
-          </div>
-
-          <!-- Day Events -->
-          <div class={`border-x border-b border-charcoal-border rounded-b-lg p-2 space-y-2 min-h-[350px] ${isToday ? 'bg-brass/5' : ''}`}>
-            {dayEvents.map((event) => {
-              const colors = typeColors[event.type] || typeColors.task;
-              return (
-                <div class={`p-2 rounded-lg border cursor-pointer hover:brightness-110 transition-all ${colors.bg} ${colors.border}`}>
-                  <div class={`text-xs font-medium ${colors.text}`}>{event.time}</div>
-                  <div class="text-sm text-cream mt-1">{event.title}</div>
-                  <div class="text-xs text-cream/40 mt-1">{event.project}</div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    })}
+  <div id="week-view" class="calendar-view hidden">
+    <div id="week-grid" class="grid grid-cols-7 gap-4">
+      <!-- Populated by JavaScript -->
+    </div>
   </div>
 
-  <!-- Upcoming Events List -->
-  <div class="mt-8">
+  <!-- List View / Upcoming Events -->
+  <div id="list-view" class="mt-8">
     <h3 class="text-lg font-medium text-cream mb-4">Upcoming Events</h3>
-    <div class="bg-charcoal-light border border-charcoal-border rounded-lg divide-y divide-charcoal-border">
-      {events.map((event) => {
+    <div id="events-list" class="bg-charcoal-light border border-charcoal-border rounded-lg divide-y divide-charcoal-border">
+      <!-- Populated by JavaScript -->
+    </div>
+  </div>
+
+  <!-- Add/Edit Event Modal -->
+  <div id="event-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60" id="modal-backdrop"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="bg-charcoal border border-charcoal-border rounded-xl w-full max-w-md p-6 relative">
+        <h3 id="modal-title" class="text-lg font-medium text-cream mb-6">Add Event</h3>
+
+        <form id="event-form" class="space-y-4">
+          <input type="hidden" id="event-id" />
+
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Title</label>
+            <input type="text" id="event-title" required
+              class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-cream placeholder:text-cream/30 focus:outline-none focus:border-brass/50"
+              placeholder="Event title..." />
+          </div>
+
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Project</label>
+            <input type="text" id="event-project"
+              class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-cream placeholder:text-cream/30 focus:outline-none focus:border-brass/50"
+              placeholder="Project name..." />
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm text-cream/60 mb-2">Date</label>
+              <input type="date" id="event-date" required
+                class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-brass/50" />
+            </div>
+            <div>
+              <label class="block text-sm text-cream/60 mb-2">Time</label>
+              <input type="time" id="event-time"
+                class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-brass/50" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Type</label>
+            <select id="event-type"
+              class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-brass/50">
+              <option value="site-visit">Site Visit</option>
+              <option value="client-meeting">Client Meeting</option>
+              <option value="work">Work Session</option>
+              <option value="task">Task</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Location</label>
+            <input type="text" id="event-location"
+              class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-cream placeholder:text-cream/30 focus:outline-none focus:border-brass/50"
+              placeholder="Address or location..." />
+          </div>
+
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Notes</label>
+            <textarea id="event-notes" rows="2"
+              class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-cream placeholder:text-cream/30 focus:outline-none focus:border-brass/50 resize-none"
+              placeholder="Additional notes..."></textarea>
+          </div>
+
+          <div class="flex gap-3 pt-4">
+            <button type="button" id="cancel-btn" class="flex-1 px-4 py-2 border border-charcoal-border text-cream/70 rounded-lg hover:border-cream/30 transition-colors">
+              Cancel
+            </button>
+            <button type="button" id="delete-btn" class="hidden px-4 py-2 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/10 transition-colors">
+              Delete
+            </button>
+            <button type="submit" class="flex-1 px-4 py-2 bg-brass text-charcoal font-medium rounded-lg hover:bg-brass-light transition-colors">
+              Save Event
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Type colors for JavaScript
+    const typeColors = {
+      'site-visit': { bg: 'bg-blue-500/20', text: 'text-blue-400', border: 'border-blue-500/30', label: 'Site Visit' },
+      'client-meeting': { bg: 'bg-emerald-500/20', text: 'text-emerald-400', border: 'border-emerald-500/30', label: 'Client Meeting' },
+      'work': { bg: 'bg-brass/20', text: 'text-brass', border: 'border-brass/30', label: 'Work Session' },
+      'task': { bg: 'bg-purple-500/20', text: 'text-purple-400', border: 'border-purple-500/30', label: 'Task' }
+    };
+
+    // State
+    let currentDate = new Date();
+    let currentView = 'month';
+    let events = JSON.parse(localStorage.getItem('ohp-events') || '[]');
+
+    // Seed demo data if empty
+    if (events.length === 0) {
+      events = [
+        { id: '1', title: 'Substrate Inspection', project: 'Greenwich Estate', type: 'site-visit', date: '2026-01-17', time: '14:00', location: '247 Round Hill Rd', notes: '' },
+        { id: '2', title: 'Sample Presentation', project: 'Westport Modern', type: 'client-meeting', date: '2026-01-18', time: '10:00', location: 'Material Library', notes: '' },
+        { id: '3', title: 'Material Library Tour', project: 'Darien Historic', type: 'client-meeting', date: '2026-01-22', time: '11:00', location: 'Material Library', notes: '' },
+        { id: '4', title: 'Master Suite - Second Coat', project: 'Greenwich Estate', type: 'work', date: '2026-01-18', time: '09:00', location: '247 Round Hill Rd', notes: '3 day job' },
+        { id: '5', title: 'Drywall Review', project: 'Westport Modern', type: 'site-visit', date: '2026-01-25', time: '09:00', location: '89 Compo Rd', notes: '' },
+        { id: '6', title: 'Progress Photos', project: 'Greenwich Estate', type: 'task', date: '2026-01-17', time: '16:00', location: 'On-site', notes: '' }
+      ];
+      saveEvents();
+    }
+
+    // DOM Elements
+    const monthTitle = document.getElementById('month-title');
+    const calendarGrid = document.getElementById('calendar-grid');
+    const weekGrid = document.getElementById('week-grid');
+    const eventsList = document.getElementById('events-list');
+    const modal = document.getElementById('event-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const eventForm = document.getElementById('event-form');
+    const deleteBtn = document.getElementById('delete-btn');
+
+    // Save events to localStorage
+    function saveEvents() {
+      localStorage.setItem('ohp-events', JSON.stringify(events));
+    }
+
+    // Format date for display
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    // Format time for display
+    function formatTime(timeStr) {
+      if (!timeStr) return '';
+      const [hours, minutes] = timeStr.split(':');
+      const h = parseInt(hours);
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      const h12 = h % 12 || 12;
+      return `${h12}:${minutes} ${ampm}`;
+    }
+
+    // Get events for a specific date
+    function getEventsForDate(dateStr) {
+      return events.filter(e => e.date === dateStr);
+    }
+
+    // Render month view
+    function renderMonthView() {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+
+      // Update title
+      monthTitle.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+      // Get first day and days in month
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const startOffset = firstDay === 0 ? 6 : firstDay - 1;
+
+      // Today's date for comparison
+      const today = new Date();
+      const todayStr = today.toISOString().split('T')[0];
+
+      let html = '';
+
+      // Empty cells for offset
+      for (let i = 0; i < startOffset; i++) {
+        html += '<div class="min-h-[100px] bg-charcoal-light/30 rounded-lg p-2"></div>';
+      }
+
+      // Days of month
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const isToday = dateStr === todayStr;
+        const dayEvents = getEventsForDate(dateStr);
+
+        html += `
+          <div class="min-h-[100px] rounded-lg p-2 border transition-colors hover:border-brass/30 cursor-pointer day-cell ${isToday ? 'bg-brass/10 border-brass/50' : 'bg-charcoal-light border-charcoal-border'}" data-date="${dateStr}">
+            <div class="text-sm font-medium mb-1 ${isToday ? 'text-brass' : 'text-cream/70'}">${day}</div>
+            <div class="space-y-1">
+              ${dayEvents.slice(0, 2).map(event => {
+                const colors = typeColors[event.type] || typeColors.task;
+                return `<div class="text-xs p-1 rounded truncate ${colors.bg} ${colors.text} event-item cursor-pointer" data-id="${event.id}" title="${event.title}">${event.title}</div>`;
+              }).join('')}
+              ${dayEvents.length > 2 ? `<div class="text-xs text-cream/40">+${dayEvents.length - 2} more</div>` : ''}
+            </div>
+          </div>
+        `;
+      }
+
+      calendarGrid.innerHTML = html;
+
+      // Add click handlers for events
+      document.querySelectorAll('.event-item').forEach(el => {
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = el.dataset.id;
+          openEditModal(id);
+        });
+      });
+
+      // Add click handlers for day cells to add event
+      document.querySelectorAll('.day-cell').forEach(el => {
+        el.addEventListener('click', () => {
+          openAddModal(el.dataset.date);
+        });
+      });
+    }
+
+    // Render week view
+    function renderWeekView() {
+      const today = new Date();
+      const dayOfWeek = today.getDay();
+      const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+      const monday = new Date(today);
+      monday.setDate(today.getDate() + mondayOffset);
+
+      const todayStr = today.toISOString().split('T')[0];
+      const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+      let html = '';
+
+      for (let i = 0; i < 7; i++) {
+        const date = new Date(monday);
+        date.setDate(monday.getDate() + i);
+        const dateStr = date.toISOString().split('T')[0];
+        const isToday = dateStr === todayStr;
+        const dayEvents = getEventsForDate(dateStr);
+
+        html += `
+          <div class="min-h-[400px]">
+            <div class="text-center py-3 rounded-t-lg ${isToday ? 'bg-brass/20' : 'bg-charcoal-light'}">
+              <div class="text-xs text-cream/50 uppercase">${days[i]}</div>
+              <div class="text-lg font-medium ${isToday ? 'text-brass' : 'text-cream'}">${date.getDate()}</div>
+            </div>
+            <div class="border-x border-b border-charcoal-border rounded-b-lg p-2 space-y-2 min-h-[350px] ${isToday ? 'bg-brass/5' : ''} day-cell cursor-pointer" data-date="${dateStr}">
+              ${dayEvents.map(event => {
+                const colors = typeColors[event.type] || typeColors.task;
+                return `
+                  <div class="p-2 rounded-lg border cursor-pointer hover:brightness-110 transition-all ${colors.bg} ${colors.border} event-item" data-id="${event.id}">
+                    <div class="text-xs font-medium ${colors.text}">${formatTime(event.time)}</div>
+                    <div class="text-sm text-cream mt-1">${event.title}</div>
+                    <div class="text-xs text-cream/40 mt-1">${event.project || ''}</div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      weekGrid.innerHTML = html;
+
+      // Add click handlers
+      document.querySelectorAll('#week-view .event-item').forEach(el => {
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openEditModal(el.dataset.id);
+        });
+      });
+
+      document.querySelectorAll('#week-view .day-cell').forEach(el => {
+        el.addEventListener('click', () => {
+          openAddModal(el.dataset.date);
+        });
+      });
+    }
+
+    // Render list view
+    function renderListView() {
+      const today = new Date().toISOString().split('T')[0];
+      const upcomingEvents = events
+        .filter(e => e.date >= today)
+        .sort((a, b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || ''));
+
+      if (upcomingEvents.length === 0) {
+        eventsList.innerHTML = '<div class="p-8 text-center text-cream/40">No upcoming events</div>';
+        return;
+      }
+
+      let html = '';
+
+      upcomingEvents.forEach(event => {
         const colors = typeColors[event.type] || typeColors.task;
-        return (
-          <div class="p-4 flex items-start gap-4 hover:bg-charcoal-border/30 transition-colors cursor-pointer">
-            <div class={`w-1 h-12 rounded-full ${colors.bg}`}></div>
+        html += `
+          <div class="p-4 flex items-start gap-4 hover:bg-charcoal-border/30 transition-colors cursor-pointer event-list-item" data-id="${event.id}">
+            <div class="w-1 h-12 rounded-full ${colors.bg}"></div>
             <div class="flex-1">
               <div class="flex items-start justify-between">
                 <div>
-                  <h4 class="text-cream font-medium">{event.title}</h4>
-                  <p class="text-sm text-cream/50">{event.project}</p>
+                  <h4 class="text-cream font-medium">${event.title}</h4>
+                  <p class="text-sm text-cream/50">${event.project || ''}</p>
                 </div>
                 <div class="text-right">
-                  <div class="text-sm text-cream">{event.date}</div>
-                  <div class="text-sm text-cream/50">{event.time} · {event.duration}</div>
+                  <div class="text-sm text-cream">${formatDate(event.date)}</div>
+                  <div class="text-sm text-cream/50">${formatTime(event.time)}</div>
                 </div>
               </div>
-              <div class="mt-2 flex items-center gap-4 text-sm text-cream/40">
-                <span class="flex items-center gap-1">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  {event.location}
-                </span>
-                <span class="flex items-center gap-1">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                  {event.attendees.join(', ')}
-                </span>
-              </div>
+              ${event.location ? `
+                <div class="mt-2 flex items-center gap-4 text-sm text-cream/40">
+                  <span class="flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    </svg>
+                    ${event.location}
+                  </span>
+                </div>
+              ` : ''}
             </div>
-            <span class={`text-xs px-2 py-0.5 rounded-full ${colors.bg} ${colors.text}`}>
-              {colors.label}
+            <span class="text-xs px-2 py-0.5 rounded-full ${colors.bg} ${colors.text}">
+              ${colors.label}
             </span>
           </div>
-        );
-      })}
-    </div>
-  </div>
+        `;
+      });
+
+      eventsList.innerHTML = html;
+
+      // Add click handlers
+      document.querySelectorAll('.event-list-item').forEach(el => {
+        el.addEventListener('click', () => {
+          openEditModal(el.dataset.id);
+        });
+      });
+    }
+
+    // Open modal for adding event
+    function openAddModal(date) {
+      modalTitle.textContent = 'Add Event';
+      eventForm.reset();
+      document.getElementById('event-id').value = '';
+      document.getElementById('event-date').value = date || new Date().toISOString().split('T')[0];
+      deleteBtn.classList.add('hidden');
+      modal.classList.remove('hidden');
+    }
+
+    // Open modal for editing event
+    function openEditModal(id) {
+      const event = events.find(e => e.id === id);
+      if (!event) return;
+
+      modalTitle.textContent = 'Edit Event';
+      document.getElementById('event-id').value = event.id;
+      document.getElementById('event-title').value = event.title;
+      document.getElementById('event-project').value = event.project || '';
+      document.getElementById('event-date').value = event.date;
+      document.getElementById('event-time').value = event.time || '';
+      document.getElementById('event-type').value = event.type;
+      document.getElementById('event-location').value = event.location || '';
+      document.getElementById('event-notes').value = event.notes || '';
+      deleteBtn.classList.remove('hidden');
+      modal.classList.remove('hidden');
+    }
+
+    // Close modal
+    function closeModal() {
+      modal.classList.add('hidden');
+    }
+
+    // Save event
+    function saveEvent(e) {
+      e.preventDefault();
+
+      const id = document.getElementById('event-id').value;
+      const eventData = {
+        id: id || Date.now().toString(),
+        title: document.getElementById('event-title').value,
+        project: document.getElementById('event-project').value,
+        date: document.getElementById('event-date').value,
+        time: document.getElementById('event-time').value,
+        type: document.getElementById('event-type').value,
+        location: document.getElementById('event-location').value,
+        notes: document.getElementById('event-notes').value
+      };
+
+      if (id) {
+        // Update existing
+        const index = events.findIndex(e => e.id === id);
+        if (index !== -1) events[index] = eventData;
+      } else {
+        // Add new
+        events.push(eventData);
+      }
+
+      saveEvents();
+      closeModal();
+      renderAll();
+    }
+
+    // Delete event
+    function deleteEvent() {
+      const id = document.getElementById('event-id').value;
+      if (!id) return;
+
+      if (confirm('Delete this event?')) {
+        events = events.filter(e => e.id !== id);
+        saveEvents();
+        closeModal();
+        renderAll();
+      }
+    }
+
+    // Render all views
+    function renderAll() {
+      renderMonthView();
+      renderWeekView();
+      renderListView();
+    }
+
+    // Set active view
+    function setActiveView(view) {
+      currentView = view;
+
+      document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.classList.remove('bg-charcoal', 'text-cream');
+        btn.classList.add('text-cream/50');
+      });
+      document.getElementById(`view-${view}`).classList.add('bg-charcoal', 'text-cream');
+      document.getElementById(`view-${view}`).classList.remove('text-cream/50');
+
+      document.getElementById('month-view').style.display = view === 'month' ? 'block' : 'none';
+      document.getElementById('week-view').style.display = view === 'week' ? 'block' : 'none';
+    }
+
+    // Event listeners
+    document.getElementById('add-event-btn').addEventListener('click', () => openAddModal());
+    document.getElementById('modal-backdrop').addEventListener('click', closeModal);
+    document.getElementById('cancel-btn').addEventListener('click', closeModal);
+    document.getElementById('delete-btn').addEventListener('click', deleteEvent);
+    eventForm.addEventListener('submit', saveEvent);
+
+    document.getElementById('prev-month').addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderMonthView();
+    });
+
+    document.getElementById('next-month').addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderMonthView();
+    });
+
+    document.getElementById('today-btn').addEventListener('click', () => {
+      currentDate = new Date();
+      renderMonthView();
+    });
+
+    document.querySelectorAll('.view-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setActiveView(btn.id.replace('view-', ''));
+      });
+    });
+
+    // Escape key to close modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Initial render
+    renderAll();
+  </script>
 </AdminLayout>

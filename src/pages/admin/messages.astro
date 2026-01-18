@@ -1,146 +1,135 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 
-const messages = [
-  { id: '1', date: 'Jan 17, 2025', time: '2:30 PM', project: 'Greenwich Estate', recipients: ['All Team'], subject: 'Master Suite Progress', channel: 'email', status: 'delivered', preview: 'First coat of Venetian complete in master bedroom. Cure time 24hrs before second application.' },
-  { id: '2', date: 'Jan 15, 2025', time: '10:00 AM', project: 'Greenwich Estate', recipients: ['Mark Thompson'], subject: 'Drywall Ready', channel: 'sms', status: 'delivered', preview: 'Drywall in master suite is ready for inspection. Please confirm access for tomorrow AM.' },
-  { id: '3', date: 'Jan 12, 2025', time: '4:15 PM', project: 'Greenwich Estate', recipients: ['Lisa Harrison', 'Sarah Chen'], subject: 'Preparation Complete', channel: 'both', status: 'delivered', preview: 'All surfaces prepped and primed. Beginning application phase Monday.' },
-  { id: '4', date: 'Jan 10, 2025', time: '9:00 AM', project: 'Westport Modern', recipients: ['David Chen', 'James Wong'], subject: 'Sample Boards Ready', channel: 'email', status: 'delivered', preview: 'Your custom sample boards are ready for review. Please schedule a time to visit the Material Library.' },
-  { id: '5', date: 'Jan 8, 2025', time: '11:30 AM', project: 'Greenwich Estate', recipients: ['All Team'], subject: 'Sample Approval Confirmed', channel: 'email', status: 'delivered', preview: 'Thank you for approving the final samples. Formal living: Warm Ivory. Master: Pearl.' },
-  { id: '6', date: 'Jan 5, 2025', time: '3:45 PM', project: 'Darien Historic', recipients: ['Patricia Wright', 'Robert Mills'], subject: 'Material Library Invitation', channel: 'both', status: 'delivered', preview: 'Excited to begin your project. Please join us at the Material Library to explore finish options.' }
-];
+const channelColors = {
+  email: { bg: 'bg-blue-500/20', text: 'text-blue-400', label: 'Email' },
+  sms: { bg: 'bg-purple-500/20', text: 'text-purple-400', label: 'SMS' },
+  both: { bg: 'bg-emerald-500/20', text: 'text-emerald-400', label: 'Email + SMS' }
+};
 
 const templates = [
   { id: 'sampling-complete', name: 'Sampling Complete', subject: 'Sample Boards Ready for Review', body: 'Your custom sample boards are ready for review at our Material Library. Please schedule a time to visit and we\'ll walk you through each finish option.\n\nBest regards,\nDaragh' },
-  { id: 'ready-for-visit', name: 'Ready for Site Visit', subject: 'Ready for Your Site Visit', body: 'We\'re ready for your scheduled site visit. The [PHASE] is progressing well and we\'d like to walk you through our work.\n\nPlease confirm the time works for you.\n\nBest regards,\nDaragh' },
+  { id: 'ready-for-visit', name: 'Ready for Site Visit', subject: 'Ready for Your Site Visit', body: 'We\'re ready for your scheduled site visit. The work is progressing well and we\'d like to walk you through our progress.\n\nPlease confirm the time works for you.\n\nBest regards,\nDaragh' },
   { id: 'drywall-spec', name: 'Drywall Spec Reminder', subject: 'Drywall Specification Reminder', body: 'A friendly reminder about drywall specifications for plaster application:\n\n- Level 4 or 5 finish required\n- All joints must be fully set (minimum 48 hours)\n- Prime with bonding primer before our arrival\n\nPlease confirm these specifications with your drywall crew.\n\nBest regards,\nDaragh' },
-  { id: 'schedule-update', name: 'Schedule Update', subject: 'Project Schedule Update', body: 'I wanted to provide an update on our project timeline:\n\n[UPDATE DETAILS]\n\nPlease let me know if you have any questions.\n\nBest regards,\nDaragh' },
-  { id: 'phase-complete', name: 'Phase Complete', subject: '[PHASE] Complete - Moving to Next Phase', body: 'I\'m pleased to report that the [PHASE] is now complete. We\'re ready to move forward with the next phase of your project.\n\nNext steps:\n[NEXT STEPS]\n\nBest regards,\nDaragh' }
+  { id: 'schedule-update', name: 'Schedule Update', subject: 'Project Schedule Update', body: 'I wanted to provide an update on our project timeline.\n\nPlease let me know if you have any questions.\n\nBest regards,\nDaragh' },
+  { id: 'phase-complete', name: 'Phase Complete', subject: 'Phase Complete - Moving Forward', body: 'I\'m pleased to report that the current phase is now complete. We\'re ready to move forward with the next phase of your project.\n\nBest regards,\nDaragh' }
 ];
-
-const contacts = [
-  { id: '1', name: 'Lisa Harrison', role: 'Client', project: 'Greenwich Estate', email: 'lisa@harrison.com', phone: '203-555-0101', channel: 'both' },
-  { id: '2', name: 'Sarah Chen', role: 'Architect', project: 'Greenwich Estate', email: 'sarah@chendesign.com', phone: '203-555-0102', channel: 'email' },
-  { id: '3', name: 'Mark Thompson', role: 'General Contractor', project: 'Greenwich Estate', email: 'mark@thompsonbuilders.com', phone: '203-555-0103', channel: 'sms' },
-  { id: '4', name: 'Emily Ross', role: 'Interior Designer', project: 'Greenwich Estate', email: 'emily@rossinteriors.com', phone: '203-555-0104', channel: 'both' },
-  { id: '5', name: 'David Chen', role: 'Client', project: 'Westport Modern', email: 'david@chenfamily.com', phone: '203-555-0201', channel: 'email' },
-  { id: '6', name: 'James Wong', role: 'Architect', project: 'Westport Modern', email: 'james@modernct.com', phone: '203-555-0202', channel: 'both' },
-  { id: '7', name: 'Patricia Wright', role: 'Client', project: 'Darien Historic', email: 'patricia@wright.com', phone: '203-555-0301', channel: 'both' },
-  { id: '8', name: 'Robert Mills', role: 'Preservation Architect', project: 'Darien Historic', email: 'robert@heritagedesign.com', phone: '203-555-0302', channel: 'email' }
-];
-
-const channelColors = {
-  email: 'bg-blue-500/20 text-blue-400',
-  sms: 'bg-purple-500/20 text-purple-400',
-  both: 'bg-emerald-500/20 text-emerald-400'
-};
 ---
 
 <AdminLayout title="Messages" currentPage="messages">
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <!-- Message List -->
-    <div class="lg:col-span-2">
-      <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-4">
-          <h2 class="text-lg font-medium text-cream">Sent Messages</h2>
-          <select class="bg-charcoal-light border border-charcoal-border rounded-lg px-3 py-1.5 text-sm text-cream/70 focus:outline-none focus:border-brass/50">
-            <option>All Projects</option>
-            <option>Greenwich Estate</option>
-            <option>Westport Modern</option>
-            <option>Darien Historic</option>
-          </select>
-        </div>
-        <button
-          id="compose-btn"
-          class="flex items-center gap-2 px-4 py-2 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-          </svg>
-          Compose
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center gap-4">
+      <div class="flex bg-charcoal-light rounded-lg p-1">
+        <button id="tab-inbox" class="tab-btn px-4 py-2 text-sm text-cream bg-charcoal rounded transition-colors">
+          Inbox
+          <span id="inbox-count" class="ml-1 px-1.5 py-0.5 text-xs bg-brass/20 text-brass rounded-full">0</span>
+        </button>
+        <button id="tab-sent" class="tab-btn px-4 py-2 text-sm text-cream/50 hover:text-cream rounded transition-colors">Sent</button>
+        <button id="tab-drafts" class="tab-btn px-4 py-2 text-sm text-cream/50 hover:text-cream rounded transition-colors">
+          Drafts
+          <span id="drafts-count" class="ml-1 px-1.5 py-0.5 text-xs bg-charcoal-border text-cream/50 rounded-full hidden">0</span>
         </button>
       </div>
 
-      <div class="space-y-3">
-        {messages.map((msg) => (
-          <div class="bg-charcoal-light border border-charcoal-border rounded-lg p-5 hover:border-brass/30 transition-colors cursor-pointer">
-            <div class="flex items-start justify-between mb-3">
-              <div>
-                <h3 class="text-cream font-medium mb-1">{msg.subject}</h3>
-                <p class="text-sm text-cream/50">To: {msg.recipients.join(', ')}</p>
-              </div>
-              <div class="text-right flex-shrink-0">
-                <div class="text-xs text-cream/40">{msg.date}</div>
-                <div class="text-xs text-cream/30">{msg.time}</div>
-              </div>
-            </div>
-
-            <p class="text-sm text-cream/70 mb-3 line-clamp-2">{msg.preview}</p>
-
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <span class="text-xs px-2 py-0.5 bg-charcoal rounded text-cream/50">{msg.project}</span>
-                <span class={`text-xs px-2 py-0.5 rounded ${channelColors[msg.channel]}`}>
-                  {msg.channel === 'both' ? 'Email + SMS' : msg.channel.toUpperCase()}
-                </span>
-              </div>
-              <span class="text-xs text-emerald-400 flex items-center gap-1">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                {msg.status}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
+      <select id="filter-project" class="bg-charcoal-light border border-charcoal-border rounded-lg px-3 py-2 text-sm text-cream/70 focus:outline-none focus:border-brass/50">
+        <option value="">All Projects</option>
+      </select>
     </div>
 
-    <!-- Compose Panel -->
-    <div id="compose-panel" class="lg:col-span-1">
-      <div class="bg-charcoal-light border border-charcoal-border rounded-lg sticky top-24">
-        <div class="p-4 border-b border-charcoal-border">
-          <h2 class="text-lg font-medium text-cream">Compose Message</h2>
+    <div class="flex items-center gap-3">
+      <button id="contacts-btn" class="flex items-center gap-2 px-4 py-2 border border-charcoal-border text-cream/70 text-sm rounded-lg hover:border-brass/50 hover:text-cream transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+        Contacts
+      </button>
+      <button id="settings-btn" class="flex items-center gap-2 px-4 py-2 border border-charcoal-border text-cream/70 text-sm rounded-lg hover:border-brass/50 hover:text-cream transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        Settings
+      </button>
+      <button id="compose-btn" class="flex items-center gap-2 px-4 py-2 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Compose
+      </button>
+    </div>
+  </div>
+
+  <!-- Message List -->
+  <div id="message-list" class="space-y-3">
+    <!-- Populated by JavaScript -->
+  </div>
+
+  <!-- Empty State -->
+  <div id="empty-state" class="hidden text-center py-16">
+    <svg class="w-16 h-16 text-cream/20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+    </svg>
+    <p id="empty-text" class="text-cream/40">No messages yet</p>
+  </div>
+
+  <!-- Compose Modal -->
+  <div id="compose-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60" id="compose-backdrop"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="bg-charcoal border border-charcoal-border rounded-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+        <div class="p-4 border-b border-charcoal-border flex items-center justify-between">
+          <h3 id="compose-title" class="text-lg font-medium text-cream">New Message</h3>
+          <button id="close-compose" class="p-2 text-cream/50 hover:text-cream rounded-lg hover:bg-charcoal-light transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
 
-        <form id="compose-form" class="p-4 space-y-4">
-          <!-- Project Selection -->
-          <div>
-            <label class="block text-sm text-cream/60 mb-2">Project</label>
-            <select id="project-select" class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-brass/50">
-              <option value="">Select project...</option>
-              <option value="greenwich-estate">Greenwich Estate</option>
-              <option value="westport-modern">Westport Modern</option>
-              <option value="darien-historic">Darien Historic</option>
-            </select>
-          </div>
+        <form id="compose-form" class="p-6 space-y-4 overflow-y-auto flex-1">
+          <input type="hidden" id="msg-id" />
+          <input type="hidden" id="msg-type" value="sent" />
 
-          <!-- Recipients -->
+          <!-- To Field -->
           <div>
-            <label class="block text-sm text-cream/60 mb-2">Recipients</label>
-            <div id="recipients-list" class="space-y-2 max-h-48 overflow-y-auto">
-              <p class="text-sm text-cream/40 italic">Select a project to see contacts</p>
+            <label class="block text-sm text-cream/60 mb-2">To</label>
+            <div class="flex gap-2">
+              <select id="recipient-select" class="flex-1 bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-brass/50">
+                <option value="">Select recipient...</option>
+              </select>
+              <button type="button" id="add-recipient-btn" class="px-3 py-2 bg-charcoal-light border border-charcoal-border rounded-lg text-cream/70 hover:text-cream hover:border-brass/50 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+              </button>
             </div>
+            <div id="selected-recipients" class="flex flex-wrap gap-2 mt-2"></div>
           </div>
 
           <!-- Channel Selection -->
           <div>
             <label class="block text-sm text-cream/60 mb-2">Send via</label>
-            <div class="grid grid-cols-2 gap-2">
-              <label class="flex items-center gap-2 p-3 bg-charcoal rounded-lg cursor-pointer hover:bg-charcoal-border/50 transition-colors has-[:checked]:border-brass/50 border border-transparent">
-                <input type="radio" name="channel" value="preferred" checked class="accent-brass" />
-                <span class="text-sm text-cream">Preferred</span>
-              </label>
-              <label class="flex items-center gap-2 p-3 bg-charcoal rounded-lg cursor-pointer hover:bg-charcoal-border/50 transition-colors has-[:checked]:border-brass/50 border border-transparent">
-                <input type="radio" name="channel" value="email" class="accent-brass" />
+            <div class="flex gap-2">
+              <label class="flex-1 flex items-center justify-center gap-2 p-3 bg-charcoal-light rounded-lg cursor-pointer hover:bg-charcoal-border/50 transition-colors has-[:checked]:border-brass/50 has-[:checked]:bg-brass/10 border border-transparent">
+                <input type="radio" name="channel" value="email" checked class="sr-only" />
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
                 <span class="text-sm text-cream">Email</span>
               </label>
-              <label class="flex items-center gap-2 p-3 bg-charcoal rounded-lg cursor-pointer hover:bg-charcoal-border/50 transition-colors has-[:checked]:border-brass/50 border border-transparent">
-                <input type="radio" name="channel" value="sms" class="accent-brass" />
+              <label class="flex-1 flex items-center justify-center gap-2 p-3 bg-charcoal-light rounded-lg cursor-pointer hover:bg-charcoal-border/50 transition-colors has-[:checked]:border-brass/50 has-[:checked]:bg-brass/10 border border-transparent">
+                <input type="radio" name="channel" value="sms" class="sr-only" />
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
                 <span class="text-sm text-cream">SMS</span>
               </label>
-              <label class="flex items-center gap-2 p-3 bg-charcoal rounded-lg cursor-pointer hover:bg-charcoal-border/50 transition-colors has-[:checked]:border-brass/50 border border-transparent">
-                <input type="radio" name="channel" value="both" class="accent-brass" />
+              <label class="flex-1 flex items-center justify-center gap-2 p-3 bg-charcoal-light rounded-lg cursor-pointer hover:bg-charcoal-border/50 transition-colors has-[:checked]:border-brass/50 has-[:checked]:bg-brass/10 border border-transparent">
+                <input type="radio" name="channel" value="both" class="sr-only" />
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
                 <span class="text-sm text-cream">Both</span>
               </label>
             </div>
@@ -148,8 +137,8 @@ const channelColors = {
 
           <!-- Template -->
           <div>
-            <label class="block text-sm text-cream/60 mb-2">Template</label>
-            <select id="template-select" class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-brass/50">
+            <label class="block text-sm text-cream/60 mb-2">Template (optional)</label>
+            <select id="template-select" class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-brass/50">
               <option value="">No template</option>
               {templates.map((t) => (
                 <option value={t.id} data-subject={t.subject} data-body={t.body}>{t.name}</option>
@@ -158,50 +147,23 @@ const channelColors = {
           </div>
 
           <!-- Subject -->
-          <div>
+          <div id="subject-row">
             <label class="block text-sm text-cream/60 mb-2">Subject</label>
-            <input
-              type="text"
-              id="subject-input"
-              placeholder="Enter subject..."
-              class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-2 text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50"
-            />
+            <input type="text" id="subject-input" placeholder="Enter subject..." class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50" />
           </div>
 
           <!-- Message -->
           <div>
             <label class="block text-sm text-cream/60 mb-2">Message</label>
-            <textarea
-              id="message-input"
-              rows="6"
-              placeholder="Type your message..."
-              class="w-full bg-charcoal border border-charcoal-border rounded-lg px-4 py-3 text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50 resize-none"
-            ></textarea>
-          </div>
-
-          <!-- Attachments -->
-          <div>
-            <label class="block text-sm text-cream/60 mb-2">Attachments</label>
-            <div class="border border-dashed border-charcoal-border rounded-lg p-4 text-center hover:border-brass/30 transition-colors cursor-pointer">
-              <svg class="w-6 h-6 text-cream/30 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-              </svg>
-              <p class="text-xs text-cream/40">Drop files or click</p>
-            </div>
+            <textarea id="message-input" rows="8" placeholder="Type your message..." class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-3 text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50 resize-none"></textarea>
           </div>
 
           <!-- Actions -->
           <div class="flex items-center gap-3 pt-2">
-            <button
-              type="submit"
-              class="flex-1 px-4 py-2 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors"
-            >
+            <button type="submit" class="flex-1 px-4 py-2.5 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors">
               Send Message
             </button>
-            <button
-              type="button"
-              class="px-4 py-2 border border-charcoal-border text-cream/70 text-sm rounded-lg hover:border-brass/50 hover:text-cream transition-colors"
-            >
+            <button type="button" id="save-draft-btn" class="px-4 py-2.5 border border-charcoal-border text-cream/70 text-sm rounded-lg hover:border-brass/50 hover:text-cream transition-colors">
               Save Draft
             </button>
           </div>
@@ -209,102 +171,1092 @@ const channelColors = {
       </div>
     </div>
   </div>
-</AdminLayout>
 
-<script define:vars={{ contacts, templates }}>
-  const projectSelect = document.getElementById('project-select');
-  const recipientsList = document.getElementById('recipients-list');
-  const templateSelect = document.getElementById('template-select');
-  const subjectInput = document.getElementById('subject-input');
-  const messageInput = document.getElementById('message-input');
-
-  // Project to contacts mapping
-  const projectContacts = {
-    'greenwich-estate': contacts.filter(c => c.project === 'Greenwich Estate'),
-    'westport-modern': contacts.filter(c => c.project === 'Westport Modern'),
-    'darien-historic': contacts.filter(c => c.project === 'Darien Historic')
-  };
-
-  // Update recipients when project changes
-  projectSelect?.addEventListener('change', () => {
-    const project = projectSelect.value;
-    if (!project) {
-      recipientsList.innerHTML = '<p class="text-sm text-cream/40 italic">Select a project to see contacts</p>';
-      return;
-    }
-
-    const projectTeam = projectContacts[project] || [];
-
-    if (projectTeam.length === 0) {
-      recipientsList.innerHTML = '<p class="text-sm text-cream/40 italic">No contacts for this project</p>';
-      return;
-    }
-
-    recipientsList.innerHTML = `
-      <label class="flex items-center gap-2 p-2 bg-charcoal rounded-lg cursor-pointer hover:bg-charcoal-border/50">
-        <input type="checkbox" value="all" class="accent-brass" />
-        <span class="text-sm text-cream font-medium">All Team Members</span>
-      </label>
-      ${projectTeam.map(contact => `
-        <label class="flex items-center gap-2 p-2 bg-charcoal rounded-lg cursor-pointer hover:bg-charcoal-border/50">
-          <input type="checkbox" value="${contact.id}" class="accent-brass recipient-checkbox" />
-          <div class="flex-1">
-            <span class="text-sm text-cream">${contact.name}</span>
-            <span class="text-xs text-cream/40 ml-2">(${contact.role})</span>
+  <!-- View Message Modal -->
+  <div id="view-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60" id="view-backdrop"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="bg-charcoal border border-charcoal-border rounded-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+        <div class="p-4 border-b border-charcoal-border flex items-center justify-between">
+          <h3 id="view-subject" class="text-lg font-medium text-cream">Subject</h3>
+          <div class="flex items-center gap-2">
+            <button id="reply-btn" class="p-2 text-cream/50 hover:text-cream rounded-lg hover:bg-charcoal-light transition-colors" title="Reply">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+              </svg>
+            </button>
+            <button id="delete-msg-btn" class="p-2 text-cream/50 hover:text-red-400 rounded-lg hover:bg-charcoal-light transition-colors" title="Delete">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+            <button id="close-view" class="p-2 text-cream/50 hover:text-cream rounded-lg hover:bg-charcoal-light transition-colors">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
-          <span class="text-xs px-1.5 py-0.5 rounded ${
-            contact.channel === 'both' ? 'bg-emerald-500/10 text-emerald-400' :
-            contact.channel === 'email' ? 'bg-blue-500/10 text-blue-400' :
-            'bg-purple-500/10 text-purple-400'
-          }">
-            ${contact.channel === 'both' ? 'E+S' : contact.channel === 'email' ? 'E' : 'S'}
+        </div>
+
+        <div class="p-6 overflow-y-auto flex-1">
+          <div class="flex items-start justify-between mb-6">
+            <div>
+              <p id="view-from" class="text-cream font-medium"></p>
+              <p id="view-to" class="text-sm text-cream/50"></p>
+            </div>
+            <div class="text-right">
+              <p id="view-date" class="text-sm text-cream/50"></p>
+              <span id="view-channel" class="text-xs px-2 py-0.5 rounded"></span>
+            </div>
+          </div>
+          <div id="view-body" class="text-cream/80 whitespace-pre-wrap"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contacts Modal -->
+  <div id="contacts-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60" id="contacts-backdrop"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="bg-charcoal border border-charcoal-border rounded-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+        <div class="p-4 border-b border-charcoal-border flex items-center justify-between">
+          <h3 class="text-lg font-medium text-cream">Contacts</h3>
+          <div class="flex items-center gap-2">
+            <button id="add-contact-btn" class="flex items-center gap-2 px-3 py-1.5 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              Add Contact
+            </button>
+            <button id="close-contacts" class="p-2 text-cream/50 hover:text-cream rounded-lg hover:bg-charcoal-light transition-colors">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="contacts-list" class="p-4 overflow-y-auto flex-1 space-y-2">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Contact Modal -->
+  <div id="contact-form-modal" class="fixed inset-0 z-[60] hidden">
+    <div class="absolute inset-0 bg-black/60" id="contact-form-backdrop"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="bg-charcoal border border-charcoal-border rounded-xl w-full max-w-md p-6">
+        <h3 id="contact-form-title" class="text-lg font-medium text-cream mb-6">Add Contact</h3>
+
+        <form id="contact-form" class="space-y-4">
+          <input type="hidden" id="contact-id" />
+
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Name</label>
+            <input type="text" id="contact-name" required class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50" placeholder="Full name..." />
+          </div>
+
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Email</label>
+            <input type="email" id="contact-email" class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50" placeholder="email@example.com" />
+          </div>
+
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Phone</label>
+            <input type="tel" id="contact-phone" class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50" placeholder="203-555-0100" />
+          </div>
+
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Role</label>
+            <select id="contact-role" class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-brass/50">
+              <option value="Client">Client</option>
+              <option value="Architect">Architect</option>
+              <option value="General Contractor">General Contractor</option>
+              <option value="Interior Designer">Interior Designer</option>
+              <option value="Project Manager">Project Manager</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm text-cream/60 mb-2">Project</label>
+            <input type="text" id="contact-project" class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-4 py-2 text-cream placeholder:text-cream/40 focus:outline-none focus:border-brass/50" placeholder="Project name..." />
+          </div>
+
+          <div class="flex gap-3 pt-4">
+            <button type="button" id="cancel-contact" class="flex-1 px-4 py-2 border border-charcoal-border text-cream/70 rounded-lg hover:border-cream/30 transition-colors">Cancel</button>
+            <button type="button" id="delete-contact-btn" class="hidden px-4 py-2 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/10 transition-colors">Delete</button>
+            <button type="submit" class="flex-1 px-4 py-2 bg-brass text-charcoal font-medium rounded-lg hover:bg-brass-light transition-colors">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60" id="settings-backdrop"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4 overflow-y-auto">
+      <div class="bg-charcoal border border-charcoal-border rounded-xl w-full max-w-2xl my-8">
+        <div class="p-4 border-b border-charcoal-border flex items-center justify-between">
+          <h3 class="text-lg font-medium text-cream">Message Settings</h3>
+          <button id="close-settings" class="p-2 text-cream/50 hover:text-cream rounded-lg hover:bg-charcoal-light transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="flex border-b border-charcoal-border">
+          <button id="settings-tab-credentials" class="settings-tab flex-1 px-4 py-3 text-sm text-cream border-b-2 border-brass">Credentials</button>
+          <button id="settings-tab-guide" class="settings-tab flex-1 px-4 py-3 text-sm text-cream/50 hover:text-cream border-b-2 border-transparent">Setup Guide</button>
+        </div>
+
+        <!-- Credentials Tab -->
+        <div id="settings-panel-credentials" class="p-6">
+          <form id="settings-form" class="space-y-6">
+            <!-- Status Indicators -->
+            <div class="grid grid-cols-2 gap-4">
+              <div id="email-status" class="p-3 rounded-lg border border-charcoal-border bg-charcoal-light">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="w-2 h-2 rounded-full bg-cream/30"></span>
+                  <span class="text-sm text-cream">Email</span>
+                </div>
+                <p class="text-xs text-cream/40">Not configured</p>
+              </div>
+              <div id="sms-status" class="p-3 rounded-lg border border-charcoal-border bg-charcoal-light">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="w-2 h-2 rounded-full bg-cream/30"></span>
+                  <span class="text-sm text-cream">SMS</span>
+                </div>
+                <p class="text-xs text-cream/40">Not configured</p>
+              </div>
+            </div>
+
+            <!-- Email Settings -->
+            <div>
+              <h4 class="text-sm font-medium text-cream mb-3 flex items-center gap-2">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Email (SendGrid)
+              </h4>
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-xs text-cream/50 mb-1">API Key</label>
+                  <input type="password" id="sendgrid-key" placeholder="SG.xxxxxxxx" class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-3 py-2 text-sm text-cream placeholder:text-cream/30 focus:outline-none focus:border-brass/50" />
+                </div>
+                <div>
+                  <label class="block text-xs text-cream/50 mb-1">From Email</label>
+                  <input type="email" id="sendgrid-from" placeholder="daragh@oldheadplaster.com" class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-3 py-2 text-sm text-cream placeholder:text-cream/30 focus:outline-none focus:border-brass/50" />
+                </div>
+              </div>
+            </div>
+
+            <!-- SMS Settings -->
+            <div>
+              <h4 class="text-sm font-medium text-cream mb-3 flex items-center gap-2">
+                <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                SMS (Twilio)
+              </h4>
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-xs text-cream/50 mb-1">Account SID</label>
+                  <input type="text" id="twilio-sid" placeholder="ACxxxxxxxx" class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-3 py-2 text-sm text-cream placeholder:text-cream/30 focus:outline-none focus:border-brass/50" />
+                </div>
+                <div>
+                  <label class="block text-xs text-cream/50 mb-1">Auth Token</label>
+                  <input type="password" id="twilio-token" placeholder="xxxxxxxx" class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-3 py-2 text-sm text-cream placeholder:text-cream/30 focus:outline-none focus:border-brass/50" />
+                </div>
+                <div>
+                  <label class="block text-xs text-cream/50 mb-1">From Phone</label>
+                  <input type="tel" id="twilio-from" placeholder="+1234567890" class="w-full bg-charcoal-light border border-charcoal-border rounded-lg px-3 py-2 text-sm text-cream placeholder:text-cream/30 focus:outline-none focus:border-brass/50" />
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <button type="submit" class="w-full px-4 py-2.5 bg-brass text-charcoal text-sm font-medium rounded-lg hover:bg-brass-light transition-colors">
+                Save Settings
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Setup Guide Tab -->
+        <div id="settings-panel-guide" class="p-6 hidden">
+          <div class="space-y-8">
+            <!-- Intro -->
+            <div class="text-center pb-4 border-b border-charcoal-border">
+              <h4 class="text-cream font-medium mb-2">Send Real Emails & Texts to Clients</h4>
+              <p class="text-sm text-cream/50">Follow these steps to activate messaging. Takes about 15 minutes.</p>
+            </div>
+
+            <!-- Email Setup -->
+            <div>
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 font-medium">1</div>
+                <h4 class="text-cream font-medium">Set Up Email (SendGrid)</h4>
+                <span class="text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded">Free: 100 emails/day</span>
+              </div>
+
+              <div class="ml-11 space-y-4">
+                <div class="flex gap-3">
+                  <input type="checkbox" id="guide-sg-1" class="mt-1 accent-brass" />
+                  <label for="guide-sg-1" class="text-sm text-cream/70">
+                    <span class="text-cream">Create a SendGrid account</span><br/>
+                    Go to <a href="https://signup.sendgrid.com/" target="_blank" class="text-brass hover:underline">signup.sendgrid.com</a> and sign up with your email
+                  </label>
+                </div>
+
+                <div class="flex gap-3">
+                  <input type="checkbox" id="guide-sg-2" class="mt-1 accent-brass" />
+                  <label for="guide-sg-2" class="text-sm text-cream/70">
+                    <span class="text-cream">Verify your sender identity</span><br/>
+                    Go to Settings → Sender Authentication → Verify a Single Sender<br/>
+                    Use <span class="text-brass">daragh@oldheadplaster.com</span> (you'll get a verification email)
+                  </label>
+                </div>
+
+                <div class="flex gap-3">
+                  <input type="checkbox" id="guide-sg-3" class="mt-1 accent-brass" />
+                  <label for="guide-sg-3" class="text-sm text-cream/70">
+                    <span class="text-cream">Create an API Key</span><br/>
+                    Go to Settings → API Keys → Create API Key<br/>
+                    Name it "Old Head Plaster" and select "Full Access"<br/>
+                    <span class="text-red-400">Copy the key immediately - you can only see it once!</span>
+                  </label>
+                </div>
+
+                <div class="flex gap-3">
+                  <input type="checkbox" id="guide-sg-4" class="mt-1 accent-brass" />
+                  <label for="guide-sg-4" class="text-sm text-cream/70">
+                    <span class="text-cream">Enter credentials above</span><br/>
+                    Go to the Credentials tab and paste your API Key and verified email
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- SMS Setup -->
+            <div>
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 font-medium">2</div>
+                <h4 class="text-cream font-medium">Set Up SMS (Twilio)</h4>
+                <span class="text-xs px-2 py-0.5 bg-brass/20 text-brass rounded">~$0.01/text + $1.15/mo for number</span>
+              </div>
+
+              <div class="ml-11 space-y-4">
+                <div class="flex gap-3">
+                  <input type="checkbox" id="guide-tw-1" class="mt-1 accent-brass" />
+                  <label for="guide-tw-1" class="text-sm text-cream/70">
+                    <span class="text-cream">Create a Twilio account</span><br/>
+                    Go to <a href="https://www.twilio.com/try-twilio" target="_blank" class="text-brass hover:underline">twilio.com/try-twilio</a> and sign up<br/>
+                    You'll get $15 free trial credit
+                  </label>
+                </div>
+
+                <div class="flex gap-3">
+                  <input type="checkbox" id="guide-tw-2" class="mt-1 accent-brass" />
+                  <label for="guide-tw-2" class="text-sm text-cream/70">
+                    <span class="text-cream">Get a phone number</span><br/>
+                    In the Console, go to Phone Numbers → Manage → Buy a Number<br/>
+                    Choose a local number (203 area code for CT)
+                  </label>
+                </div>
+
+                <div class="flex gap-3">
+                  <input type="checkbox" id="guide-tw-3" class="mt-1 accent-brass" />
+                  <label for="guide-tw-3" class="text-sm text-cream/70">
+                    <span class="text-cream">Find your credentials</span><br/>
+                    Go to Account → API Keys & Tokens<br/>
+                    Copy your <span class="text-brass">Account SID</span> and <span class="text-brass">Auth Token</span>
+                  </label>
+                </div>
+
+                <div class="flex gap-3">
+                  <input type="checkbox" id="guide-tw-4" class="mt-1 accent-brass" />
+                  <label for="guide-tw-4" class="text-sm text-cream/70">
+                    <span class="text-cream">Enter credentials above</span><br/>
+                    Go to the Credentials tab and paste your Account SID, Auth Token, and phone number
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Done -->
+            <div class="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
+              <div class="flex items-center gap-3">
+                <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div>
+                  <p class="text-emerald-400 font-medium">You're all set!</p>
+                  <p class="text-sm text-cream/50">Once credentials are saved, messages will send automatically.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Help -->
+            <div class="text-center text-sm text-cream/40">
+              Need help? Contact your tech support or email setup@soullab.app
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Channel colors
+    const channelColors = {
+      email: { bg: 'bg-blue-500/20', text: 'text-blue-400', label: 'Email' },
+      sms: { bg: 'bg-purple-500/20', text: 'text-purple-400', label: 'SMS' },
+      both: { bg: 'bg-emerald-500/20', text: 'text-emerald-400', label: 'Email + SMS' }
+    };
+
+    // State
+    let currentTab = 'inbox';
+    let currentViewMsgId = null;
+    let selectedRecipients: string[] = [];
+
+    // Load data from localStorage
+    let messages = JSON.parse(localStorage.getItem('ohp-messages') || '[]');
+    let contacts = JSON.parse(localStorage.getItem('ohp-contacts') || '[]');
+    let settings = JSON.parse(localStorage.getItem('ohp-msg-settings') || '{}');
+
+    // Seed demo data if empty
+    if (contacts.length === 0) {
+      contacts = [
+        { id: '1', name: 'Lisa Harrison', role: 'Client', project: 'Greenwich Estate', email: 'lisa@harrison.com', phone: '203-555-0101' },
+        { id: '2', name: 'Sarah Chen', role: 'Architect', project: 'Greenwich Estate', email: 'sarah@chendesign.com', phone: '203-555-0102' },
+        { id: '3', name: 'Mark Thompson', role: 'General Contractor', project: 'Greenwich Estate', email: 'mark@thompsonbuilders.com', phone: '203-555-0103' },
+        { id: '4', name: 'David Chen', role: 'Client', project: 'Westport Modern', email: 'david@chenfamily.com', phone: '203-555-0201' },
+        { id: '5', name: 'James Wong', role: 'Architect', project: 'Westport Modern', email: 'james@modernct.com', phone: '203-555-0202' },
+        { id: '6', name: 'Patricia Wright', role: 'Client', project: 'Darien Historic', email: 'patricia@wright.com', phone: '203-555-0301' }
+      ];
+      saveContacts();
+    }
+
+    if (messages.length === 0) {
+      messages = [
+        { id: '1', type: 'inbox', from: 'Lisa Harrison', fromEmail: 'lisa@harrison.com', to: 'Daragh', subject: 'Re: Master Suite Progress', body: 'Thank you for the update! The first coat looks beautiful. Looking forward to seeing the final result.\n\nBest,\nLisa', channel: 'email', date: '2026-01-17T14:30:00', read: false, project: 'Greenwich Estate' },
+        { id: '2', type: 'inbox', from: 'Mark Thompson', fromEmail: 'mark@thompsonbuilders.com', to: 'Daragh', subject: 'Drywall Ready Confirmation', body: 'Confirmed for tomorrow morning. I\'ll meet you at the site at 8 AM.\n\nMark', channel: 'sms', date: '2026-01-17T10:15:00', read: true, project: 'Greenwich Estate' },
+        { id: '3', type: 'sent', from: 'Daragh', to: 'Lisa Harrison, Sarah Chen', subject: 'Master Suite Progress', body: 'First coat of Venetian complete in master bedroom. Cure time 24hrs before second application.\n\nBest regards,\nDaragh', channel: 'email', date: '2026-01-17T09:00:00', project: 'Greenwich Estate', status: 'delivered' },
+        { id: '4', type: 'sent', from: 'Daragh', to: 'David Chen, James Wong', subject: 'Sample Boards Ready', body: 'Your custom sample boards are ready for review. Please schedule a time to visit the Material Library.\n\nBest regards,\nDaragh', channel: 'email', date: '2026-01-15T11:00:00', project: 'Westport Modern', status: 'delivered' },
+        { id: '5', type: 'inbox', from: 'Patricia Wright', fromEmail: 'patricia@wright.com', to: 'Daragh', subject: 'Historic Plaster Questions', body: 'Hi Daragh,\n\nI have a few questions about the historic plaster restoration process. Can we schedule a call this week?\n\nThanks,\nPatricia', channel: 'email', date: '2026-01-16T15:45:00', read: false, project: 'Darien Historic' }
+      ];
+      saveMessages();
+    }
+
+    // Save functions
+    function saveMessages() {
+      localStorage.setItem('ohp-messages', JSON.stringify(messages));
+    }
+
+    function saveContacts() {
+      localStorage.setItem('ohp-contacts', JSON.stringify(contacts));
+    }
+
+    function saveSettings() {
+      localStorage.setItem('ohp-msg-settings', JSON.stringify(settings));
+    }
+
+    // Format date
+    function formatDate(dateStr: string) {
+      const date = new Date(dateStr);
+      const now = new Date();
+      const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 0) {
+        return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      } else if (diffDays === 1) {
+        return 'Yesterday';
+      } else if (diffDays < 7) {
+        return date.toLocaleDateString('en-US', { weekday: 'short' });
+      } else {
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      }
+    }
+
+    function formatFullDate(dateStr: string) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+    }
+
+    // Get unique projects
+    function getProjects() {
+      const projects = new Set<string>();
+      contacts.forEach(c => c.project && projects.add(c.project));
+      messages.forEach(m => m.project && projects.add(m.project));
+      return Array.from(projects).sort();
+    }
+
+    // Populate project filter
+    function populateProjectFilter() {
+      const select = document.getElementById('filter-project') as HTMLSelectElement;
+      const projects = getProjects();
+      select.innerHTML = '<option value="">All Projects</option>' +
+        projects.map(p => `<option value="${p}">${p}</option>`).join('');
+    }
+
+    // Render message list
+    function renderMessages() {
+      const list = document.getElementById('message-list');
+      const emptyState = document.getElementById('empty-state');
+      const emptyText = document.getElementById('empty-text');
+      const filterProject = (document.getElementById('filter-project') as HTMLSelectElement).value;
+
+      let filtered = messages.filter(m => m.type === currentTab || (currentTab === 'drafts' && m.type === 'draft'));
+      if (filterProject) {
+        filtered = filtered.filter(m => m.project === filterProject);
+      }
+
+      // Sort by date descending
+      filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+      // Update counts
+      const unreadCount = messages.filter(m => m.type === 'inbox' && !m.read).length;
+      const draftsCount = messages.filter(m => m.type === 'draft').length;
+
+      document.getElementById('inbox-count')!.textContent = unreadCount.toString();
+      document.getElementById('inbox-count')!.classList.toggle('hidden', unreadCount === 0);
+
+      document.getElementById('drafts-count')!.textContent = draftsCount.toString();
+      document.getElementById('drafts-count')!.classList.toggle('hidden', draftsCount === 0);
+
+      if (filtered.length === 0) {
+        list!.innerHTML = '';
+        emptyState!.classList.remove('hidden');
+        emptyText!.textContent = currentTab === 'inbox' ? 'No messages in your inbox' :
+                                  currentTab === 'sent' ? 'No sent messages' : 'No drafts';
+        return;
+      }
+
+      emptyState!.classList.add('hidden');
+
+      list!.innerHTML = filtered.map(msg => {
+        const colors = channelColors[msg.channel] || channelColors.email;
+        const isUnread = msg.type === 'inbox' && !msg.read;
+
+        return `
+          <div class="message-item bg-charcoal-light border border-charcoal-border rounded-lg p-5 hover:border-brass/30 transition-colors cursor-pointer ${isUnread ? 'border-l-2 border-l-brass' : ''}" data-id="${msg.id}">
+            <div class="flex items-start justify-between mb-2">
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  ${isUnread ? '<span class="w-2 h-2 bg-brass rounded-full flex-shrink-0"></span>' : ''}
+                  <span class="text-cream font-medium ${isUnread ? '' : 'font-normal'} truncate">
+                    ${msg.type === 'inbox' ? msg.from : `To: ${msg.to}`}
+                  </span>
+                </div>
+                <h3 class="text-cream ${isUnread ? 'font-medium' : 'font-normal'} truncate">${msg.subject || '(No subject)'}</h3>
+              </div>
+              <div class="text-right flex-shrink-0 ml-4">
+                <div class="text-xs text-cream/40">${formatDate(msg.date)}</div>
+              </div>
+            </div>
+            <p class="text-sm text-cream/50 line-clamp-1 mb-3">${msg.body.split('\n')[0]}</p>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                ${msg.project ? `<span class="text-xs px-2 py-0.5 bg-charcoal rounded text-cream/50">${msg.project}</span>` : ''}
+                <span class="text-xs px-2 py-0.5 rounded ${colors.bg} ${colors.text}">${colors.label}</span>
+              </div>
+              ${msg.type === 'sent' && msg.status ? `
+                <span class="text-xs text-emerald-400 flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  ${msg.status}
+                </span>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Add click handlers
+      document.querySelectorAll('.message-item').forEach(el => {
+        el.addEventListener('click', () => openViewModal(el.dataset.id!));
+      });
+    }
+
+    // Populate recipient select
+    function populateRecipientSelect() {
+      const select = document.getElementById('recipient-select') as HTMLSelectElement;
+      const available = contacts.filter(c => !selectedRecipients.includes(c.id));
+
+      select.innerHTML = '<option value="">Select recipient...</option>' +
+        available.map(c => `<option value="${c.id}">${c.name} (${c.role}${c.project ? ' - ' + c.project : ''})</option>`).join('');
+    }
+
+    // Update selected recipients display
+    function updateSelectedRecipients() {
+      const container = document.getElementById('selected-recipients');
+      container!.innerHTML = selectedRecipients.map(id => {
+        const contact = contacts.find(c => c.id === id);
+        if (!contact) return '';
+        return `
+          <span class="inline-flex items-center gap-1 px-2 py-1 bg-brass/20 text-brass text-sm rounded">
+            ${contact.name}
+            <button type="button" class="remove-recipient hover:text-brass-light" data-id="${id}">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </span>
-        </label>
-      `).join('')}
-    `;
+        `;
+      }).join('');
 
-    // Handle "All" checkbox
-    const allCheckbox = recipientsList.querySelector('input[value="all"]');
-    const recipientCheckboxes = recipientsList.querySelectorAll('.recipient-checkbox');
+      // Add remove handlers
+      document.querySelectorAll('.remove-recipient').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const id = (btn as HTMLElement).dataset.id!;
+          selectedRecipients = selectedRecipients.filter(r => r !== id);
+          updateSelectedRecipients();
+          populateRecipientSelect();
+        });
+      });
+    }
 
-    allCheckbox?.addEventListener('change', () => {
-      recipientCheckboxes.forEach(cb => cb.checked = allCheckbox.checked);
+    // Open compose modal
+    function openComposeModal(replyTo?: any) {
+      const modal = document.getElementById('compose-modal');
+      const title = document.getElementById('compose-title');
+
+      // Reset form
+      (document.getElementById('compose-form') as HTMLFormElement).reset();
+      (document.getElementById('msg-id') as HTMLInputElement).value = '';
+      selectedRecipients = [];
+
+      if (replyTo) {
+        title!.textContent = 'Reply';
+        (document.getElementById('subject-input') as HTMLInputElement).value =
+          replyTo.subject.startsWith('Re:') ? replyTo.subject : `Re: ${replyTo.subject}`;
+
+        // Find contact by email/name
+        const contact = contacts.find(c => c.email === replyTo.fromEmail || c.name === replyTo.from);
+        if (contact) {
+          selectedRecipients = [contact.id];
+        }
+      } else {
+        title!.textContent = 'New Message';
+      }
+
+      populateRecipientSelect();
+      updateSelectedRecipients();
+      modal!.classList.remove('hidden');
+    }
+
+    // Close compose modal
+    function closeComposeModal() {
+      document.getElementById('compose-modal')!.classList.add('hidden');
+    }
+
+    // Open view modal
+    function openViewModal(id: string) {
+      const msg = messages.find(m => m.id === id);
+      if (!msg) return;
+
+      currentViewMsgId = id;
+
+      // Mark as read
+      if (msg.type === 'inbox' && !msg.read) {
+        msg.read = true;
+        saveMessages();
+        renderMessages();
+      }
+
+      const colors = channelColors[msg.channel] || channelColors.email;
+
+      document.getElementById('view-subject')!.textContent = msg.subject || '(No subject)';
+      document.getElementById('view-from')!.textContent = msg.type === 'inbox' ? `From: ${msg.from}` : `From: ${msg.from}`;
+      document.getElementById('view-to')!.textContent = `To: ${msg.to}`;
+      document.getElementById('view-date')!.textContent = formatFullDate(msg.date);
+      document.getElementById('view-body')!.textContent = msg.body;
+
+      const channelSpan = document.getElementById('view-channel');
+      channelSpan!.className = `text-xs px-2 py-0.5 rounded ${colors.bg} ${colors.text}`;
+      channelSpan!.textContent = colors.label;
+
+      // Show/hide reply button based on message type
+      document.getElementById('reply-btn')!.classList.toggle('hidden', msg.type !== 'inbox');
+
+      document.getElementById('view-modal')!.classList.remove('hidden');
+    }
+
+    // Close view modal
+    function closeViewModal() {
+      document.getElementById('view-modal')!.classList.add('hidden');
+      currentViewMsgId = null;
+    }
+
+    // Send message
+    async function sendMessage(e: Event) {
+      e.preventDefault();
+
+      if (selectedRecipients.length === 0) {
+        alert('Please select at least one recipient');
+        return;
+      }
+
+      const channel = (document.querySelector('input[name="channel"]:checked') as HTMLInputElement)?.value || 'email';
+      const subject = (document.getElementById('subject-input') as HTMLInputElement).value;
+      const body = (document.getElementById('message-input') as HTMLTextAreaElement).value;
+
+      if (!body.trim()) {
+        alert('Please enter a message');
+        return;
+      }
+
+      const recipientNames = selectedRecipients.map(id => {
+        const contact = contacts.find(c => c.id === id);
+        return contact?.name || '';
+      }).filter(Boolean).join(', ');
+
+      const newMsg = {
+        id: Date.now().toString(),
+        type: 'sent',
+        from: 'Daragh',
+        to: recipientNames,
+        subject: subject || '(No subject)',
+        body: body,
+        channel: channel,
+        date: new Date().toISOString(),
+        status: 'sending'
+      };
+
+      // Add project if recipients have same project
+      const recipientContacts = selectedRecipients.map(id => contacts.find(c => c.id === id)).filter(Boolean);
+      const projects = [...new Set(recipientContacts.map(c => c?.project).filter(Boolean))];
+      if (projects.length === 1) {
+        newMsg.project = projects[0];
+      }
+
+      messages.push(newMsg);
+      saveMessages();
+
+      // Simulate sending (in production, call actual API)
+      const success = await simulateSend(newMsg, recipientContacts);
+
+      // Update status
+      const msgIndex = messages.findIndex(m => m.id === newMsg.id);
+      if (msgIndex !== -1) {
+        messages[msgIndex].status = success ? 'delivered' : 'failed';
+        saveMessages();
+      }
+
+      closeComposeModal();
+      currentTab = 'sent';
+      updateTabs();
+      renderMessages();
+
+      alert(success ? 'Message sent!' : 'Failed to send message. Check your settings.');
+    }
+
+    // Simulate sending (replace with actual API calls in production)
+    async function simulateSend(msg: any, recipients: any[]) {
+      // Check if we have API credentials
+      const hasEmail = settings.sendgridKey && settings.sendgridFrom;
+      const hasSMS = settings.twilioSid && settings.twilioToken && settings.twilioFrom;
+
+      if (msg.channel === 'email' && !hasEmail) {
+        console.log('Email would be sent to:', recipients.map(r => r?.email).filter(Boolean));
+        return true; // Demo mode
+      }
+
+      if (msg.channel === 'sms' && !hasSMS) {
+        console.log('SMS would be sent to:', recipients.map(r => r?.phone).filter(Boolean));
+        return true; // Demo mode
+      }
+
+      if (msg.channel === 'both') {
+        console.log('Email + SMS would be sent');
+        return true; // Demo mode
+      }
+
+      // In production, make actual API calls here
+      // await sendViaGendGrid(msg, recipients);
+      // await sendViaTwilio(msg, recipients);
+
+      return true;
+    }
+
+    // Save draft
+    function saveDraft() {
+      const subject = (document.getElementById('subject-input') as HTMLInputElement).value;
+      const body = (document.getElementById('message-input') as HTMLTextAreaElement).value;
+      const channel = (document.querySelector('input[name="channel"]:checked') as HTMLInputElement)?.value || 'email';
+
+      const recipientNames = selectedRecipients.map(id => {
+        const contact = contacts.find(c => c.id === id);
+        return contact?.name || '';
+      }).filter(Boolean).join(', ');
+
+      const draft = {
+        id: Date.now().toString(),
+        type: 'draft',
+        from: 'Daragh',
+        to: recipientNames || '(No recipients)',
+        subject: subject || '(No subject)',
+        body: body,
+        channel: channel,
+        date: new Date().toISOString()
+      };
+
+      messages.push(draft);
+      saveMessages();
+      closeComposeModal();
+
+      currentTab = 'drafts';
+      updateTabs();
+      renderMessages();
+    }
+
+    // Delete message
+    function deleteMessage(id: string) {
+      if (!confirm('Delete this message?')) return;
+
+      messages = messages.filter(m => m.id !== id);
+      saveMessages();
+      closeViewModal();
+      renderMessages();
+    }
+
+    // Update tab styles
+    function updateTabs() {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-charcoal', 'text-cream');
+        btn.classList.add('text-cream/50');
+      });
+
+      const activeTab = document.getElementById(`tab-${currentTab}`);
+      activeTab?.classList.add('bg-charcoal', 'text-cream');
+      activeTab?.classList.remove('text-cream/50');
+    }
+
+    // Render contacts list
+    function renderContacts() {
+      const list = document.getElementById('contacts-list');
+
+      if (contacts.length === 0) {
+        list!.innerHTML = '<p class="text-center text-cream/40 py-8">No contacts yet</p>';
+        return;
+      }
+
+      // Group by project
+      const byProject: Record<string, typeof contacts> = {};
+      contacts.forEach(c => {
+        const proj = c.project || 'No Project';
+        if (!byProject[proj]) byProject[proj] = [];
+        byProject[proj].push(c);
+      });
+
+      list!.innerHTML = Object.entries(byProject).map(([project, projectContacts]) => `
+        <div class="mb-4">
+          <h4 class="text-xs text-cream/40 uppercase mb-2">${project}</h4>
+          <div class="space-y-2">
+            ${projectContacts.map(c => `
+              <div class="contact-item flex items-center justify-between p-3 bg-charcoal rounded-lg hover:bg-charcoal-border/50 transition-colors cursor-pointer" data-id="${c.id}">
+                <div>
+                  <div class="text-cream font-medium">${c.name}</div>
+                  <div class="text-sm text-cream/50">${c.role}</div>
+                </div>
+                <div class="text-right text-sm text-cream/40">
+                  ${c.email ? `<div>${c.email}</div>` : ''}
+                  ${c.phone ? `<div>${c.phone}</div>` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      // Add click handlers
+      document.querySelectorAll('.contact-item').forEach(el => {
+        el.addEventListener('click', () => openEditContact(el.dataset.id!));
+      });
+    }
+
+    // Open add contact modal
+    function openAddContact() {
+      (document.getElementById('contact-form') as HTMLFormElement).reset();
+      (document.getElementById('contact-id') as HTMLInputElement).value = '';
+      document.getElementById('contact-form-title')!.textContent = 'Add Contact';
+      document.getElementById('delete-contact-btn')!.classList.add('hidden');
+      document.getElementById('contact-form-modal')!.classList.remove('hidden');
+    }
+
+    // Open edit contact modal
+    function openEditContact(id: string) {
+      const contact = contacts.find(c => c.id === id);
+      if (!contact) return;
+
+      (document.getElementById('contact-id') as HTMLInputElement).value = contact.id;
+      (document.getElementById('contact-name') as HTMLInputElement).value = contact.name;
+      (document.getElementById('contact-email') as HTMLInputElement).value = contact.email || '';
+      (document.getElementById('contact-phone') as HTMLInputElement).value = contact.phone || '';
+      (document.getElementById('contact-role') as HTMLSelectElement).value = contact.role || 'Client';
+      (document.getElementById('contact-project') as HTMLInputElement).value = contact.project || '';
+
+      document.getElementById('contact-form-title')!.textContent = 'Edit Contact';
+      document.getElementById('delete-contact-btn')!.classList.remove('hidden');
+      document.getElementById('contact-form-modal')!.classList.remove('hidden');
+    }
+
+    // Close contact form modal
+    function closeContactForm() {
+      document.getElementById('contact-form-modal')!.classList.add('hidden');
+    }
+
+    // Save contact
+    function saveContact(e: Event) {
+      e.preventDefault();
+
+      const id = (document.getElementById('contact-id') as HTMLInputElement).value;
+      const contactData = {
+        id: id || Date.now().toString(),
+        name: (document.getElementById('contact-name') as HTMLInputElement).value,
+        email: (document.getElementById('contact-email') as HTMLInputElement).value,
+        phone: (document.getElementById('contact-phone') as HTMLInputElement).value,
+        role: (document.getElementById('contact-role') as HTMLSelectElement).value,
+        project: (document.getElementById('contact-project') as HTMLInputElement).value
+      };
+
+      if (id) {
+        const index = contacts.findIndex(c => c.id === id);
+        if (index !== -1) contacts[index] = contactData;
+      } else {
+        contacts.push(contactData);
+      }
+
+      saveContacts();
+      closeContactForm();
+      renderContacts();
+      populateProjectFilter();
+      populateRecipientSelect();
+    }
+
+    // Delete contact
+    function deleteContact() {
+      const id = (document.getElementById('contact-id') as HTMLInputElement).value;
+      if (!id) return;
+
+      if (confirm('Delete this contact?')) {
+        contacts = contacts.filter(c => c.id !== id);
+        saveContacts();
+        closeContactForm();
+        renderContacts();
+        populateProjectFilter();
+      }
+    }
+
+    // Load settings into form
+    function loadSettings() {
+      (document.getElementById('sendgrid-key') as HTMLInputElement).value = settings.sendgridKey || '';
+      (document.getElementById('sendgrid-from') as HTMLInputElement).value = settings.sendgridFrom || '';
+      (document.getElementById('twilio-sid') as HTMLInputElement).value = settings.twilioSid || '';
+      (document.getElementById('twilio-token') as HTMLInputElement).value = settings.twilioToken || '';
+      (document.getElementById('twilio-from') as HTMLInputElement).value = settings.twilioFrom || '';
+      updateStatusIndicators();
+    }
+
+    // Update status indicators
+    function updateStatusIndicators() {
+      const emailStatus = document.getElementById('email-status');
+      const smsStatus = document.getElementById('sms-status');
+
+      const hasEmail = settings.sendgridKey && settings.sendgridFrom;
+      const hasSMS = settings.twilioSid && settings.twilioToken && settings.twilioFrom;
+
+      if (emailStatus) {
+        const dot = emailStatus.querySelector('span.w-2');
+        const text = emailStatus.querySelector('p');
+        if (hasEmail) {
+          dot?.classList.remove('bg-cream/30');
+          dot?.classList.add('bg-emerald-400');
+          if (text) text.textContent = 'Ready to send';
+          text?.classList.remove('text-cream/40');
+          text?.classList.add('text-emerald-400');
+        } else {
+          dot?.classList.remove('bg-emerald-400');
+          dot?.classList.add('bg-cream/30');
+          if (text) text.textContent = 'Not configured';
+          text?.classList.remove('text-emerald-400');
+          text?.classList.add('text-cream/40');
+        }
+      }
+
+      if (smsStatus) {
+        const dot = smsStatus.querySelector('span.w-2');
+        const text = smsStatus.querySelector('p');
+        if (hasSMS) {
+          dot?.classList.remove('bg-cream/30');
+          dot?.classList.add('bg-emerald-400');
+          if (text) text.textContent = 'Ready to send';
+          text?.classList.remove('text-cream/40');
+          text?.classList.add('text-emerald-400');
+        } else {
+          dot?.classList.remove('bg-emerald-400');
+          dot?.classList.add('bg-cream/30');
+          if (text) text.textContent = 'Not configured';
+          text?.classList.remove('text-emerald-400');
+          text?.classList.add('text-cream/40');
+        }
+      }
+    }
+
+    // Settings tab switching
+    function setSettingsTab(tab: string) {
+      const tabs = document.querySelectorAll('.settings-tab');
+      tabs.forEach(t => {
+        t.classList.remove('text-cream', 'border-brass');
+        t.classList.add('text-cream/50', 'border-transparent');
+      });
+
+      const activeTab = document.getElementById(`settings-tab-${tab}`);
+      activeTab?.classList.add('text-cream', 'border-brass');
+      activeTab?.classList.remove('text-cream/50', 'border-transparent');
+
+      document.getElementById('settings-panel-credentials')!.classList.toggle('hidden', tab !== 'credentials');
+      document.getElementById('settings-panel-guide')!.classList.toggle('hidden', tab !== 'guide');
+    }
+
+    // Save settings
+    function handleSaveSettings(e: Event) {
+      e.preventDefault();
+
+      settings = {
+        sendgridKey: (document.getElementById('sendgrid-key') as HTMLInputElement).value,
+        sendgridFrom: (document.getElementById('sendgrid-from') as HTMLInputElement).value,
+        twilioSid: (document.getElementById('twilio-sid') as HTMLInputElement).value,
+        twilioToken: (document.getElementById('twilio-token') as HTMLInputElement).value,
+        twilioFrom: (document.getElementById('twilio-from') as HTMLInputElement).value
+      };
+
+      saveSettings();
+      updateStatusIndicators();
+      alert('Settings saved!');
+    }
+
+    // Event listeners
+    document.getElementById('compose-btn')?.addEventListener('click', () => openComposeModal());
+    document.getElementById('compose-backdrop')?.addEventListener('click', closeComposeModal);
+    document.getElementById('close-compose')?.addEventListener('click', closeComposeModal);
+    document.getElementById('compose-form')?.addEventListener('submit', sendMessage);
+    document.getElementById('save-draft-btn')?.addEventListener('click', saveDraft);
+
+    document.getElementById('view-backdrop')?.addEventListener('click', closeViewModal);
+    document.getElementById('close-view')?.addEventListener('click', closeViewModal);
+    document.getElementById('reply-btn')?.addEventListener('click', () => {
+      const msg = messages.find(m => m.id === currentViewMsgId);
+      if (msg) {
+        closeViewModal();
+        openComposeModal(msg);
+      }
     });
-  });
+    document.getElementById('delete-msg-btn')?.addEventListener('click', () => {
+      if (currentViewMsgId) deleteMessage(currentViewMsgId);
+    });
 
-  // Template selection
-  templateSelect?.addEventListener('change', () => {
-    const option = templateSelect.selectedOptions[0];
-    if (option && option.value) {
-      subjectInput.value = option.dataset.subject || '';
-      messageInput.value = option.dataset.body || '';
-    }
-  });
+    document.getElementById('contacts-btn')?.addEventListener('click', () => {
+      renderContacts();
+      document.getElementById('contacts-modal')!.classList.remove('hidden');
+    });
+    document.getElementById('contacts-backdrop')?.addEventListener('click', () => {
+      document.getElementById('contacts-modal')!.classList.add('hidden');
+    });
+    document.getElementById('close-contacts')?.addEventListener('click', () => {
+      document.getElementById('contacts-modal')!.classList.add('hidden');
+    });
+    document.getElementById('add-contact-btn')?.addEventListener('click', openAddContact);
 
-  // Form submission
-  const form = document.getElementById('compose-form');
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
+    document.getElementById('contact-form-backdrop')?.addEventListener('click', closeContactForm);
+    document.getElementById('cancel-contact')?.addEventListener('click', closeContactForm);
+    document.getElementById('contact-form')?.addEventListener('submit', saveContact);
+    document.getElementById('delete-contact-btn')?.addEventListener('click', deleteContact);
 
-    const project = projectSelect.value;
-    const channel = document.querySelector('input[name="channel"]:checked')?.value;
-    const subject = subjectInput.value;
-    const message = messageInput.value;
-    const selectedRecipients = Array.from(recipientsList.querySelectorAll('input:checked'))
-      .map(cb => cb.value)
-      .filter(v => v !== 'all');
+    document.getElementById('settings-btn')?.addEventListener('click', () => {
+      loadSettings();
+      setSettingsTab('credentials'); // Reset to credentials tab
+      document.getElementById('settings-modal')!.classList.remove('hidden');
+    });
+    document.getElementById('settings-backdrop')?.addEventListener('click', () => {
+      document.getElementById('settings-modal')!.classList.add('hidden');
+    });
+    document.getElementById('close-settings')?.addEventListener('click', () => {
+      document.getElementById('settings-modal')!.classList.add('hidden');
+    });
+    document.getElementById('settings-form')?.addEventListener('submit', handleSaveSettings);
 
-    if (!project || selectedRecipients.length === 0 || !subject || !message) {
-      alert('Please fill in all required fields');
-      return;
-    }
+    // Settings tab listeners
+    document.getElementById('settings-tab-credentials')?.addEventListener('click', () => setSettingsTab('credentials'));
+    document.getElementById('settings-tab-guide')?.addEventListener('click', () => setSettingsTab('guide'));
 
-    // In production, this would call the API
-    console.log('Sending message:', { project, channel, subject, message, recipients: selectedRecipients });
-    alert('Message sent! (Demo - would send via API in production)');
+    document.getElementById('add-recipient-btn')?.addEventListener('click', () => {
+      const select = document.getElementById('recipient-select') as HTMLSelectElement;
+      if (select.value && !selectedRecipients.includes(select.value)) {
+        selectedRecipients.push(select.value);
+        updateSelectedRecipients();
+        populateRecipientSelect();
+      }
+    });
 
-    // Reset form
-    form.reset();
-    recipientsList.innerHTML = '<p class="text-sm text-cream/40 italic">Select a project to see contacts</p>';
-  });
-</script>
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentTab = btn.id.replace('tab-', '');
+        updateTabs();
+        renderMessages();
+      });
+    });
+
+    document.getElementById('filter-project')?.addEventListener('change', renderMessages);
+
+    // Template selection
+    document.getElementById('template-select')?.addEventListener('change', (e) => {
+      const select = e.target as HTMLSelectElement;
+      const option = select.selectedOptions[0];
+      if (option && option.value) {
+        (document.getElementById('subject-input') as HTMLInputElement).value = option.dataset.subject || '';
+        (document.getElementById('message-input') as HTMLTextAreaElement).value = option.dataset.body || '';
+      }
+    });
+
+    // Show/hide subject based on channel
+    document.querySelectorAll('input[name="channel"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        const channel = (document.querySelector('input[name="channel"]:checked') as HTMLInputElement)?.value;
+        document.getElementById('subject-row')!.style.display = channel === 'sms' ? 'none' : 'block';
+      });
+    });
+
+    // Escape key handlers
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeComposeModal();
+        closeViewModal();
+        closeContactForm();
+        document.getElementById('contacts-modal')?.classList.add('hidden');
+        document.getElementById('settings-modal')?.classList.add('hidden');
+      }
+    });
+
+    // Initial render
+    populateProjectFilter();
+    renderMessages();
+  </script>
+</AdminLayout>
