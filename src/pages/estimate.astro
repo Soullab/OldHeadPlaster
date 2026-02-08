@@ -6682,6 +6682,27 @@ Old Head Plaster
     sendAccountantMessage("Based on my current revenue and profit margins, am I ready to hire help? What would the financial impact be of bringing on a part-time assistant or subcontractor?");
   }
 
+  // ===== GLOBAL EXPORTS (for onclick handlers) =====
+  window.switchTab = switchTab;
+  window.openBespokeContract = openBespokeContract;
+  window.openNewLeadModal = openNewLeadModal;
+  window.openNewInvoiceModal = openNewInvoiceModal;
+  window.openQuickExpenseModal = openQuickExpenseModal;
+  window.openAddTaskModal = openAddTaskModal;
+  window.openHiringCalculator = openHiringCalculator;
+  window.openSubcontractorModal = openSubcontractorModal;
+  window.openRemindersPanel = openRemindersPanel;
+  window.sendDailySummaryToOwner = sendDailySummaryToOwner;
+  window.closeLeadModal = closeLeadModal;
+  window.sendBulkReminders = sendBulkReminders;
+  window.bespokeSections = bespokeSections;
+  window.addBespokeSection = addBespokeSection;
+  window.renderBespokeSections = renderBespokeSections;
+  window.recalcSectionSubtotal = recalcSectionSubtotal;
+  window.updateBespokeTotal = updateBespokeTotal;
+  window.addProcessToSection = addProcessToSection;
+  window.askAccountantScaling = askAccountantScaling;
+
   // ===== INIT =====
   document.addEventListener('DOMContentLoaded', () => {
     initAuth();
