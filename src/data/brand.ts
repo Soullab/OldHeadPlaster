@@ -20,6 +20,11 @@ export interface BrandConfig {
   location: string;
   serviceArea: string;
 
+  // Licensing
+  hicNumber?: string;
+  businessEntity?: string;
+  ownerFullName?: string;
+
   // Virtual assistant
   virtualName: string;
   virtualTagline: string;
@@ -58,6 +63,10 @@ export const BRAND_PRESETS: Record<string, BrandConfig> = {
     email: "daragh@oldheadplaster.com",
     location: "Madison, Connecticut",
     serviceArea: "Fairfield & New Haven Counties",
+
+    hicNumber: "0647302",
+    businessEntity: "Old Head Plaster LLC",
+    ownerFullName: "Daragh McLoughlin",
 
     virtualName: "Virtual Daragh",
     virtualTagline: "Plaster Expert",
