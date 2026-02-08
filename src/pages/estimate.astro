@@ -2856,11 +2856,7 @@ const finishTypes = [
           <div id="contract-rooms" class="space-y-2 mb-4">
             <!-- Rooms rendered by JS -->
           </div>
-          <div class="grid grid-cols-3 gap-4 p-4 bg-stone/20 rounded">
-            <div>
-              <p class="text-charcoal/50 text-xs uppercase">Total Area</p>
-              <p class="text-charcoal font-heading" id="contract-sqft">0 sq ft</p>
-            </div>
+          <div class="grid grid-cols-2 gap-4 p-4 bg-stone/20 rounded">
             <div>
               <p class="text-charcoal/50 text-xs uppercase">Finish Type</p>
               <p class="text-charcoal font-heading" id="contract-finish">Venetian Plaster</p>
@@ -3797,21 +3793,19 @@ oldheadplaster.com`);
     el('contract-client-sig').textContent = client;
 
     // Scope
-    el('contract-sqft').textContent = `${estimate.totalSqFt.toLocaleString()} sq ft`;
     el('contract-finish').textContent = finishType;
     el('contract-tier').textContent = tierNames[state.tier] || 'Signature';
 
     // Rooms
     const roomsContainer = el('contract-rooms');
     roomsContainer.innerHTML = state.rooms.map(room => {
-      const area = calculateRoomArea(room);
       const surfaces = [];
       if (room.includeWalls) surfaces.push('Walls');
       if (room.includeCeiling) surfaces.push('Ceiling');
       return `
         <div class="flex justify-between text-sm py-1">
           <span class="text-charcoal">${room.name} <span class="text-charcoal/50">(${surfaces.join(', ')})</span></span>
-          <span class="text-charcoal">${area.toLocaleString()} sq ft</span>
+          <span class="text-charcoal/50 text-xs">${room.length}' x ${room.width}' x ${room.height}'h</span>
         </div>
       `;
     }).join('');
