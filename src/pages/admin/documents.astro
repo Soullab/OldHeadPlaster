@@ -231,6 +231,54 @@ const typeIcons = {
     localStorage.setItem(DOCS_KEY, JSON.stringify(docs));
   }
 
+  // Fetch cloud contracts and merge with local documents
+  async function syncCloudContracts() {
+    try {
+      const response = await fetch('/api/contracts');
+      const result = await response.json();
+      if (!result.success) return;
+
+      const docs = getDocuments();
+      let changed = false;
+
+      result.contracts.forEach(contract => {
+        const existing = docs.findIndex(d => d.contractNumber === contract.contractNumber);
+        if (existing === -1) {
+          // Add cloud contract to local docs
+          docs.unshift({
+            id: 'cloud-' + contract.id,
+            name: (contract.contractNumber || 'Contract') + ' — ' + (contract.clientName || 'Client'),
+            project: contract.clientName || 'Unknown',
+            type: 'contract',
+            size: 'PDF',
+            uploadedBy: 'Daragh',
+            date: (contract.updatedAt || contract.createdAt || '').split('T')[0],
+            shared: ['All Team'],
+            contractNumber: contract.contractNumber,
+            amount: contract.amount,
+            status: contract.status || 'draft',
+            cloudId: contract.id
+          });
+          changed = true;
+        } else {
+          // Update status from cloud
+          if (docs[existing].status !== contract.status) {
+            docs[existing].status = contract.status;
+            docs[existing].amount = contract.amount;
+            changed = true;
+          }
+        }
+      });
+
+      if (changed) {
+        saveDocuments(docs);
+        renderDocuments();
+      }
+    } catch (e) {
+      console.error('Cloud sync failed:', e);
+    }
+  }
+
   function getProjects() {
     const stored = localStorage.getItem(PROJECTS_KEY);
     return stored ? JSON.parse(stored) : [];
@@ -557,4 +605,7 @@ const typeIcons = {
   // Initialize
   populateProjectFilter();
   renderDocuments();
+
+  // Sync cloud contracts
+  syncCloudContracts();
 </script>

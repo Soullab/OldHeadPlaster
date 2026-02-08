@@ -330,6 +330,24 @@ const finishTypes = [
               </div>
             </div>
 
+            <!-- Contracts -->
+            <div class="bg-cream shadow-sm">
+              <div class="p-4 border-b border-stone/30 flex items-center justify-between">
+                <h3 class="font-heading text-charcoal flex items-center gap-2">
+                  <svg class="w-5 h-5 text-bronze" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Contracts
+                </h3>
+                <button onclick="openBespokeContract()" style="font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #A8935C; background: none; border: none; cursor: pointer;">
+                  + New
+                </button>
+              </div>
+              <div class="p-4" id="dashboard-contracts-list">
+                <p class="text-charcoal/40 text-sm py-3">Loading contracts...</p>
+              </div>
+            </div>
+
             <!-- Recent Activity -->
             <div class="bg-cream shadow-sm">
               <div class="p-4 border-b border-stone/30">
@@ -4725,33 +4743,119 @@ oldheadplaster.com`);
     }, 6000);
   }
 
-  function saveContractLog(data) {
+  // ===== CLOUD CONTRACT STORAGE =====
+
+  // Save contract to server (cloud storage)
+  async function saveContractToServer(contractData) {
     try {
-      const logs = JSON.parse(localStorage.getItem('ohp-contract-logs') || '[]');
-      logs.unshift(data);
-      // Keep last 100
-      if (logs.length > 100) logs.length = 100;
-      localStorage.setItem('ohp-contract-logs', JSON.stringify(logs));
+      const response = await fetch('/api/contracts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(contractData)
+      });
+      const result = await response.json();
+      if (result.success) {
+        console.log('Contract saved to cloud:', result.contract.id);
+        // Refresh dashboard contracts list if visible
+        if (typeof loadDashboardContracts === 'function') loadDashboardContracts();
+      }
+      return result;
     } catch (e) {
-      console.error('Failed to save contract log:', e);
+      console.error('Failed to save contract to server:', e);
+      return { success: false, error: e.message };
     }
   }
 
-  // File contract to admin/documents system
+  // Load all contracts from server
+  async function loadContractsFromServer(search = '', status = '') {
+    try {
+      let url = '/api/contracts';
+      const params = new URLSearchParams();
+      if (search) params.set('search', search);
+      if (status) params.set('status', status);
+      if (params.toString()) url += '?' + params.toString();
+
+      const response = await fetch(url);
+      const result = await response.json();
+      return result.success ? result.contracts : [];
+    } catch (e) {
+      console.error('Failed to load contracts:', e);
+      return [];
+    }
+  }
+
+  // Gather current contract data from the DOM
+  function gatherCurrentContractData() {
+    const el = (id) => document.getElementById(id);
+    const client = el('contract-client')?.textContent || 'Client';
+    const contractNumber = el('contract-number')?.textContent || '';
+    const clientEmail = el('contract-client-email')?.value || '';
+    const clientPhone = el('contract-client-phone')?.value || '';
+    const clientAddress = el('contract-location')?.textContent || '';
+
+    let amount = '$0';
+    let sectionsData = [];
+    if (bespokeMode) {
+      const total = bespokeSections.reduce((sum, s) => sum + s.subtotal, 0);
+      amount = '$' + total.toLocaleString();
+      sectionsData = bespokeSections.map(s => ({
+        title: s.title,
+        items: s.items,
+        processSteps: s.processSteps,
+        subtotal: s.subtotal
+      }));
+    } else {
+      const agreedPrice = el('contract-agreed-price')?.value;
+      if (agreedPrice) amount = '$' + Number(agreedPrice).toLocaleString();
+    }
+
+    return {
+      contractNumber,
+      clientName: client,
+      clientEmail,
+      clientPhone,
+      clientAddress,
+      amount,
+      bespokeMode,
+      sections: sectionsData,
+      timeline: {
+        contractDate: el('contract-sign-date')?.value || '',
+        startDate: el('contract-start-date')?.value || '',
+        endDate: el('contract-end-date')?.value || ''
+      }
+    };
+  }
+
+  // Save contract log (now uses server API)
+  function saveContractLog(data) {
+    // Also save to localStorage as fallback
+    try {
+      const logs = JSON.parse(localStorage.getItem('ohp-contract-logs') || '[]');
+      logs.unshift(data);
+      if (logs.length > 100) logs.length = 100;
+      localStorage.setItem('ohp-contract-logs', JSON.stringify(logs));
+    } catch (e) {
+      console.error('localStorage fallback error:', e);
+    }
+  }
+
+  // File contract to cloud + local documents
   function fileContractToDocuments(contractNumber, clientName, amount, status) {
+    // Save to cloud API
+    const contractData = gatherCurrentContractData();
+    contractData.status = status;
+    contractData.id = contractNumber.replace(/[^a-zA-Z0-9-]/g, '-').toLowerCase();
+    saveContractToServer(contractData);
+
+    // Also save to localStorage for admin/documents page
     try {
       const docs = JSON.parse(localStorage.getItem('oldhead_documents') || '[]');
       const today = new Date().toISOString().split('T')[0];
-
-      // Check if this contract is already filed (by contract number)
       const existing = docs.findIndex(d => d.contractNumber === contractNumber);
       if (existing !== -1) {
-        // Update existing
         docs[existing].status = status;
         docs[existing].date = today;
-        docs[existing].shared = ['All Team'];
       } else {
-        // Create new document entry
         docs.unshift({
           id: 'doc-' + Date.now(),
           name: contractNumber ? contractNumber.replace('Contract #', '') + ' — ' + clientName : 'Contract — ' + clientName,
@@ -4766,45 +4870,123 @@ oldheadplaster.com`);
           status: status || 'draft'
         });
       }
-
       localStorage.setItem('oldhead_documents', JSON.stringify(docs));
     } catch (e) {
-      console.error('Failed to file contract:', e);
+      console.error('localStorage fallback error:', e);
     }
   }
 
   // Save/file contract without sending (accessible from UI)
   function fileCurrentContract() {
-    const client = document.getElementById('contract-client')?.textContent || 'Client';
-    const contractNumber = document.getElementById('contract-number')?.textContent || '';
-    const clientEmail = document.getElementById('contract-client-email')?.value || '';
+    const contractData = gatherCurrentContractData();
+    contractData.status = 'filed';
+    contractData.id = contractData.contractNumber.replace(/[^a-zA-Z0-9-]/g, '-').toLowerCase();
 
-    let amount = '$0';
-    if (bespokeMode) {
-      const total = bespokeSections.reduce((sum, s) => sum + s.subtotal, 0);
-      amount = '$' + total.toLocaleString();
-    } else {
-      const agreedPrice = document.getElementById('contract-agreed-price')?.value;
-      if (agreedPrice) {
-        amount = '$' + Number(agreedPrice).toLocaleString();
+    // Save to cloud
+    saveContractToServer(contractData).then(result => {
+      if (result.success) {
+        showToast('Contract saved to cloud', 'success');
+      } else {
+        showToast('Saved locally (cloud sync pending)', 'warning');
       }
-    }
-
-    // Save to contract log
-    saveContractLog({
-      contractNumber,
-      client,
-      email: clientEmail,
-      amount,
-      filedAt: new Date().toISOString(),
-      status: 'filed'
     });
 
     // File to documents
-    fileContractToDocuments(contractNumber, client, amount, 'filed');
+    fileContractToDocuments(contractData.contractNumber, contractData.clientName, contractData.amount, 'filed');
+    updateContractStatus('filed', 'Contract saved');
+  }
 
-    showToast('Contract filed to Documents', 'success');
-    updateContractStatus('filed', 'Contract saved to documents');
+  // Load a saved contract into the editor
+  async function loadSavedContract(contractId) {
+    try {
+      const contracts = await loadContractsFromServer();
+      const contract = contracts.find(c => c.id === contractId);
+      if (!contract) { showToast('Contract not found', 'error'); return; }
+
+      // Open bespoke contract modal
+      openBespokeContract();
+
+      // Populate with saved data
+      setTimeout(() => {
+        const el = (id) => document.getElementById(id);
+        if (contract.clientName && contract.clientName !== 'Client') {
+          el('contract-client').textContent = contract.clientName;
+          el('contract-client-sig').textContent = contract.clientName;
+        }
+        if (contract.clientEmail) el('contract-client-email').value = contract.clientEmail;
+        if (contract.clientPhone) el('contract-client-phone').value = contract.clientPhone;
+        if (contract.clientAddress) el('contract-location').textContent = contract.clientAddress;
+        if (contract.contractNumber) el('contract-number').textContent = contract.contractNumber;
+
+        // Restore sections
+        if (contract.sections && contract.sections.length) {
+          bespokeSections.length = 0;
+          window.bespokeSections = bespokeSections;
+          contract.sections.forEach(s => {
+            bespokeSections.push({
+              id: Date.now() + Math.random(),
+              title: s.title || 'Section',
+              items: s.items || [{ name: '', price: 0 }],
+              processSteps: s.processSteps || [],
+              subtotal: (s.items || []).reduce((sum, item) => sum + (Number(item.price) || 0), 0)
+            });
+          });
+          renderBespokeSections();
+          updateBespokeTotal();
+          updateBespokePayments();
+        }
+
+        // Restore timeline
+        if (contract.timeline) {
+          if (contract.timeline.startDate) el('contract-start-date') && (el('contract-start-date').value = contract.timeline.startDate);
+          if (contract.timeline.endDate) el('contract-end-date') && (el('contract-end-date').value = contract.timeline.endDate);
+        }
+      }, 100);
+    } catch (e) {
+      console.error('Failed to load contract:', e);
+      showToast('Failed to load contract', 'error');
+    }
+  }
+
+  // Dashboard contracts widget
+  async function loadDashboardContracts() {
+    const container = document.getElementById('dashboard-contracts-list');
+    if (!container) return;
+
+    try {
+      const contracts = await loadContractsFromServer();
+
+      if (!contracts.length) {
+        container.innerHTML = '<p class="text-charcoal/40 text-sm py-3">No contracts yet. Click Custom Contract to create one.</p>';
+        return;
+      }
+
+      container.innerHTML = contracts.slice(0, 8).map(c => {
+        const statusColors = {
+          draft: 'bg-charcoal/10 text-charcoal/50',
+          filed: 'bg-bronze/15 text-bronze',
+          sent: 'bg-green-100 text-green-700',
+          downloaded: 'bg-blue-100 text-blue-700',
+          signed: 'bg-emerald-100 text-emerald-700'
+        };
+        const statusClass = statusColors[c.status] || statusColors.draft;
+        const date = c.updatedAt || c.createdAt;
+        const displayDate = date ? new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+
+        return '<div class="flex items-center justify-between py-3 border-b border-stone/30 last:border-0 cursor-pointer hover:bg-stone/20 -mx-2 px-2 transition-colors" onclick="loadSavedContract(\'' + c.id + '\')">' +
+          '<div class="flex-1 min-w-0">' +
+            '<p class="text-charcoal font-medium text-sm truncate">' + (c.clientName || 'Unnamed') + '</p>' +
+            '<p class="text-charcoal/40 text-xs truncate">' + (c.contractNumber || '') + (c.amount && c.amount !== '$0' ? ' · ' + c.amount : '') + '</p>' +
+          '</div>' +
+          '<div class="flex items-center gap-2 ml-3 shrink-0">' +
+            '<span class="text-xs px-2 py-0.5 rounded-full ' + statusClass + '">' + (c.status || 'draft') + '</span>' +
+            '<span class="text-charcoal/30 text-xs">' + displayDate + '</span>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    } catch (e) {
+      container.innerHTML = '<p class="text-charcoal/40 text-sm py-3">Unable to load contracts.</p>';
+    }
   }
 
   // ===== PROJECTS TAB =====
@@ -7123,6 +7305,10 @@ Old Head Plaster
   window.populateBespokeContract = populateBespokeContract;
   window.fileCurrentContract = fileCurrentContract;
   window.fileContractToDocuments = fileContractToDocuments;
+  window.saveContractToServer = saveContractToServer;
+  window.loadContractsFromServer = loadContractsFromServer;
+  window.loadSavedContract = loadSavedContract;
+  window.loadDashboardContracts = loadDashboardContracts;
   window.askAccountantScaling = askAccountantScaling;
 
   // ===== INIT =====
@@ -7130,6 +7316,7 @@ Old Head Plaster
     initAuth();
     initTabs();
     initDashboard();
+    loadDashboardContracts();
     parseURLParams();
     initEstimator();
     initCostBreakdown();
