@@ -2766,6 +2766,12 @@ const finishTypes = [
             </svg>
             Download
           </button>
+          <button id="contract-file-btn" style="display: flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1px solid rgba(250,250,248,0.15); font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(250,250,248,0.6); background: transparent; cursor: pointer; transition: all 0.3s;">
+            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+            </svg>
+            File
+          </button>
           <button id="contract-send-btn" style="display: flex; align-items: center; gap: 8px; padding: 10px 24px; background: #A8935C; font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #1C1C1E; font-weight: 500; border: none; cursor: pointer; transition: all 0.3s;">
             <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
@@ -4036,6 +4042,7 @@ oldheadplaster.com`);
     // Contract modal
     document.getElementById('close-contract-modal')?.addEventListener('click', closeContractModal);
     document.getElementById('contract-download-btn')?.addEventListener('click', downloadContractPDF);
+    document.getElementById('contract-file-btn')?.addEventListener('click', fileCurrentContract);
     document.getElementById('contract-send-btn')?.addEventListener('click', sendContract);
 
     // Send confirmation modal
@@ -4118,6 +4125,7 @@ oldheadplaster.com`);
 
     // Init with empty sections
     bespokeSections = [];
+    window.bespokeSections = bespokeSections;
     renderBespokeSections();
     updateBespokeTotal();
 
@@ -4126,6 +4134,39 @@ oldheadplaster.com`);
 
     modal.classList.remove('hidden');
     modal.scrollTo(0, 0);
+  }
+
+  // Programmatic contract population (for loading saved contracts or client data)
+  function populateBespokeContract(data) {
+    if (!data) return;
+    const el = (id) => document.getElementById(id);
+
+    // Client info
+    if (data.clientName) {
+      el('contract-client').textContent = data.clientName;
+      el('contract-client-sig').textContent = data.clientName;
+    }
+    if (data.clientEmail) el('contract-client-email').value = data.clientEmail;
+    if (data.clientPhone) el('contract-client-phone').value = data.clientPhone;
+    if (data.clientAddress) el('contract-location').textContent = data.clientAddress;
+
+    // Sections
+    if (data.sections && data.sections.length) {
+      bespokeSections = [];
+      window.bespokeSections = bespokeSections;
+      data.sections.forEach(function(s) {
+        bespokeSections.push({
+          id: Date.now() + Math.random(),
+          title: s.title || 'Section',
+          items: s.items || [{ name: '', price: 0 }],
+          processSteps: s.processSteps || [],
+          subtotal: (s.items || []).reduce(function(sum, item) { return sum + (Number(item.price) || 0); }, 0)
+        });
+      });
+      renderBespokeSections();
+      updateBespokeTotal();
+      updateBespokePayments();
+    }
   }
 
   function addBespokeSection(title = '', items = [], processSteps = [], subtotal = 0) {
@@ -4455,6 +4496,15 @@ oldheadplaster.com`);
     html2pdf().set(opt).from(element).save().then(() => {
       btn.innerHTML = originalText;
       btn.disabled = false;
+
+      // Auto-file to documents on download
+      const contractNumber = document.getElementById('contract-number')?.textContent || '';
+      let amount = '$0';
+      if (bespokeMode) {
+        const total = bespokeSections.reduce((sum, s) => sum + s.subtotal, 0);
+        amount = '$' + total.toLocaleString();
+      }
+      fileContractToDocuments(contractNumber, client, amount, 'downloaded');
     });
   }
 
@@ -4579,12 +4629,15 @@ oldheadplaster.com`);
           client,
           email: clientEmail,
           phone: clientPhone,
-          totalSqFt: estimate.totalSqFt,
-          estimateRange: `$${estimate.lowEstimate.toLocaleString()} – $${estimate.highEstimate.toLocaleString()}`,
+          totalSqFt: totalSqFt,
+          estimateRange: estimateRange,
           agreedPrice,
           sentAt: new Date().toISOString(),
           status: 'sent'
         });
+
+        // Auto-file contract to admin/documents
+        fileContractToDocuments(contractNumber, client, agreedPrice || estimateRange, 'sent');
       } else {
         updateContractStatus('error', 'Failed to send');
         showToast(`Failed to send: ${result.error}`, 'error');
@@ -4674,6 +4727,76 @@ oldheadplaster.com`);
     } catch (e) {
       console.error('Failed to save contract log:', e);
     }
+  }
+
+  // File contract to admin/documents system
+  function fileContractToDocuments(contractNumber, clientName, amount, status) {
+    try {
+      const docs = JSON.parse(localStorage.getItem('oldhead_documents') || '[]');
+      const today = new Date().toISOString().split('T')[0];
+
+      // Check if this contract is already filed (by contract number)
+      const existing = docs.findIndex(d => d.contractNumber === contractNumber);
+      if (existing !== -1) {
+        // Update existing
+        docs[existing].status = status;
+        docs[existing].date = today;
+        docs[existing].shared = ['All Team'];
+      } else {
+        // Create new document entry
+        docs.unshift({
+          id: 'doc-' + Date.now(),
+          name: contractNumber ? contractNumber.replace('Contract #', '') + ' — ' + clientName : 'Contract — ' + clientName,
+          project: clientName,
+          type: 'contract',
+          size: 'PDF',
+          uploadedBy: 'Daragh',
+          date: today,
+          shared: ['All Team'],
+          contractNumber: contractNumber,
+          amount: amount,
+          status: status || 'draft'
+        });
+      }
+
+      localStorage.setItem('oldhead_documents', JSON.stringify(docs));
+    } catch (e) {
+      console.error('Failed to file contract:', e);
+    }
+  }
+
+  // Save/file contract without sending (accessible from UI)
+  function fileCurrentContract() {
+    const client = document.getElementById('contract-client')?.textContent || 'Client';
+    const contractNumber = document.getElementById('contract-number')?.textContent || '';
+    const clientEmail = document.getElementById('contract-client-email')?.value || '';
+
+    let amount = '$0';
+    if (bespokeMode) {
+      const total = bespokeSections.reduce((sum, s) => sum + s.subtotal, 0);
+      amount = '$' + total.toLocaleString();
+    } else {
+      const agreedPrice = document.getElementById('contract-agreed-price')?.value;
+      if (agreedPrice) {
+        amount = '$' + Number(agreedPrice).toLocaleString();
+      }
+    }
+
+    // Save to contract log
+    saveContractLog({
+      contractNumber,
+      client,
+      email: clientEmail,
+      amount,
+      filedAt: new Date().toISOString(),
+      status: 'filed'
+    });
+
+    // File to documents
+    fileContractToDocuments(contractNumber, client, amount, 'filed');
+
+    showToast('Contract filed to Documents', 'success');
+    updateContractStatus('filed', 'Contract saved to documents');
   }
 
   // ===== PROJECTS TAB =====
@@ -6989,6 +7112,9 @@ Old Head Plaster
   window.recalcSectionSubtotal = recalcSectionSubtotal;
   window.updateBespokeTotal = updateBespokeTotal;
   window.addProcessToSection = addProcessToSection;
+  window.populateBespokeContract = populateBespokeContract;
+  window.fileCurrentContract = fileCurrentContract;
+  window.fileContractToDocuments = fileContractToDocuments;
   window.askAccountantScaling = askAccountantScaling;
 
   // ===== INIT =====
