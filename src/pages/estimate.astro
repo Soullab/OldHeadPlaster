@@ -3038,14 +3038,62 @@ const finishTypes = [
         </div>
 
         <!-- Warranty -->
-        <div style="padding: 40px 64px; border-bottom: 1px solid rgba(236,234,231,0.5);">
-          <div class="contract-section-heading" style="margin-bottom: 20px;">
+        <div style="padding: 48px 64px; border-bottom: 1px solid rgba(236,234,231,0.5);">
+          <div class="contract-section-heading" style="margin-bottom: 24px;">
             <span><span class="contract-section-num">V</span> Warranty</span>
           </div>
-          <p class="contract-body">
-            Contractor warrants all workmanship for a period of <strong style="color: #1C1C1E; font-weight: 500;">one (1) year</strong> from the date of completion.
-            This warranty covers defects in application technique and material failure under normal use conditions.
-            The warranty does not cover damage caused by improper cleaning, physical impact, or structural movement.
+
+          <!-- Warranty headline -->
+          <p style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 16px; color: #1C1C1E; font-weight: 500; margin-bottom: 20px; line-height: 1.6;">
+            Three-Year Limited Workmanship Warranty
+          </p>
+
+          <!-- Warranty body -->
+          <div class="contract-body" style="display: flex; flex-direction: column; gap: 14px;">
+            <p>
+              For all works performed under this agreement, Old Head Plaster LLC provides a
+              <strong style="color: #1C1C1E; font-weight: 500;">Three-Year Limited Workmanship Warranty</strong>
+              to guarantee service and workmanship quality.
+            </p>
+            <p>
+              For a period of <strong style="color: #1C1C1E; font-weight: 500;">thirty-six (36) months</strong> from the general completion date,
+              Contractor warrants against peeling, cracking, bubbling, and discoloration under ordinary wear and tear
+              (herein referred to as "Warranted Condition").
+            </p>
+            <p>
+              For this warranty to be valid, the full contract price must be paid as outlined in this agreement,
+              and the property made accessible to Contractor to perform any repairs.
+            </p>
+            <p>
+              For warranty claims, notice must be raised to Old Head Plaster LLC within
+              <strong style="color: #1C1C1E; font-weight: 500;">two (2) weeks</strong> of occurrence.
+              Should Contractor determine that a Warranted Condition has occurred, Contractor will supply,
+              free of charge, labour and materials (not necessarily the original product used) to perform the repairs.
+            </p>
+          </div>
+
+          <!-- Exclusions -->
+          <div style="margin-top: 24px; padding: 20px 24px; background: linear-gradient(135deg, rgba(236,234,231,0.15) 0%, transparent 100%); border-left: 2px solid rgba(168,147,92,0.2);">
+            <p style="font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(168,147,92,0.5); font-weight: 500; margin-bottom: 12px;">
+              This warranty does not cover damages or failure due to
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px 32px;">
+              <p class="contract-body" style="font-size: 11px;">Structural defects</p>
+              <p class="contract-body" style="font-size: 11px;">Excessive heat or cold</p>
+              <p class="contract-body" style="font-size: 11px;">Fire and explosion</p>
+              <p class="contract-body" style="font-size: 11px;">Negligence, abnormal use, or accidents</p>
+              <p class="contract-body" style="font-size: 11px;">Failure of surface or substrate</p>
+              <p class="contract-body" style="font-size: 11px;">Abrasion or mechanical damages</p>
+              <p class="contract-body" style="font-size: 11px;">Contaminants or rust</p>
+              <p class="contract-body" style="font-size: 11px;">Incompatible cleaning products</p>
+              <p class="contract-body" style="font-size: 11px;">Moisture or water in building structure</p>
+              <p class="contract-body" style="font-size: 11px;">Contact with damaging solids, liquids, or gases</p>
+            </div>
+          </div>
+
+          <!-- Repair note -->
+          <p class="contract-body" style="margin-top: 16px; font-size: 11px; font-style: italic; color: rgba(28,28,30,0.45);">
+            Repairs under this warranty will be performed only on the specific areas where the warranted condition has occurred. Colour and texture may vary slightly.
           </p>
         </div>
 
@@ -4093,124 +4141,121 @@ oldheadplaster.com`);
   }
 
   function renderBespokeSections() {
-    const container = document.getElementById('bespoke-scope-sections');
+    var container = document.getElementById('bespoke-scope-sections');
     if (!container) return;
 
-    container.innerHTML = bespokeSections.map((section, si) => `
-      <div style="padding: 32px 64px; border-top: 1px solid rgba(236,234,231,0.4);" data-section="${si}">
-        <!-- Section header -->
-        <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px;">
-          <div style="flex: 1;">
-            <input type="text" value="${section.title}" onchange="bespokeSections[${si}].title=this.value; updateBespokeTotal()"
-              style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; color: #1C1C1E; font-weight: 500; background: transparent; border: none; border-bottom: 1px solid transparent; width: 100%; padding-bottom: 4px; outline: none; transition: border-color 0.3s;"
-              onfocus="this.style.borderBottomColor='#A8935C'" onblur="this.style.borderBottomColor='transparent'"
-              placeholder="Section title (e.g., Microcement Areas)" />
-          </div>
-          <button onclick="bespokeSections.splice(${si}, 1); renderBespokeSections(); updateBespokeTotal()"
-            style="color: rgba(28,28,30,0.2); margin-left: 16px; padding: 4px; cursor: pointer; background: none; border: none; transition: color 0.3s;"
-            onmouseover="this.style.color='#e53e3e'" onmouseout="this.style.color='rgba(28,28,30,0.2)'"
-            title="Remove section">
-            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
-        </div>
+    var html = '';
+    for (var si = 0; si < bespokeSections.length; si++) {
+      var section = bespokeSections[si];
+      html += '<div style="padding:32px 64px;border-top:1px solid rgba(236,234,231,0.4);" data-section="' + si + '">';
 
-        <!-- Process description -->
-        ${section.processSteps.length > 0 ? `
-          <div style="margin-bottom: 24px; padding: 20px 24px; background: linear-gradient(135deg, rgba(236,234,231,0.2) 0%, rgba(236,234,231,0.08) 100%); border-left: 2px solid rgba(168,147,92,0.25);">
-            <p style="font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(168,147,92,0.6); font-weight: 500; margin-bottom: 12px;">Process</p>
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-              ${section.processSteps.map(step => `<p style="font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(28,28,30,0.5); line-height: 1.6;">&bull; ${step}</p>`).join('')}
-            </div>
-          </div>
-        ` : `
-          <button onclick="addProcessToSection(${si})"
-            style="font-family: 'Inter', sans-serif; font-size: 10px; color: rgba(28,28,30,0.25); display: flex; align-items: center; gap: 6px; margin-bottom: 20px; cursor: pointer; background: none; border: none; transition: color 0.3s;"
-            onmouseover="this.style.color='#A8935C'" onmouseout="this.style.color='rgba(28,28,30,0.25)'">
-            <svg style="width: 12px; height: 12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
-            Add process description
-          </button>
-        `}
+      // Section header
+      html += '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;">';
+      html += '<div style="flex:1;">';
+      html += '<input type="text" value="' + section.title + '" onchange="bespokeSections[' + si + '].title=this.value;updateBespokeTotal()"';
+      html += ' style="font-family:Cormorant Garamond,Georgia,serif;font-size:18px;color:#1C1C1E;font-weight:500;background:transparent;border:none;border-bottom:1px solid transparent;width:100%;padding-bottom:4px;outline:none;"';
+      html += ' placeholder="Section title (e.g., Microcement Areas)" />';
+      html += '</div>';
+      html += '<button onclick="bespokeSections.splice(' + si + ',1);renderBespokeSections();updateBespokeTotal()"';
+      html += ' style="color:rgba(28,28,30,0.2);margin-left:16px;padding:4px;cursor:pointer;background:none;border:none;" title="Remove section">';
+      html += '<svg style="width:14px;height:14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
+      html += '</button></div>';
 
-        <!-- Area line items -->
-        <div style="display: flex; flex-direction: column;">
-          ${section.items.map((item, ii) => `
-            <div class="scope-area-item group" style="gap: 12px;">
-              <input type="text" value="${item.name}" onchange="bespokeSections[${si}].items[${ii}].name=this.value"
-                style="flex: 1; font-family: 'Inter', sans-serif; font-size: 12px; color: #1C1C1E; background: transparent; border: none; outline: none; padding: 0;"
-                placeholder="Area name (e.g., Master Bathroom)" />
-              <div style="display: flex; align-items: baseline; gap: 2px;">
-                <span style="font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(28,28,30,0.3);">$</span>
-                <input type="number" value="${item.price}" onchange="bespokeSections[${si}].items[${ii}].price=Number(this.value); recalcSectionSubtotal(${si}); updateBespokeTotal()"
-                  style="width: 100px; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 15px; color: #1C1C1E; background: transparent; border: none; outline: none; text-align: right; font-weight: 500;"
-                  placeholder="0" />
-              </div>
-              <button onclick="bespokeSections[${si}].items.splice(${ii}, 1); renderBespokeSections(); updateBespokeTotal()"
-                style="color: rgba(28,28,30,0.12); cursor: pointer; background: none; border: none; opacity: 0; transition: all 0.3s;"
-                onmouseover="this.style.color='#e53e3e'; this.style.opacity='1'" onmouseout="this.style.color='rgba(28,28,30,0.12)'; this.style.opacity='0'"
-                title="Remove">
-                <svg style="width: 12px; height: 12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
-            </div>
-          `).join('')}
-        </div>
+      // Process description
+      if (section.processSteps.length > 0) {
+        html += '<div style="margin-bottom:24px;padding:20px 24px;background:linear-gradient(135deg,rgba(236,234,231,0.2),rgba(236,234,231,0.08));border-left:2px solid rgba(168,147,92,0.25);">';
+        html += '<p style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(168,147,92,0.6);font-weight:500;margin-bottom:12px;">PROCESS</p>';
+        html += '<div style="display:flex;flex-direction:column;gap:6px;">';
+        for (var pi = 0; pi < section.processSteps.length; pi++) {
+          html += '<p style="font-family:Inter,sans-serif;font-size:11px;color:rgba(28,28,30,0.5);line-height:1.6;">&bull; ' + section.processSteps[pi] + '</p>';
+        }
+        html += '</div></div>';
+      } else {
+        html += '<button onclick="addProcessToSection(' + si + ')"';
+        html += ' style="font-family:Inter,sans-serif;font-size:10px;color:rgba(28,28,30,0.25);display:flex;align-items:center;gap:6px;margin-bottom:20px;cursor:pointer;background:none;border:none;">';
+        html += '<svg style="width:12px;height:12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>';
+        html += ' Add process description</button>';
+      }
 
-        <!-- Add area + Section total -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 12px; border-top: 1px solid rgba(168,147,92,0.15);">
-          <button onclick="bespokeSections[${si}].items.push({name:'', price:0}); renderBespokeSections()"
-            style="font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(28,28,30,0.3); display: flex; align-items: center; gap: 6px; cursor: pointer; background: none; border: none; transition: color 0.3s;"
-            onmouseover="this.style.color='#A8935C'" onmouseout="this.style.color='rgba(28,28,30,0.3)'">
-            <svg style="width: 10px; height: 10px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
-            Add area
-          </button>
-          <div style="display: flex; align-items: baseline; gap: 8px;">
-            <span style="font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(28,28,30,0.35);">Section Total</span>
-            <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; color: #1C1C1E; font-weight: 500;">$${section.subtotal.toLocaleString()}</span>
-          </div>
-        </div>
-      </div>
-    `).join('');
+      // Area line items
+      html += '<div style="display:flex;flex-direction:column;">';
+      for (var ii = 0; ii < section.items.length; ii++) {
+        var item = section.items[ii];
+        html += '<div style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid rgba(236,234,231,0.6);gap:12px;">';
+        html += '<input type="text" value="' + item.name + '" onchange="bespokeSections[' + si + '].items[' + ii + '].name=this.value"';
+        html += ' style="flex:1;font-family:Inter,sans-serif;font-size:12px;color:#1C1C1E;background:transparent;border:none;outline:none;padding:0;"';
+        html += ' placeholder="Area name (e.g., Master Bathroom)" />';
+        html += '<div style="display:flex;align-items:baseline;gap:2px;">';
+        html += '<span style="font-family:Inter,sans-serif;font-size:11px;color:rgba(28,28,30,0.3);">$</span>';
+        html += '<input type="number" value="' + item.price + '" onchange="bespokeSections[' + si + '].items[' + ii + '].price=Number(this.value);recalcSectionSubtotal(' + si + ');updateBespokeTotal()"';
+        html += ' style="width:100px;font-family:Cormorant Garamond,Georgia,serif;font-size:15px;color:#1C1C1E;background:transparent;border:none;outline:none;text-align:right;font-weight:500;"';
+        html += ' placeholder="0" />';
+        html += '</div>';
+        html += '<button onclick="bespokeSections[' + si + '].items.splice(' + ii + ',1);renderBespokeSections();updateBespokeTotal()"';
+        html += ' style="color:rgba(28,28,30,0.12);cursor:pointer;background:none;border:none;opacity:0;transition:all 0.3s;" title="Remove">';
+        html += '<svg style="width:12px;height:12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
+        html += '</button></div>';
+      }
+      html += '</div>';
+
+      // Add area + Section total
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:12px;border-top:1px solid rgba(168,147,92,0.15);">';
+      html += '<button onclick="bespokeSections[' + si + '].items.push({name:\'\',price:0});renderBespokeSections()"';
+      html += ' style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(28,28,30,0.3);display:flex;align-items:center;gap:6px;cursor:pointer;background:none;border:none;">';
+      html += '<svg style="width:10px;height:10px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>';
+      html += ' Add area</button>';
+      html += '<div style="display:flex;align-items:baseline;gap:8px;">';
+      html += '<span style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(28,28,30,0.35);">Section Total</span>';
+      html += '<span style="font-family:Cormorant Garamond,Georgia,serif;font-size:18px;color:#1C1C1E;font-weight:500;">$' + section.subtotal.toLocaleString() + '</span>';
+      html += '</div></div>';
+
+      html += '</div>';
+    }
+    container.innerHTML = html;
   }
 
   function recalcSectionSubtotal(si) {
-    const section = bespokeSections[si];
+    var section = bespokeSections[si];
     if (!section) return;
-    section.subtotal = section.items.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+    section.subtotal = section.items.reduce(function(sum, item) { return sum + (Number(item.price) || 0); }, 0);
   }
 
   function updateBespokeTotal() {
-    const total = bespokeSections.reduce((sum, s) => {
-      s.subtotal = s.items.reduce((iSum, item) => iSum + (Number(item.price) || 0), 0);
+    var total = bespokeSections.reduce(function(sum, s) {
+      s.subtotal = s.items.reduce(function(iSum, item) { return iSum + (Number(item.price) || 0); }, 0);
       return sum + s.subtotal;
     }, 0);
 
-    const totalEl = document.getElementById('bespoke-total');
-    if (totalEl) totalEl.textContent = `$${total.toLocaleString()}`;
+    var totalEl = document.getElementById('bespoke-total');
+    if (totalEl) totalEl.textContent = '$' + total.toLocaleString();
 
     // Update pricing summary
-    const summaryEl = document.getElementById('bespoke-pricing-summary');
+    var summaryEl = document.getElementById('bespoke-pricing-summary');
     if (summaryEl) {
-      summaryEl.innerHTML = bespokeSections.map(s => `
-        <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 12px 0; border-bottom: 1px solid rgba(250,250,248,0.06);">
-          <span style="font-family: 'Inter', sans-serif; font-size: 12px; color: rgba(250,250,248,0.5);">${s.title}</span>
-          <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; color: rgba(250,250,248,0.8); font-weight: 400;">$${s.subtotal.toLocaleString()}</span>
-        </div>
-      `).join('');
+      var summaryHtml = '';
+      for (var i = 0; i < bespokeSections.length; i++) {
+        var s = bespokeSections[i];
+        summaryHtml += '<div style="display:flex;justify-content:space-between;align-items:baseline;padding:12px 0;border-bottom:1px solid rgba(250,250,248,0.06);">';
+        summaryHtml += '<span style="font-family:Inter,sans-serif;font-size:12px;color:rgba(250,250,248,0.5);">' + s.title + '</span>';
+        summaryHtml += '<span style="font-family:Cormorant Garamond,Georgia,serif;font-size:20px;color:rgba(250,250,248,0.8);font-weight:400;">$' + s.subtotal.toLocaleString() + '</span>';
+        summaryHtml += '</div>';
+      }
+      summaryEl.innerHTML = summaryHtml;
     }
 
     updateBespokePayments();
-    renderBespokeSections();
   }
 
   function updateBespokePayments() {
-    const total = bespokeSections.reduce((sum, s) => sum + s.subtotal, 0);
-    const deposit = Math.round(total / 3);
-    const progress = Math.round(total / 3);
-    const final = total - deposit - progress;
+    var total = bespokeSections.reduce(function(sum, s) { return sum + s.subtotal; }, 0);
+    var deposit = Math.round(total / 3);
+    var progress = Math.round(total / 3);
+    var finalAmt = total - deposit - progress;
 
-    const el = (id) => document.getElementById(id);
-    if (el('contract-deposit-amt')) el('contract-deposit-amt').textContent = `$${deposit.toLocaleString()}`;
-    if (el('contract-progress-amt')) el('contract-progress-amt').textContent = `$${progress.toLocaleString()}`;
-    if (el('contract-final-amt')) el('contract-final-amt').textContent = `$${final.toLocaleString()}`;
+    var el = function(id) { return document.getElementById(id); };
+    if (el('contract-deposit-amt')) el('contract-deposit-amt').textContent = '$' + deposit.toLocaleString();
+    if (el('contract-progress-amt')) el('contract-progress-amt').textContent = '$' + progress.toLocaleString();
+    if (el('contract-final-amt')) el('contract-final-amt').textContent = '$' + finalAmt.toLocaleString();
   }
 
   function addProcessToSection(si) {
