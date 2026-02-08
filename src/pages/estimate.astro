@@ -2752,23 +2752,23 @@ const finishTypes = [
   <div id="contract-modal" class="fixed inset-0 bg-charcoal/95 backdrop-blur-sm z-[60] hidden overflow-y-auto">
     <div class="min-h-screen py-8 px-4">
       <!-- Action Bar -->
-      <div class="max-w-4xl mx-auto mb-4 flex items-center justify-between">
-        <button id="close-contract-modal" class="flex items-center gap-2 text-cream/70 hover:text-cream transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      <div class="max-w-4xl mx-auto flex items-center justify-between" style="margin-bottom: 24px;">
+        <button id="close-contract-modal" style="display: flex; align-items: center; gap: 10px; font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(250,250,248,0.4); background: none; border: none; cursor: pointer; transition: color 0.3s;">
+          <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          Back to Quote
+          Back
         </button>
-        <div class="flex items-center gap-3">
-          <button id="contract-download-btn" class="flex items-center gap-2 px-4 py-2 border border-cream/30 text-cream text-sm hover:bg-cream/10 transition-colors rounded">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        <div class="flex items-center" style="gap: 12px;">
+          <button id="contract-download-btn" style="display: flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1px solid rgba(250,250,248,0.15); font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(250,250,248,0.6); background: transparent; cursor: pointer; transition: all 0.3s;">
+            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            Download Contract
+            Download
           </button>
-          <button id="contract-send-btn" class="flex items-center gap-2 px-4 py-2 bg-bronze text-charcoal text-sm font-medium hover:bg-bronze/90 transition-colors rounded">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+          <button id="contract-send-btn" style="display: flex; align-items: center; gap: 8px; padding: 10px 24px; background: #A8935C; font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #1C1C1E; font-weight: 500; border: none; cursor: pointer; transition: all 0.3s;">
+            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
             </svg>
             Send to Client
           </button>
@@ -2776,364 +2776,393 @@ const finishTypes = [
       </div>
 
       <!-- Contract Document -->
-      <div id="contract-document" class="max-w-4xl mx-auto bg-cream shadow-2xl">
+      <div id="contract-document" class="max-w-4xl mx-auto shadow-2xl">
         <!-- Header -->
-        <div class="bg-charcoal px-12 py-10">
+        <div class="bg-charcoal" style="padding: 48px 64px 44px;">
           <div class="flex items-start justify-between">
-            <div class="flex items-center gap-5">
-              <img src="/images/headland-seal.svg" alt="Old Head Plaster" class="h-16 w-auto opacity-90" />
-              <div>
-                <h1 class="text-3xl font-heading text-cream tracking-wide">OLD HEAD PLASTER</h1>
-                <p class="text-bronze text-sm tracking-[0.2em] mt-1">ARTISAN DECORATIVE FINISHES</p>
-              </div>
+            <div>
+              <img src="/images/headland-mark.svg" alt="Old Head Plaster" class="h-14 w-auto opacity-95" />
             </div>
             <div class="text-right">
-              <p class="text-cream text-xl font-heading">Service Agreement</p>
-              <p class="text-cream/40 text-xs mt-2" id="contract-number"></p>
+              <p style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; color: #A8935C; font-weight: 400;">Service Agreement</p>
+              <p class="text-cream/30 mt-3" style="font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.15em;" id="contract-number"></p>
             </div>
+          </div>
+          <!-- Brass accent line -->
+          <div style="margin-top: 32px; height: 1px; background: linear-gradient(90deg, #A8935C 0%, #A8935C 40%, transparent 100%); opacity: 0.5;"></div>
+          <!-- Contractor info line -->
+          <div class="flex items-center justify-between" style="margin-top: 16px;">
+            <p style="font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.12em; color: rgba(250,250,248,0.35);">
+              41 Suffolk Dr, Madison, CT 06443 · daragh@oldheadplaster.com · 860-574-7004
+            </p>
+            <p style="font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.12em; color: rgba(168,147,92,0.6);">
+              CT HIC Reg. #<span id="contract-hic-number">0647302</span>
+            </p>
           </div>
         </div>
 
-        <!-- CT Home Improvement Act Required Notice -->
-        <div class="px-12 py-4 bg-amber-50 border-b-2 border-amber-400">
-          <p class="text-amber-800 text-xs font-medium">
-            This is a Home Improvement Contract subject to the Connecticut Home Improvement Act (CGS § 20-418 et seq.)
+        <!-- CT Home Improvement Act Notice — elegant integration -->
+        <div class="contract-legal-notice" style="padding: 12px 64px; border-bottom: none;">
+          <p style="font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.08em; color: rgba(28,28,30,0.45);">
+            Home Improvement Contract pursuant to CGS § 20-418 et seq.
           </p>
         </div>
 
         <!-- Parties -->
-        <div class="px-12 py-8 border-b border-stone/30">
-          <p class="text-charcoal/70 text-sm leading-relaxed mb-6">
-            This Home Improvement Contract ("Agreement") is entered into as of <strong id="contract-date-inline" class="text-charcoal"></strong> by and between:
+        <div style="padding: 48px 64px 40px; border-bottom: 1px solid rgba(236,234,231,0.5);">
+          <p class="contract-body" style="margin-bottom: 32px;">
+            This Home Improvement Contract ("Agreement") is entered into as of <strong id="contract-date-inline" style="color: #1C1C1E; font-weight: 500;"></strong> by and between:
           </p>
-          <div class="grid grid-cols-2 gap-8">
-            <div class="p-4 bg-stone/20 rounded">
-              <p class="text-charcoal/50 text-xs uppercase tracking-wide mb-2">Contractor</p>
-              <p class="text-charcoal font-heading">Old Head Plaster LLC</p>
-              <p class="text-charcoal/70 text-sm">41 Suffolk Dr</p>
-              <p class="text-charcoal/70 text-sm">Madison, CT 06443</p>
-              <p class="text-charcoal/70 text-sm">daragh@oldheadplaster.com</p>
-              <p class="text-charcoal/70 text-sm">860-574-7004</p>
-              <p class="text-bronze text-sm font-medium mt-2">CT HIC Reg. #<span id="contract-hic-number">0647302</span></p>
+          <div class="grid grid-cols-2" style="gap: 48px;">
+            <!-- Contractor -->
+            <div style="border-top: 2px solid #A8935C; padding-top: 20px;">
+              <p class="contract-label" style="margin-bottom: 12px;">Contractor</p>
+              <p class="contract-value" style="margin-bottom: 8px;">Old Head Plaster LLC</p>
+              <p class="contract-body" style="font-size: 12px; line-height: 1.6;">
+                41 Suffolk Dr<br>
+                Madison, CT 06443<br>
+                daragh@oldheadplaster.com<br>
+                860-574-7004
+              </p>
             </div>
-            <div class="p-4 bg-stone/20 rounded">
-              <p class="text-charcoal/50 text-xs uppercase tracking-wide mb-2">Property Owner</p>
-              <p class="text-charcoal font-heading" id="contract-client">Client Name</p>
-              <p class="text-charcoal/70 text-sm" id="contract-location">Location</p>
-              <div class="mt-2">
-                <label class="block text-charcoal/50 text-xs mb-1">Email</label>
-                <input type="email" id="contract-client-email" placeholder="client@email.com"
-                  class="w-full px-3 py-2 border border-stone/40 text-sm focus:border-bronze focus:outline-none text-charcoal" />
+            <!-- Property Owner -->
+            <div style="border-top: 2px solid #A8935C; padding-top: 20px;">
+              <p class="contract-label" style="margin-bottom: 12px;">Property Owner</p>
+              <p class="contract-value" id="contract-client" style="margin-bottom: 4px;">Client Name</p>
+              <p class="contract-body" id="contract-location" style="font-size: 12px; margin-bottom: 16px;">Location</p>
+              <div style="margin-bottom: 10px;">
+                <label class="contract-label" style="display: block; margin-bottom: 4px; font-size: 9px;">Email</label>
+                <input type="email" id="contract-client-email" placeholder="client@email.com" class="contract-input" />
               </div>
-              <div class="mt-2">
-                <label class="block text-charcoal/50 text-xs mb-1">Phone</label>
-                <input type="tel" id="contract-client-phone" placeholder="(203) 555-0000"
-                  class="w-full px-3 py-2 border border-stone/40 text-sm focus:border-bronze focus:outline-none text-charcoal" />
+              <div>
+                <label class="contract-label" style="display: block; margin-bottom: 4px; font-size: 9px;">Phone</label>
+                <input type="tel" id="contract-client-phone" placeholder="(203) 555-0000" class="contract-input" />
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Project Timeline (CT Required) -->
-        <div class="px-12 py-6 border-b border-stone/30 bg-stone/10">
-          <h2 class="text-lg font-heading text-charcoal mb-4">Project Timeline</h2>
-          <div class="grid grid-cols-3 gap-4">
+        <!-- Project Timeline -->
+        <div style="padding: 32px 64px; border-bottom: 1px solid rgba(236,234,231,0.5); background: linear-gradient(135deg, rgba(236,234,231,0.15) 0%, transparent 100%);">
+          <div class="contract-section-heading" style="margin-bottom: 24px;">
+            <span>Project Timeline</span>
+          </div>
+          <div class="grid grid-cols-3" style="gap: 32px;">
             <div>
-              <label class="block text-charcoal/50 text-xs uppercase mb-1">Contract Date</label>
-              <input type="date" id="contract-sign-date"
-                class="w-full px-3 py-2 border border-stone/40 text-sm focus:border-bronze focus:outline-none text-charcoal" />
+              <label class="contract-label" style="display: block; margin-bottom: 6px; font-size: 9px;">Contract Date</label>
+              <input type="date" id="contract-sign-date" class="contract-input" />
             </div>
             <div>
-              <label class="block text-charcoal/50 text-xs uppercase mb-1">Estimated Start Date</label>
-              <input type="date" id="contract-start-date"
-                class="w-full px-3 py-2 border border-stone/40 text-sm focus:border-bronze focus:outline-none text-charcoal" />
+              <label class="contract-label" style="display: block; margin-bottom: 6px; font-size: 9px;">Estimated Start</label>
+              <input type="date" id="contract-start-date" class="contract-input" />
             </div>
             <div>
-              <label class="block text-charcoal/50 text-xs uppercase mb-1">Estimated Completion</label>
-              <input type="date" id="contract-end-date"
-                class="w-full px-3 py-2 border border-stone/40 text-sm focus:border-bronze focus:outline-none text-charcoal" />
+              <label class="contract-label" style="display: block; margin-bottom: 6px; font-size: 9px;">Estimated Completion</label>
+              <input type="date" id="contract-end-date" class="contract-input" />
             </div>
           </div>
-          <p class="text-charcoal/50 text-xs mt-3">
-            * Completion date is an estimate. Weather, material availability, and scope changes may affect timeline.
+          <p style="font-family: 'Inter', sans-serif; font-size: 10px; color: rgba(28,28,30,0.35); margin-top: 16px; font-style: italic;">
+            Completion date is an estimate. Weather, material availability, and scope changes may affect timeline.
           </p>
         </div>
 
         <!-- Scope of Work (Standard - from estimator) -->
-        <div id="contract-scope-standard" class="px-12 py-8 border-b border-stone/30">
-          <h2 class="text-lg font-heading text-charcoal mb-4">1. Scope of Work</h2>
-          <p class="text-charcoal/70 text-sm mb-4">
+        <div id="contract-scope-standard" style="padding: 48px 64px; border-bottom: 1px solid rgba(236,234,231,0.5);">
+          <div class="contract-section-heading" style="margin-bottom: 24px;">
+            <span><span class="contract-section-num">I</span> Scope of Work</span>
+          </div>
+          <p class="contract-body" style="margin-bottom: 24px;">
             Contractor agrees to provide decorative plaster finishing services for the following areas:
           </p>
-          <div id="contract-rooms" class="space-y-2 mb-4">
+          <div id="contract-rooms" style="margin-bottom: 24px;">
             <!-- Rooms rendered by JS -->
           </div>
-          <div class="grid grid-cols-2 gap-4 p-4 bg-stone/20 rounded">
+          <div class="grid grid-cols-2" style="gap: 32px; padding: 20px 0; border-top: 1px solid rgba(236,234,231,0.5);">
             <div>
-              <p class="text-charcoal/50 text-xs uppercase">Finish Type</p>
-              <p class="text-charcoal font-heading" id="contract-finish">Venetian Plaster</p>
+              <p class="contract-label" style="margin-bottom: 4px;">Finish Type</p>
+              <p class="contract-value" id="contract-finish">Venetian Plaster</p>
             </div>
             <div>
-              <p class="text-charcoal/50 text-xs uppercase">Pricing Tier</p>
-              <p class="text-charcoal font-heading" id="contract-tier">Signature</p>
+              <p class="contract-label" style="margin-bottom: 4px;">Pricing Tier</p>
+              <p class="contract-value" id="contract-tier">Signature</p>
             </div>
           </div>
         </div>
 
         <!-- Scope of Work (Bespoke - custom sections) -->
-        <div id="contract-scope-bespoke" class="hidden border-b border-stone/30">
-          <div class="px-12 py-8">
-            <div class="flex items-center justify-between mb-4">
-              <h2 class="text-lg font-heading text-charcoal">1. Scope of Work</h2>
-              <button id="add-scope-section-btn" class="text-xs text-bronze hover:text-bronze/80 flex items-center gap-1 transition-colors">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+        <div id="contract-scope-bespoke" class="hidden" style="border-bottom: 1px solid rgba(236,234,231,0.5);">
+          <div style="padding: 48px 64px 24px;">
+            <div class="flex items-center justify-between" style="margin-bottom: 24px;">
+              <div class="contract-section-heading" style="flex: 1;">
+                <span><span class="contract-section-num">I</span> Scope of Work</span>
+              </div>
+              <button id="add-scope-section-btn" style="font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #A8935C; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid rgba(168,147,92,0.3); background: transparent; cursor: pointer; transition: all 0.3s; margin-left: 16px;">
+                <svg style="width: 12px; height: 12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                 Add Section
               </button>
             </div>
-            <p class="text-charcoal/70 text-sm mb-6">
+            <p class="contract-body" style="margin-bottom: 8px;">
               Contractor agrees to provide decorative plaster and microcement finishing services as detailed below:
             </p>
           </div>
-          <div id="bespoke-scope-sections" class="divide-y divide-stone/20">
+          <div id="bespoke-scope-sections">
             <!-- Sections rendered by JS -->
           </div>
         </div>
 
         <!-- Pricing (Standard - from estimator) -->
-        <div id="contract-pricing-standard" class="px-12 py-8 border-b border-stone/30 bg-charcoal">
-          <h2 class="text-lg font-heading text-cream mb-4">2. Project Investment</h2>
-          <div class="grid grid-cols-2 gap-8">
+        <div id="contract-pricing-standard" class="contract-dark-section" style="padding: 48px 64px; border-bottom: 1px solid rgba(236,234,231,0.5);">
+          <div class="contract-section-heading" style="margin-bottom: 32px;">
+            <span style="color: #A8935C;"><span class="contract-section-num">II</span> Project Investment</span>
+          </div>
+          <div class="grid grid-cols-2" style="gap: 48px;">
             <div>
-              <p class="text-cream/50 text-xs uppercase mb-2">Estimated Range</p>
-              <p class="text-3xl font-heading text-bronze">
+              <p class="contract-label" style="color: rgba(250,250,248,0.35); margin-bottom: 8px;">Estimated Range</p>
+              <p style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 36px; font-weight: 300; color: #A8935C; line-height: 1;">
                 $<span id="contract-low">0</span> – $<span id="contract-high">0</span>
               </p>
-              <p class="text-cream/40 text-sm mt-2">Final price to be confirmed after site assessment</p>
+              <p style="font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(250,250,248,0.3); margin-top: 12px;">Final price confirmed after site assessment</p>
             </div>
             <div>
-              <p class="text-cream/50 text-xs uppercase mb-2">Agreed Price (if applicable)</p>
-              <div class="flex items-center gap-2">
-                <span class="text-cream text-xl">$</span>
+              <p class="contract-label" style="color: rgba(250,250,248,0.35); margin-bottom: 8px;">Agreed Price</p>
+              <div class="flex items-center" style="gap: 8px;">
+                <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; color: rgba(250,250,248,0.5);">$</span>
                 <input type="text" id="contract-agreed-price" placeholder="Enter agreed price"
-                  class="flex-1 px-3 py-2 bg-cream/10 border border-cream/20 text-cream text-xl font-heading focus:border-bronze focus:outline-none" />
+                  style="flex: 1; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; padding: 8px 0; border: none; border-bottom: 1px solid rgba(168,147,92,0.3); background: transparent; color: #FAFAF8; outline: none;" />
               </div>
             </div>
           </div>
         </div>
 
         <!-- Pricing (Bespoke - itemized total) -->
-        <div id="contract-pricing-bespoke" class="hidden px-12 py-8 border-b border-stone/30 bg-charcoal">
-          <h2 class="text-lg font-heading text-cream mb-6">2. Project Investment</h2>
-          <div id="bespoke-pricing-summary" class="space-y-4 mb-6">
+        <div id="contract-pricing-bespoke" class="hidden contract-dark-section" style="padding: 48px 64px; border-bottom: 1px solid rgba(236,234,231,0.5);">
+          <div class="contract-section-heading" style="margin-bottom: 32px;">
+            <span style="color: #A8935C;"><span class="contract-section-num">II</span> Project Investment</span>
+          </div>
+          <div id="bespoke-pricing-summary" style="margin-bottom: 32px;">
             <!-- Section totals rendered by JS -->
           </div>
-          <div class="border-t border-cream/20 pt-4 flex justify-between items-center">
-            <p class="text-cream/50 text-xs uppercase tracking-wide">Total Contract Amount</p>
-            <p class="text-3xl font-heading text-bronze" id="bespoke-total">$0</p>
+          <div style="border-top: 1px solid rgba(168,147,92,0.3); padding-top: 24px; display: flex; justify-content: space-between; align-items: baseline;">
+            <p class="contract-label" style="color: rgba(250,250,248,0.35);">Total Contract Amount</p>
+            <p style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 42px; font-weight: 300; color: #A8935C; line-height: 1;" id="bespoke-total">$0</p>
           </div>
-          <p class="text-cream/30 text-xs mt-3">
-            Note: Any additional samples are charged at $125 per sample.
+          <p style="font-family: 'Inter', sans-serif; font-size: 10px; color: rgba(250,250,248,0.25); margin-top: 16px; font-style: italic;">
+            Any additional samples are charged at $125 per sample.
           </p>
         </div>
 
-        <!-- Payment Terms (CT Compliant) -->
-        <div class="px-12 py-8 border-b border-stone/30">
-          <h2 class="text-lg font-heading text-charcoal mb-4">3. Payment Schedule</h2>
-          <p class="text-charcoal/60 text-xs mb-4 italic">
+        <!-- Payment Schedule -->
+        <div style="padding: 48px 64px; border-bottom: 1px solid rgba(236,234,231,0.5);">
+          <div class="contract-section-heading" style="margin-bottom: 8px;">
+            <span><span class="contract-section-num">III</span> Payment Schedule</span>
+          </div>
+          <p style="font-family: 'Inter', sans-serif; font-size: 10px; color: rgba(28,28,30,0.35); margin-bottom: 32px; font-style: italic;">
             Per Connecticut Home Improvement Act, initial deposit may not exceed one-third (1/3) of total contract price.
           </p>
-          <div class="space-y-3 text-sm text-charcoal/70">
-            <div class="flex items-start gap-3">
-              <span class="w-6 h-6 bg-bronze/20 rounded-full flex items-center justify-center text-bronze text-xs flex-shrink-0">1</span>
-              <div>
-                <p class="text-charcoal font-medium">Deposit: 33% upon signing</p>
-                <p>Due upon execution of this agreement to secure project scheduling and order materials.</p>
-                <p class="text-bronze font-medium mt-1" id="contract-deposit-amt">$0</p>
+          <div style="display: flex; flex-direction: column; gap: 24px;">
+            <div class="payment-step">
+              <div class="payment-step-number">1</div>
+              <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                  <p style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 15px; color: #1C1C1E; font-weight: 500;">Deposit — 33% upon signing</p>
+                  <p style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; color: #A8935C; font-weight: 500;" id="contract-deposit-amt">$0</p>
+                </div>
+                <p class="contract-body" style="font-size: 11px; margin-top: 4px;">Due upon execution to secure scheduling and order materials.</p>
               </div>
             </div>
-            <div class="flex items-start gap-3">
-              <span class="w-6 h-6 bg-bronze/20 rounded-full flex items-center justify-center text-bronze text-xs flex-shrink-0">2</span>
-              <div>
-                <p class="text-charcoal font-medium">Progress: 33% at project midpoint</p>
-                <p>Due when approximately half of work is complete and materials are on site.</p>
-                <p class="text-bronze font-medium mt-1" id="contract-progress-amt">$0</p>
+            <div class="payment-step">
+              <div class="payment-step-number">2</div>
+              <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                  <p style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 15px; color: #1C1C1E; font-weight: 500;">Progress — 33% at midpoint</p>
+                  <p style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; color: #A8935C; font-weight: 500;" id="contract-progress-amt">$0</p>
+                </div>
+                <p class="contract-body" style="font-size: 11px; margin-top: 4px;">Due when approximately half of work is complete and materials are on site.</p>
               </div>
             </div>
-            <div class="flex items-start gap-3">
-              <span class="w-6 h-6 bg-bronze/20 rounded-full flex items-center justify-center text-bronze text-xs flex-shrink-0">3</span>
-              <div>
-                <p class="text-charcoal font-medium">Final: 34% upon completion</p>
-                <p>Due upon satisfactory completion and final walkthrough approval.</p>
-                <p class="text-bronze font-medium mt-1" id="contract-final-amt">$0</p>
+            <div class="payment-step">
+              <div class="payment-step-number">3</div>
+              <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                  <p style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 15px; color: #1C1C1E; font-weight: 500;">Final — 34% upon completion</p>
+                  <p style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; color: #A8935C; font-weight: 500;" id="contract-final-amt">$0</p>
+                </div>
+                <p class="contract-body" style="font-size: 11px; margin-top: 4px;">Due upon satisfactory completion and final walkthrough approval.</p>
               </div>
             </div>
           </div>
-          <p class="text-charcoal/50 text-xs mt-4">
+          <p style="font-family: 'Inter', sans-serif; font-size: 10px; color: rgba(28,28,30,0.3); margin-top: 24px;">
             Payment accepted via check or bank transfer. Credit cards accepted with 3% processing fee.
           </p>
         </div>
 
-        <!-- Work Includes -->
-        <div class="px-12 py-8 border-b border-stone/30">
-          <h2 class="text-lg font-heading text-charcoal mb-4">4. Services Included</h2>
-          <div class="grid grid-cols-2 gap-4 text-sm">
-            <ul class="space-y-2 text-charcoal/70">
-              <li class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-bronze" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                On-site consultation & measurement
-              </li>
-              <li class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-bronze" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                Custom sample creation (up to 3)
-              </li>
-              <li class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-bronze" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                All materials & specialized tools
-              </li>
-              <li class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-bronze" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                Surface preparation & priming
-              </li>
-            </ul>
-            <ul class="space-y-2 text-charcoal/70">
-              <li class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-bronze" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                Multi-coat plaster application
-              </li>
-              <li class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-bronze" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                Protective sealer application
-              </li>
-              <li class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-bronze" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                Daily cleanup & final site cleaning
-              </li>
-              <li class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-bronze" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                Care guide & walkthrough
-              </li>
-            </ul>
+        <!-- Services Included -->
+        <div style="padding: 40px 64px; border-bottom: 1px solid rgba(236,234,231,0.5);">
+          <div class="contract-section-heading" style="margin-bottom: 24px;">
+            <span><span class="contract-section-num">IV</span> Services Included</span>
+          </div>
+          <div class="grid grid-cols-2" style="gap: 16px 48px;">
+            <div class="flex items-baseline" style="gap: 12px; padding: 8px 0;">
+              <span class="service-check" style="font-size: 11px;">&#10003;</span>
+              <span class="contract-body" style="font-size: 12px;">On-site consultation & measurement</span>
+            </div>
+            <div class="flex items-baseline" style="gap: 12px; padding: 8px 0;">
+              <span class="service-check" style="font-size: 11px;">&#10003;</span>
+              <span class="contract-body" style="font-size: 12px;">Multi-coat plaster application</span>
+            </div>
+            <div class="flex items-baseline" style="gap: 12px; padding: 8px 0;">
+              <span class="service-check" style="font-size: 11px;">&#10003;</span>
+              <span class="contract-body" style="font-size: 12px;">Custom sample creation (up to 3)</span>
+            </div>
+            <div class="flex items-baseline" style="gap: 12px; padding: 8px 0;">
+              <span class="service-check" style="font-size: 11px;">&#10003;</span>
+              <span class="contract-body" style="font-size: 12px;">Protective sealer application</span>
+            </div>
+            <div class="flex items-baseline" style="gap: 12px; padding: 8px 0;">
+              <span class="service-check" style="font-size: 11px;">&#10003;</span>
+              <span class="contract-body" style="font-size: 12px;">All materials & specialized tools</span>
+            </div>
+            <div class="flex items-baseline" style="gap: 12px; padding: 8px 0;">
+              <span class="service-check" style="font-size: 11px;">&#10003;</span>
+              <span class="contract-body" style="font-size: 12px;">Daily cleanup & final site cleaning</span>
+            </div>
+            <div class="flex items-baseline" style="gap: 12px; padding: 8px 0;">
+              <span class="service-check" style="font-size: 11px;">&#10003;</span>
+              <span class="contract-body" style="font-size: 12px;">Surface preparation & priming</span>
+            </div>
+            <div class="flex items-baseline" style="gap: 12px; padding: 8px 0;">
+              <span class="service-check" style="font-size: 11px;">&#10003;</span>
+              <span class="contract-body" style="font-size: 12px;">Care guide & walkthrough</span>
+            </div>
           </div>
         </div>
 
         <!-- Warranty -->
-        <div class="px-12 py-8 border-b border-stone/30">
-          <h2 class="text-lg font-heading text-charcoal mb-4">5. Warranty</h2>
-          <p class="text-charcoal/70 text-sm">
-            Contractor warrants all workmanship for a period of <strong class="text-charcoal">one (1) year</strong> from the date of completion.
+        <div style="padding: 40px 64px; border-bottom: 1px solid rgba(236,234,231,0.5);">
+          <div class="contract-section-heading" style="margin-bottom: 20px;">
+            <span><span class="contract-section-num">V</span> Warranty</span>
+          </div>
+          <p class="contract-body">
+            Contractor warrants all workmanship for a period of <strong style="color: #1C1C1E; font-weight: 500;">one (1) year</strong> from the date of completion.
             This warranty covers defects in application technique and material failure under normal use conditions.
             The warranty does not cover damage caused by improper cleaning, physical impact, or structural movement.
           </p>
         </div>
 
-        <!-- Terms -->
-        <div class="px-12 py-8 border-b border-stone/30 bg-stone/10">
-          <h2 class="text-lg font-heading text-charcoal mb-4">6. Additional Terms</h2>
-          <div class="text-xs text-charcoal/60 space-y-2">
-            <p><strong>Access:</strong> Owner agrees to provide clear access to all work areas during scheduled work hours (typically 8am-5pm).</p>
-            <p><strong>Protection:</strong> Contractor will protect surrounding surfaces with drop cloths and masking. Owner should remove or secure valuable items.</p>
-            <p><strong>Scheduling:</strong> Specific start dates will be confirmed at least 2 weeks prior to commencement, subject to material availability.</p>
-            <p><strong>Changes:</strong> Any changes to scope of work must be agreed upon in writing and may affect pricing and timeline. No verbal agreements.</p>
-            <p><strong>Permits:</strong> Owner is responsible for obtaining any necessary building permits unless otherwise agreed in writing.</p>
-            <p><strong>Disputes:</strong> Any dispute arising from this contract shall be resolved in accordance with Connecticut law. Venue shall be in the county where the work is performed.</p>
+        <!-- Additional Terms -->
+        <div style="padding: 40px 64px; border-bottom: 1px solid rgba(236,234,231,0.5); background: linear-gradient(135deg, rgba(236,234,231,0.12) 0%, transparent 100%);">
+          <div class="contract-section-heading" style="margin-bottom: 24px;">
+            <span><span class="contract-section-num">VI</span> Additional Terms</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px 48px;">
+            <p class="contract-body" style="font-size: 11px;"><strong style="color: rgba(28,28,30,0.55); font-weight: 500;">Access</strong> — Owner agrees to provide clear access to all work areas during scheduled work hours (typically 8am–5pm).</p>
+            <p class="contract-body" style="font-size: 11px;"><strong style="color: rgba(28,28,30,0.55); font-weight: 500;">Changes</strong> — Any changes to scope must be agreed upon in writing and may affect pricing and timeline.</p>
+            <p class="contract-body" style="font-size: 11px;"><strong style="color: rgba(28,28,30,0.55); font-weight: 500;">Protection</strong> — Contractor will protect surrounding surfaces with drop cloths and masking. Owner should remove or secure valuable items.</p>
+            <p class="contract-body" style="font-size: 11px;"><strong style="color: rgba(28,28,30,0.55); font-weight: 500;">Permits</strong> — Owner is responsible for obtaining any necessary building permits unless otherwise agreed in writing.</p>
+            <p class="contract-body" style="font-size: 11px;"><strong style="color: rgba(28,28,30,0.55); font-weight: 500;">Scheduling</strong> — Start dates confirmed at least 2 weeks prior, subject to material availability.</p>
+            <p class="contract-body" style="font-size: 11px;"><strong style="color: rgba(28,28,30,0.55); font-weight: 500;">Disputes</strong> — Resolved in accordance with Connecticut law, in the county where work is performed.</p>
           </div>
         </div>
 
         <!-- CT REQUIRED: 3-Day Right to Cancel Notice -->
-        <div class="px-12 py-8 border-b-4 border-amber-500 bg-amber-50">
-          <h2 class="text-lg font-heading text-amber-900 mb-4 flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-            NOTICE OF CUSTOMER'S RIGHT TO CANCEL
-          </h2>
-          <div class="text-sm text-amber-900 space-y-3 p-4 bg-white/50 border border-amber-300 rounded">
-            <p class="font-medium">
-              YOU, THE BUYER, MAY CANCEL THIS TRANSACTION AT ANY TIME PRIOR TO MIDNIGHT OF THE THIRD BUSINESS DAY AFTER THE DATE OF THIS TRANSACTION.
+        <div class="contract-legal-notice" style="padding: 40px 64px; border-bottom: 1px solid rgba(236,234,231,0.5);">
+          <div class="contract-section-heading" style="margin-bottom: 24px;">
+            <span style="font-size: 12px;">Notice of Customer's Right to Cancel</span>
+          </div>
+          <div style="padding: 24px; background: white; border: 1px solid rgba(236,234,231,0.6);">
+            <p style="font-family: 'Inter', sans-serif; font-size: 11px; color: #1C1C1E; font-weight: 500; line-height: 1.7; margin-bottom: 16px;">
+              You, the buyer, may cancel this transaction at any time prior to midnight of the third business day after the date of this transaction.
             </p>
-            <p>
-              <strong>Cancellation Deadline:</strong> <span id="contract-cancel-deadline" class="text-amber-700 font-bold">_______________</span>
-            </p>
-            <p class="text-xs">
+            <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 16px;">
+              <span class="contract-label" style="font-size: 9px;">Cancellation Deadline</span>
+              <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 16px; color: #A8935C; font-weight: 500;" id="contract-cancel-deadline">_______________</span>
+            </div>
+            <p style="font-family: 'Inter', sans-serif; font-size: 10px; color: rgba(28,28,30,0.45); line-height: 1.7; margin-bottom: 12px;">
               Saturday is considered a business day under Connecticut law. If you cancel, any payments made will be refunded within ten (10) days.
               No work shall begin until after the three-day cancellation period has expired.
             </p>
-            <p class="text-xs">
-              To cancel, mail or deliver a signed and dated copy of this cancellation notice, or any other written notice to:
+            <p style="font-family: 'Inter', sans-serif; font-size: 10px; color: rgba(28,28,30,0.45); line-height: 1.7;">
+              To cancel, mail or deliver a signed and dated notice to:
+              <strong style="color: rgba(28,28,30,0.55);">Old Head Plaster LLC, 41 Suffolk Dr, Madison, CT 06443</strong>
             </p>
-            <div class="text-xs bg-white p-3 rounded border border-amber-200 mt-2">
-              <p class="font-medium">Old Head Plaster LLC</p>
-              <p>41 Suffolk Dr, Madison, CT 06443</p>
-              <p>daragh@oldheadplaster.com · 860-574-7004</p>
-            </div>
           </div>
 
-          <!-- Duplicate Cancellation Form (CT Required) -->
-          <div class="mt-6 p-4 border-2 border-dashed border-amber-400 bg-white">
-            <p class="text-xs text-amber-700 uppercase tracking-wide mb-2 font-medium">Cancellation Form (Detach and keep)</p>
-            <div class="text-sm text-charcoal/70">
-              <p>I hereby cancel this transaction.</p>
-              <div class="grid grid-cols-2 gap-4 mt-3">
-                <div>
-                  <p class="text-xs text-charcoal/50">Owner's Signature</p>
-                  <div class="border-b border-charcoal/30 h-8 mt-1"></div>
-                </div>
-                <div>
-                  <p class="text-xs text-charcoal/50">Date</p>
-                  <div class="border-b border-charcoal/30 h-8 mt-1"></div>
-                </div>
+          <!-- Cancellation Form -->
+          <div class="contract-cancel-form" style="margin-top: 24px; padding: 20px 24px;">
+            <p class="contract-label" style="margin-bottom: 12px; font-size: 9px; color: #A8935C;">Cancellation Form — Detach and keep</p>
+            <p class="contract-body" style="font-size: 12px; margin-bottom: 16px;">I hereby cancel this transaction.</p>
+            <div class="grid grid-cols-2" style="gap: 32px;">
+              <div>
+                <p class="contract-label" style="font-size: 9px; margin-bottom: 4px;">Owner's Signature</p>
+                <div class="signature-line" style="height: 32px;"></div>
+              </div>
+              <div>
+                <p class="contract-label" style="font-size: 9px; margin-bottom: 4px;">Date</p>
+                <div class="signature-line" style="height: 32px;"></div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Signatures -->
-        <div class="px-12 py-10">
-          <h2 class="text-lg font-heading text-charcoal mb-6">7. Agreement</h2>
-          <p class="text-charcoal/70 text-sm mb-8">
+        <div style="padding: 56px 64px 48px;">
+          <div class="contract-section-heading" style="margin-bottom: 16px;">
+            <span><span class="contract-section-num">VII</span> Agreement</span>
+          </div>
+          <p class="contract-body" style="margin-bottom: 40px;">
             By signing below, both parties agree to the terms and conditions outlined in this Service Agreement.
           </p>
-          <div class="grid grid-cols-2 gap-12">
+          <div class="grid grid-cols-2" style="gap: 64px;">
+            <!-- Contractor Signature -->
             <div>
-              <p class="text-charcoal/50 text-xs uppercase tracking-wide mb-4">Contractor</p>
-              <div class="border-b-2 border-charcoal/30 pb-2 mb-2">
-                <p class="font-heading text-charcoal italic">Daragh McLoughlin</p>
+              <p class="contract-label" style="margin-bottom: 24px;">Contractor</p>
+              <div style="padding-bottom: 8px; margin-bottom: 8px;">
+                <p style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22px; font-style: italic; color: #1C1C1E; font-weight: 400;">Daragh McLoughlin</p>
               </div>
-              <p class="text-charcoal text-sm">Daragh McLoughlin, Owner</p>
-              <p class="text-charcoal/50 text-xs" id="contract-date-contractor"></p>
+              <div class="signature-line" style="margin-bottom: 12px;"></div>
+              <p style="font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(28,28,30,0.55);">Daragh McLoughlin, Owner</p>
+              <p style="font-family: 'Inter', sans-serif; font-size: 10px; color: rgba(28,28,30,0.35); margin-top: 4px;" id="contract-date-contractor"></p>
             </div>
+            <!-- Client Signature -->
             <div>
-              <p class="text-charcoal/50 text-xs uppercase tracking-wide mb-4">Client</p>
-              <div class="relative border-2 border-dashed border-charcoal/20 rounded bg-white h-24 mb-2 group cursor-crosshair" id="signature-pad-container">
-                <canvas id="signature-canvas" class="absolute inset-0 w-full h-full"></canvas>
-                <p id="signature-placeholder" class="absolute inset-0 flex items-center justify-center text-charcoal/30 text-sm pointer-events-none">
-                  Sign here (draw with mouse or touch)
+              <p class="contract-label" style="margin-bottom: 24px;">Client</p>
+              <div class="relative group cursor-crosshair" id="signature-pad-container"
+                   style="border: 1.5px solid rgba(168,147,92,0.25); background: white; height: 80px; margin-bottom: 8px; position: relative;">
+                <canvas id="signature-canvas" style="position: absolute; inset: 0; width: 100%; height: 100%;"></canvas>
+                <p id="signature-placeholder" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(28,28,30,0.2); pointer-events: none;">
+                  Sign here
                 </p>
-                <button id="clear-signature-btn" class="absolute top-1 right-1 text-charcoal/30 hover:text-charcoal/60 text-xs px-2 py-0.5 rounded hidden group-hover:block z-10" type="button">
+                <button id="clear-signature-btn" type="button"
+                        style="position: absolute; top: 4px; right: 8px; font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(28,28,30,0.25); cursor: pointer; background: none; border: none; display: none; z-index: 10;">
                   Clear
                 </button>
               </div>
-              <p class="text-charcoal text-sm" id="contract-client-sig">Client Name</p>
-              <p class="text-charcoal/50 text-xs">Date: _______________</p>
+              <div class="signature-line" style="margin-bottom: 12px;"></div>
+              <p style="font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(28,28,30,0.55);" id="contract-client-sig">Client Name</p>
+              <p style="font-family: 'Inter', sans-serif; font-size: 10px; color: rgba(28,28,30,0.35); margin-top: 4px;">Date: _______________</p>
             </div>
           </div>
 
           <!-- Contract Status Badge -->
-          <div id="contract-status-bar" class="mt-8 p-4 rounded-lg bg-stone/20 border border-stone/30 flex items-center justify-between hidden">
-            <div class="flex items-center gap-3">
-              <div id="status-indicator" class="w-3 h-3 rounded-full bg-amber-400"></div>
-              <span id="status-text" class="text-sm text-charcoal/70">Draft</span>
+          <div id="contract-status-bar" class="hidden" style="margin-top: 40px; padding: 16px 20px; background: rgba(236,234,231,0.2); border: 1px solid rgba(236,234,231,0.4); display: none; align-items: center; justify-content: space-between;">
+            <div class="flex items-center" style="gap: 12px;">
+              <div id="status-indicator" style="width: 8px; height: 8px; border-radius: 50%; background: #A8935C;"></div>
+              <span id="status-text" style="font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(28,28,30,0.55);">Draft</span>
             </div>
-            <span id="status-timestamp" class="text-xs text-charcoal/40"></span>
+            <span id="status-timestamp" style="font-family: 'Inter', sans-serif; font-size: 10px; color: rgba(28,28,30,0.3);"></span>
           </div>
         </div>
 
         <!-- Footer -->
-        <div class="px-12 py-6 bg-charcoal text-center">
-          <p class="text-cream/50 text-xs">
-            Old Head Plaster LLC · Madison, CT 06443 · CT HIC Reg. #0647302 · oldheadplaster.com
+        <div style="padding: 32px 64px; background: #1C1C1E; text-align: center; position: relative;">
+          <!-- Brass accent line -->
+          <div style="position: absolute; top: 0; left: 64px; right: 64px; height: 1px; background: linear-gradient(90deg, transparent, #A8935C, transparent); opacity: 0.4;"></div>
+          <!-- Seal mark -->
+          <img src="/images/headland-seal.svg" alt="" style="height: 28px; width: auto; opacity: 0.2; margin: 0 auto 16px;" />
+          <p style="font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.15em; color: rgba(250,250,248,0.35);">
+            OLD HEAD PLASTER LLC &nbsp;&middot;&nbsp; MADISON, CT 06443 &nbsp;&middot;&nbsp; CT HIC REG. #0647302 &nbsp;&middot;&nbsp; OLDHEADPLASTER.COM
           </p>
-          <p class="text-cream/30 text-[10px] mt-2">
+          <p style="font-family: 'Inter', sans-serif; font-size: 8px; color: rgba(250,250,248,0.18); margin-top: 8px;">
             This contract complies with the Connecticut Home Improvement Act (CGS § 20-418 et seq.)
           </p>
         </div>
@@ -3196,9 +3225,212 @@ const finishTypes = [
     color: #C98821;
     border-bottom-color: #C98821;
   }
-
   details[open] summary svg {
     transform: rotate(180deg);
+  }
+
+  /* ═══════════════════════════════════════ */
+  /* CONTRACT LUXURY DESIGN SYSTEM          */
+  /* ═══════════════════════════════════════ */
+
+  /* Paper texture & base */
+  #contract-document {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    background: linear-gradient(180deg, #FAFAF8 0%, #F6F4F1 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle watermark behind contract */
+  #contract-document::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background-image: url('/images/headland-seal.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.018;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* All contract children above watermark */
+  #contract-document > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Section heading style */
+  .contract-section-heading {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #A8935C;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .contract-section-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, #A8935C 0%, transparent 100%);
+  }
+
+  /* Section number */
+  .contract-section-num {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: #A8935C;
+    line-height: 1;
+    opacity: 0.5;
+    margin-right: 4px;
+  }
+
+  /* Brass divider line */
+  .brass-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #A8935C 20%, #A8935C 80%, transparent);
+    opacity: 0.3;
+  }
+
+  /* Contract body text */
+  .contract-body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 13px;
+    line-height: 1.8;
+    color: rgba(28, 28, 30, 0.65);
+  }
+
+  /* Contract label (tiny uppercase) */
+  .contract-label {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(28, 28, 30, 0.4);
+    font-weight: 500;
+  }
+
+  /* Contract value text */
+  .contract-value {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 16px;
+    color: #1C1C1E;
+    font-weight: 500;
+  }
+
+  /* Elegant input styling */
+  .contract-input {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 13px;
+    padding: 8px 0;
+    border: none;
+    border-bottom: 1px solid rgba(168, 147, 92, 0.3);
+    background: transparent;
+    color: #1C1C1E;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .contract-input:focus {
+    border-bottom-color: #A8935C;
+  }
+  .contract-input::placeholder {
+    color: rgba(28, 28, 30, 0.25);
+  }
+
+  /* Scope section item */
+  .scope-area-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(236, 234, 231, 0.6);
+  }
+  .scope-area-item:last-child {
+    border-bottom: none;
+  }
+
+  /* Dark section (pricing) */
+  .contract-dark-section {
+    background: #1C1C1E;
+    position: relative;
+  }
+  .contract-dark-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 64px;
+    right: 64px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #A8935C, transparent);
+  }
+
+  /* Legal notice styling */
+  .contract-legal-notice {
+    background: linear-gradient(135deg, #F8F6F1 0%, #F3F0EA 100%);
+    border-left: 3px solid #A8935C;
+  }
+
+  /* Cancellation form */
+  .contract-cancel-form {
+    border: 1.5px dashed rgba(168, 147, 92, 0.4);
+    background: white;
+  }
+
+  /* Signature line */
+  .signature-line {
+    border-bottom: 1.5px solid rgba(28, 28, 30, 0.15);
+  }
+
+  /* Payment step */
+  .payment-step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .payment-step-number {
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid #A8935C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 15px;
+    color: #A8935C;
+    flex-shrink: 0;
+  }
+
+  /* Check mark for services */
+  .service-check {
+    color: #A8935C;
+    opacity: 0.7;
+  }
+
+  /* Print-specific styles */
+  @media print {
+    #contract-modal {
+      position: static !important;
+      background: white !important;
+    }
+    #contract-document {
+      box-shadow: none !important;
+      max-width: 100% !important;
+    }
+    .contract-dark-section {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
   }
 </style>
 
@@ -3865,63 +4097,74 @@ oldheadplaster.com`);
     if (!container) return;
 
     container.innerHTML = bespokeSections.map((section, si) => `
-      <div class="px-12 py-6" data-section="${si}">
-        <div class="flex items-start justify-between mb-4">
-          <div class="flex-1">
+      <div style="padding: 32px 64px; border-top: 1px solid rgba(236,234,231,0.4);" data-section="${si}">
+        <!-- Section header -->
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px;">
+          <div style="flex: 1;">
             <input type="text" value="${section.title}" onchange="bespokeSections[${si}].title=this.value; updateBespokeTotal()"
-              class="text-charcoal font-heading text-base bg-transparent border-b border-transparent hover:border-stone/30 focus:border-bronze focus:outline-none w-full pb-1"
+              style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; color: #1C1C1E; font-weight: 500; background: transparent; border: none; border-bottom: 1px solid transparent; width: 100%; padding-bottom: 4px; outline: none; transition: border-color 0.3s;"
+              onfocus="this.style.borderBottomColor='#A8935C'" onblur="this.style.borderBottomColor='transparent'"
               placeholder="Section title (e.g., Microcement Areas)" />
           </div>
           <button onclick="bespokeSections.splice(${si}, 1); renderBespokeSections(); updateBespokeTotal()"
-            class="text-charcoal/30 hover:text-red-500 ml-4 p-1 transition-colors" title="Remove section">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            style="color: rgba(28,28,30,0.2); margin-left: 16px; padding: 4px; cursor: pointer; background: none; border: none; transition: color 0.3s;"
+            onmouseover="this.style.color='#e53e3e'" onmouseout="this.style.color='rgba(28,28,30,0.2)'"
+            title="Remove section">
+            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
 
+        <!-- Process description -->
         ${section.processSteps.length > 0 ? `
-          <div class="mb-5 p-4 bg-stone/10 rounded text-xs text-charcoal/60 leading-relaxed">
-            <p class="text-charcoal/50 uppercase tracking-wide text-[10px] font-medium mb-2">Process</p>
-            <div class="space-y-1">
-              ${section.processSteps.map(step => `<p>• ${step}</p>`).join('')}
+          <div style="margin-bottom: 24px; padding: 20px 24px; background: linear-gradient(135deg, rgba(236,234,231,0.2) 0%, rgba(236,234,231,0.08) 100%); border-left: 2px solid rgba(168,147,92,0.25);">
+            <p style="font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(168,147,92,0.6); font-weight: 500; margin-bottom: 12px;">Process</p>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              ${section.processSteps.map(step => `<p style="font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(28,28,30,0.5); line-height: 1.6;">&bull; ${step}</p>`).join('')}
             </div>
           </div>
         ` : `
           <button onclick="addProcessToSection(${si})"
-            class="text-xs text-charcoal/30 hover:text-bronze mb-4 flex items-center gap-1 transition-colors">
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+            style="font-family: 'Inter', sans-serif; font-size: 10px; color: rgba(28,28,30,0.25); display: flex; align-items: center; gap: 6px; margin-bottom: 20px; cursor: pointer; background: none; border: none; transition: color 0.3s;"
+            onmouseover="this.style.color='#A8935C'" onmouseout="this.style.color='rgba(28,28,30,0.25)'">
+            <svg style="width: 12px; height: 12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
             Add process description
           </button>
         `}
 
-        <div class="space-y-2">
+        <!-- Area line items -->
+        <div style="display: flex; flex-direction: column;">
           ${section.items.map((item, ii) => `
-            <div class="flex items-center gap-3 text-sm group">
+            <div class="scope-area-item group" style="gap: 12px;">
               <input type="text" value="${item.name}" onchange="bespokeSections[${si}].items[${ii}].name=this.value"
-                class="flex-1 px-3 py-2 border border-stone/20 rounded text-charcoal bg-transparent focus:border-bronze focus:outline-none"
+                style="flex: 1; font-family: 'Inter', sans-serif; font-size: 12px; color: #1C1C1E; background: transparent; border: none; outline: none; padding: 0;"
                 placeholder="Area name (e.g., Master Bathroom)" />
-              <div class="flex items-center">
-                <span class="text-charcoal/40 text-sm mr-1">$</span>
+              <div style="display: flex; align-items: baseline; gap: 2px;">
+                <span style="font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(28,28,30,0.3);">$</span>
                 <input type="number" value="${item.price}" onchange="bespokeSections[${si}].items[${ii}].price=Number(this.value); recalcSectionSubtotal(${si}); updateBespokeTotal()"
-                  class="w-28 px-3 py-2 border border-stone/20 rounded text-charcoal bg-transparent text-right font-heading focus:border-bronze focus:outline-none"
+                  style="width: 100px; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 15px; color: #1C1C1E; background: transparent; border: none; outline: none; text-align: right; font-weight: 500;"
                   placeholder="0" />
               </div>
               <button onclick="bespokeSections[${si}].items.splice(${ii}, 1); renderBespokeSections(); updateBespokeTotal()"
-                class="text-charcoal/20 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all" title="Remove">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                style="color: rgba(28,28,30,0.12); cursor: pointer; background: none; border: none; opacity: 0; transition: all 0.3s;"
+                onmouseover="this.style.color='#e53e3e'; this.style.opacity='1'" onmouseout="this.style.color='rgba(28,28,30,0.12)'; this.style.opacity='0'"
+                title="Remove">
+                <svg style="width: 12px; height: 12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
           `).join('')}
         </div>
 
-        <div class="flex justify-between items-center mt-3">
+        <!-- Add area + Section total -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 12px; border-top: 1px solid rgba(168,147,92,0.15);">
           <button onclick="bespokeSections[${si}].items.push({name:'', price:0}); renderBespokeSections()"
-            class="text-xs text-charcoal/40 hover:text-bronze flex items-center gap-1 transition-colors">
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+            style="font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(28,28,30,0.3); display: flex; align-items: center; gap: 6px; cursor: pointer; background: none; border: none; transition: color 0.3s;"
+            onmouseover="this.style.color='#A8935C'" onmouseout="this.style.color='rgba(28,28,30,0.3)'">
+            <svg style="width: 10px; height: 10px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
             Add area
           </button>
-          <div class="text-sm">
-            <span class="text-charcoal/50">Section Total: </span>
-            <span class="font-heading text-charcoal">$${section.subtotal.toLocaleString()}</span>
+          <div style="display: flex; align-items: baseline; gap: 8px;">
+            <span style="font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(28,28,30,0.35);">Section Total</span>
+            <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; color: #1C1C1E; font-weight: 500;">$${section.subtotal.toLocaleString()}</span>
           </div>
         </div>
       </div>
@@ -3947,9 +4190,9 @@ oldheadplaster.com`);
     const summaryEl = document.getElementById('bespoke-pricing-summary');
     if (summaryEl) {
       summaryEl.innerHTML = bespokeSections.map(s => `
-        <div class="flex justify-between items-center text-sm">
-          <span class="text-cream/70">${s.title}</span>
-          <span class="text-cream font-heading">$${s.subtotal.toLocaleString()}</span>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 12px 0; border-bottom: 1px solid rgba(250,250,248,0.06);">
+          <span style="font-family: 'Inter', sans-serif; font-size: 12px; color: rgba(250,250,248,0.5);">${s.title}</span>
+          <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; color: rgba(250,250,248,0.8); font-weight: 400;">$${s.subtotal.toLocaleString()}</span>
         </div>
       `).join('');
     }
