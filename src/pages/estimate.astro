@@ -222,7 +222,7 @@ const finishTypes = [
         </div>
 
         <!-- Quick Action Buttons -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           <button onclick="switchTab('estimator')" class="flex flex-col items-center gap-2 p-4 bg-cream shadow-sm hover:shadow-md transition-shadow">
             <div class="w-12 h-12 bg-bronze/20 rounded-full flex items-center justify-center">
               <svg class="w-6 h-6 text-bronze" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -230,6 +230,14 @@ const finishTypes = [
               </svg>
             </div>
             <span class="text-sm text-charcoal font-medium">New Estimate</span>
+          </button>
+          <button onclick="openBespokeContract()" class="flex flex-col items-center gap-2 p-4 bg-cream shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+              <svg class="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+              </svg>
+            </div>
+            <span class="text-sm text-charcoal font-medium">Custom Contract</span>
           </button>
           <button onclick="switchTab('leads'); openNewLeadModal()" class="flex flex-col items-center gap-2 p-4 bg-cream shadow-sm hover:shadow-md transition-shadow">
             <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -2772,9 +2780,12 @@ const finishTypes = [
         <!-- Header -->
         <div class="bg-charcoal px-12 py-10">
           <div class="flex items-start justify-between">
-            <div>
-              <h1 class="text-3xl font-heading text-cream tracking-wide">OLD HEAD PLASTER</h1>
-              <p class="text-bronze text-sm tracking-[0.2em] mt-1">ARTISAN DECORATIVE FINISHES</p>
+            <div class="flex items-center gap-5">
+              <img src="/images/headland-seal.svg" alt="Old Head Plaster" class="h-16 w-auto opacity-90" />
+              <div>
+                <h1 class="text-3xl font-heading text-cream tracking-wide">OLD HEAD PLASTER</h1>
+                <p class="text-bronze text-sm tracking-[0.2em] mt-1">ARTISAN DECORATIVE FINISHES</p>
+              </div>
             </div>
             <div class="text-right">
               <p class="text-cream text-xl font-heading">Service Agreement</p>
@@ -2799,6 +2810,7 @@ const finishTypes = [
             <div class="p-4 bg-stone/20 rounded">
               <p class="text-charcoal/50 text-xs uppercase tracking-wide mb-2">Contractor</p>
               <p class="text-charcoal font-heading">Old Head Plaster LLC</p>
+              <p class="text-charcoal/70 text-sm">41 Suffolk Dr</p>
               <p class="text-charcoal/70 text-sm">Madison, CT 06443</p>
               <p class="text-charcoal/70 text-sm">daragh@oldheadplaster.com</p>
               <p class="text-charcoal/70 text-sm">860-574-7004</p>
@@ -2847,8 +2859,8 @@ const finishTypes = [
           </p>
         </div>
 
-        <!-- Scope of Work -->
-        <div class="px-12 py-8 border-b border-stone/30">
+        <!-- Scope of Work (Standard - from estimator) -->
+        <div id="contract-scope-standard" class="px-12 py-8 border-b border-stone/30">
           <h2 class="text-lg font-heading text-charcoal mb-4">1. Scope of Work</h2>
           <p class="text-charcoal/70 text-sm mb-4">
             Contractor agrees to provide decorative plaster finishing services for the following areas:
@@ -2868,8 +2880,27 @@ const finishTypes = [
           </div>
         </div>
 
-        <!-- Pricing -->
-        <div class="px-12 py-8 border-b border-stone/30 bg-charcoal">
+        <!-- Scope of Work (Bespoke - custom sections) -->
+        <div id="contract-scope-bespoke" class="hidden border-b border-stone/30">
+          <div class="px-12 py-8">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-heading text-charcoal">1. Scope of Work</h2>
+              <button id="add-scope-section-btn" class="text-xs text-bronze hover:text-bronze/80 flex items-center gap-1 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+                Add Section
+              </button>
+            </div>
+            <p class="text-charcoal/70 text-sm mb-6">
+              Contractor agrees to provide decorative plaster and microcement finishing services as detailed below:
+            </p>
+          </div>
+          <div id="bespoke-scope-sections" class="divide-y divide-stone/20">
+            <!-- Sections rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Pricing (Standard - from estimator) -->
+        <div id="contract-pricing-standard" class="px-12 py-8 border-b border-stone/30 bg-charcoal">
           <h2 class="text-lg font-heading text-cream mb-4">2. Project Investment</h2>
           <div class="grid grid-cols-2 gap-8">
             <div>
@@ -2888,6 +2919,21 @@ const finishTypes = [
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Pricing (Bespoke - itemized total) -->
+        <div id="contract-pricing-bespoke" class="hidden px-12 py-8 border-b border-stone/30 bg-charcoal">
+          <h2 class="text-lg font-heading text-cream mb-6">2. Project Investment</h2>
+          <div id="bespoke-pricing-summary" class="space-y-4 mb-6">
+            <!-- Section totals rendered by JS -->
+          </div>
+          <div class="border-t border-cream/20 pt-4 flex justify-between items-center">
+            <p class="text-cream/50 text-xs uppercase tracking-wide">Total Contract Amount</p>
+            <p class="text-3xl font-heading text-bronze" id="bespoke-total">$0</p>
+          </div>
+          <p class="text-cream/30 text-xs mt-3">
+            Note: Any additional samples are charged at $125 per sample.
+          </p>
         </div>
 
         <!-- Payment Terms (CT Compliant) -->
@@ -3017,8 +3063,8 @@ const finishTypes = [
             </p>
             <div class="text-xs bg-white p-3 rounded border border-amber-200 mt-2">
               <p class="font-medium">Old Head Plaster LLC</p>
-              <p>Madison, CT 06443</p>
-              <p>daragh@oldheadplaster.com</p>
+              <p>41 Suffolk Dr, Madison, CT 06443</p>
+              <p>daragh@oldheadplaster.com · 860-574-7004</p>
             </div>
           </div>
 
@@ -3721,6 +3767,11 @@ oldheadplaster.com`);
     // Initialize signature pad
     initSignaturePad();
 
+    // Bespoke contract: add section button
+    document.getElementById('add-scope-section-btn')?.addEventListener('click', () => {
+      addBespokeSection();
+    });
+
     // Close on escape
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
@@ -3747,9 +3798,197 @@ oldheadplaster.com`);
     return result;
   }
 
-  function openContractModal() {
+  // ===== BESPOKE CONTRACT MODE =====
+  let bespokeMode = false;
+  let bespokeSections = [];
+
+  function openBespokeContract() {
+    bespokeMode = true;
     const modal = document.getElementById('contract-modal');
     if (!modal) return;
+
+    const el = (id) => document.getElementById(id);
+    const now = new Date();
+
+    // Toggle visibility: hide standard, show bespoke
+    el('contract-scope-standard')?.classList.add('hidden');
+    el('contract-scope-bespoke')?.classList.remove('hidden');
+    el('contract-pricing-standard')?.classList.add('hidden');
+    el('contract-pricing-bespoke')?.classList.remove('hidden');
+
+    // Contract number & dates
+    el('contract-number').textContent = `Contract #OHP-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}-${Math.random().toString(36).substr(2,4).toUpperCase()}`;
+    el('contract-date-inline').textContent = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    el('contract-date-contractor').textContent = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    // CT 3-day cancellation
+    const cancelDeadline = addBusinessDays(now, 3);
+    const cdEl = el('contract-cancel-deadline');
+    if (cdEl) cdEl.textContent = cancelDeadline.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + ' at midnight';
+
+    // Date defaults
+    const formatDate = (d) => d.toISOString().split('T')[0];
+    const signDateEl = el('contract-sign-date');
+    if (signDateEl) signDateEl.value = formatDate(now);
+
+    // Default client info (blank for bespoke)
+    el('contract-client').textContent = 'Client';
+    el('contract-location').textContent = '';
+    el('contract-client-sig').textContent = 'Client';
+
+    // Init with empty sections
+    bespokeSections = [];
+    renderBespokeSections();
+    updateBespokeTotal();
+
+    // Update payment terms based on total
+    updateBespokePayments();
+
+    modal.classList.remove('hidden');
+    modal.scrollTo(0, 0);
+  }
+
+  function addBespokeSection(title = '', items = [], processSteps = [], subtotal = 0) {
+    bespokeSections.push({
+      id: Date.now() + Math.random(),
+      title: title || 'New Section',
+      items: items.length ? items : [{ name: '', price: 0 }],
+      processSteps: processSteps.length ? processSteps : [],
+      subtotal: subtotal
+    });
+    renderBespokeSections();
+    updateBespokeTotal();
+  }
+
+  function renderBespokeSections() {
+    const container = document.getElementById('bespoke-scope-sections');
+    if (!container) return;
+
+    container.innerHTML = bespokeSections.map((section, si) => `
+      <div class="px-12 py-6" data-section="${si}">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex-1">
+            <input type="text" value="${section.title}" onchange="bespokeSections[${si}].title=this.value; updateBespokeTotal()"
+              class="text-charcoal font-heading text-base bg-transparent border-b border-transparent hover:border-stone/30 focus:border-bronze focus:outline-none w-full pb-1"
+              placeholder="Section title (e.g., Microcement Areas)" />
+          </div>
+          <button onclick="bespokeSections.splice(${si}, 1); renderBespokeSections(); updateBespokeTotal()"
+            class="text-charcoal/30 hover:text-red-500 ml-4 p-1 transition-colors" title="Remove section">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+
+        ${section.processSteps.length > 0 ? `
+          <div class="mb-5 p-4 bg-stone/10 rounded text-xs text-charcoal/60 leading-relaxed">
+            <p class="text-charcoal/50 uppercase tracking-wide text-[10px] font-medium mb-2">Process</p>
+            <div class="space-y-1">
+              ${section.processSteps.map(step => `<p>• ${step}</p>`).join('')}
+            </div>
+          </div>
+        ` : `
+          <button onclick="addProcessToSection(${si})"
+            class="text-xs text-charcoal/30 hover:text-bronze mb-4 flex items-center gap-1 transition-colors">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+            Add process description
+          </button>
+        `}
+
+        <div class="space-y-2">
+          ${section.items.map((item, ii) => `
+            <div class="flex items-center gap-3 text-sm group">
+              <input type="text" value="${item.name}" onchange="bespokeSections[${si}].items[${ii}].name=this.value"
+                class="flex-1 px-3 py-2 border border-stone/20 rounded text-charcoal bg-transparent focus:border-bronze focus:outline-none"
+                placeholder="Area name (e.g., Master Bathroom)" />
+              <div class="flex items-center">
+                <span class="text-charcoal/40 text-sm mr-1">$</span>
+                <input type="number" value="${item.price}" onchange="bespokeSections[${si}].items[${ii}].price=Number(this.value); recalcSectionSubtotal(${si}); updateBespokeTotal()"
+                  class="w-28 px-3 py-2 border border-stone/20 rounded text-charcoal bg-transparent text-right font-heading focus:border-bronze focus:outline-none"
+                  placeholder="0" />
+              </div>
+              <button onclick="bespokeSections[${si}].items.splice(${ii}, 1); renderBespokeSections(); updateBespokeTotal()"
+                class="text-charcoal/20 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all" title="Remove">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="flex justify-between items-center mt-3">
+          <button onclick="bespokeSections[${si}].items.push({name:'', price:0}); renderBespokeSections()"
+            class="text-xs text-charcoal/40 hover:text-bronze flex items-center gap-1 transition-colors">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+            Add area
+          </button>
+          <div class="text-sm">
+            <span class="text-charcoal/50">Section Total: </span>
+            <span class="font-heading text-charcoal">$${section.subtotal.toLocaleString()}</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function recalcSectionSubtotal(si) {
+    const section = bespokeSections[si];
+    if (!section) return;
+    section.subtotal = section.items.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+  }
+
+  function updateBespokeTotal() {
+    const total = bespokeSections.reduce((sum, s) => {
+      s.subtotal = s.items.reduce((iSum, item) => iSum + (Number(item.price) || 0), 0);
+      return sum + s.subtotal;
+    }, 0);
+
+    const totalEl = document.getElementById('bespoke-total');
+    if (totalEl) totalEl.textContent = `$${total.toLocaleString()}`;
+
+    // Update pricing summary
+    const summaryEl = document.getElementById('bespoke-pricing-summary');
+    if (summaryEl) {
+      summaryEl.innerHTML = bespokeSections.map(s => `
+        <div class="flex justify-between items-center text-sm">
+          <span class="text-cream/70">${s.title}</span>
+          <span class="text-cream font-heading">$${s.subtotal.toLocaleString()}</span>
+        </div>
+      `).join('');
+    }
+
+    updateBespokePayments();
+    renderBespokeSections();
+  }
+
+  function updateBespokePayments() {
+    const total = bespokeSections.reduce((sum, s) => sum + s.subtotal, 0);
+    const deposit = Math.round(total / 3);
+    const progress = Math.round(total / 3);
+    const final = total - deposit - progress;
+
+    const el = (id) => document.getElementById(id);
+    if (el('contract-deposit-amt')) el('contract-deposit-amt').textContent = `$${deposit.toLocaleString()}`;
+    if (el('contract-progress-amt')) el('contract-progress-amt').textContent = `$${progress.toLocaleString()}`;
+    if (el('contract-final-amt')) el('contract-final-amt').textContent = `$${final.toLocaleString()}`;
+  }
+
+  function addProcessToSection(si) {
+    const steps = prompt('Enter process steps (one per line):');
+    if (steps) {
+      bespokeSections[si].processSteps = steps.split('\n').filter(s => s.trim());
+      renderBespokeSections();
+    }
+  }
+
+  // ===== STANDARD CONTRACT MODE (from estimator) =====
+  function openContractModal() {
+    bespokeMode = false;
+    const modal = document.getElementById('contract-modal');
+    if (!modal) return;
+
+    // Toggle visibility: show standard, hide bespoke
+    document.getElementById('contract-scope-standard')?.classList.remove('hidden');
+    document.getElementById('contract-scope-bespoke')?.classList.add('hidden');
+    document.getElementById('contract-pricing-standard')?.classList.remove('hidden');
+    document.getElementById('contract-pricing-bespoke')?.classList.add('hidden');
 
     const estimate = calculateEstimate();
     const client = document.getElementById('quote-client')?.textContent || 'Client';
@@ -3936,8 +4175,18 @@ oldheadplaster.com`);
     const clientPhone = document.getElementById('contract-client-phone')?.value;
     const client = document.getElementById('contract-client')?.textContent || 'Client';
     const contractNumber = document.getElementById('contract-number')?.textContent || '';
-    const estimate = calculateEstimate();
-    const agreedPrice = document.getElementById('contract-agreed-price')?.value;
+
+    let priceDisplay = '';
+    if (bespokeMode) {
+      const total = bespokeSections.reduce((sum, s) => sum + s.subtotal, 0);
+      priceDisplay = `<strong>Total: $${total.toLocaleString()}</strong>`;
+    } else {
+      const estimate = calculateEstimate();
+      const agreedPrice = document.getElementById('contract-agreed-price')?.value;
+      priceDisplay = agreedPrice
+        ? `<strong>Agreed Price: $${agreedPrice}</strong>`
+        : `<strong>Estimate: $${estimate.lowEstimate.toLocaleString()} – $${estimate.highEstimate.toLocaleString()}</strong>`;
+    }
 
     if (!clientEmail) {
       showToast('Please enter the client\'s email address.', 'error');
@@ -3952,8 +4201,7 @@ oldheadplaster.com`);
       <p><strong>Email:</strong> ${clientEmail}</p>
       ${clientPhone ? `<p><strong>Phone:</strong> ${clientPhone}</p>` : ''}
       <p><strong>Contract:</strong> ${contractNumber}</p>
-      <p><strong>Area:</strong> ${estimate.totalSqFt.toLocaleString()} sq ft</p>
-      <p><strong>${agreedPrice ? 'Agreed Price: $' + agreedPrice : 'Estimate: $' + estimate.lowEstimate.toLocaleString() + ' – $' + estimate.highEstimate.toLocaleString()}</strong></p>
+      <p>${priceDisplay}</p>
       <p class="text-xs text-charcoal/50 mt-3">A PDF of the full contract will be generated and attached to the email.</p>
     `;
 
@@ -3970,9 +4218,20 @@ oldheadplaster.com`);
     const clientPhone = document.getElementById('contract-client-phone')?.value;
     const client = document.getElementById('contract-client')?.textContent || 'Client';
     const contractNumber = document.getElementById('contract-number')?.textContent || '';
-    const estimate = calculateEstimate();
-    const agreedPrice = document.getElementById('contract-agreed-price')?.value;
     const sendSms = document.getElementById('send-sms-check')?.checked;
+
+    let totalSqFt, estimateRange, agreedPrice;
+    if (bespokeMode) {
+      const total = bespokeSections.reduce((sum, s) => sum + s.subtotal, 0);
+      totalSqFt = 'Bespoke';
+      estimateRange = `$${total.toLocaleString()}`;
+      agreedPrice = total.toString();
+    } else {
+      const estimate = calculateEstimate();
+      totalSqFt = estimate.totalSqFt.toLocaleString();
+      estimateRange = `$${estimate.lowEstimate.toLocaleString()} – $${estimate.highEstimate.toLocaleString()}`;
+      agreedPrice = document.getElementById('contract-agreed-price')?.value;
+    }
 
     // Close confirmation modal
     document.getElementById('send-confirm-modal')?.classList.add('hidden');
@@ -4011,8 +4270,8 @@ oldheadplaster.com`);
       formData.append('clientEmail', clientEmail);
       if (sendSms && clientPhone) formData.append('clientPhone', clientPhone);
       formData.append('contractNumber', contractNumber);
-      formData.append('totalSqFt', estimate.totalSqFt.toLocaleString());
-      formData.append('estimateRange', `$${estimate.lowEstimate.toLocaleString()} – $${estimate.highEstimate.toLocaleString()}`);
+      formData.append('totalSqFt', totalSqFt);
+      formData.append('estimateRange', estimateRange);
       if (agreedPrice) formData.append('agreedPrice', agreedPrice);
 
       const response = await fetch('/api/send-contract', {
