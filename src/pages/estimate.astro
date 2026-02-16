@@ -3501,72 +3501,83 @@ const finishTypes = [
     opacity: 0.7;
   }
 
-  /* Print-specific styles */
+  /* Print-specific styles — PDF-quality contract output */
   @media print {
-    /* Hide everything except the contract */
-    body > *:not(#contract-modal) {
-      display: none !important;
+    /* Page setup */
+    @page {
+      margin: 0;
+      size: letter;
     }
-    header, footer, nav, .h-\\[80px\\] {
+
+    /* Hide everything on the page */
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+      background: white !important;
+    }
+    body > * {
       display: none !important;
     }
 
-    /* Make the modal act as a normal document */
+    /* Show only the contract modal */
     #contract-modal {
-      position: static !important;
       display: block !important;
-      background: white !important;
+      position: static !important;
+      background: none !important;
       overflow: visible !important;
       height: auto !important;
       padding: 0 !important;
+      z-index: auto !important;
     }
-    #contract-modal > .min-h-screen {
+    #contract-modal > div {
       min-height: auto !important;
       padding: 0 !important;
     }
 
-    /* Hide action bar and buttons */
-    #contract-modal > .min-h-screen > .max-w-4xl:first-child {
-      display: none !important;
-    }
+    /* Hide all action bars, buttons, and controls */
     #close-contract-modal,
     #contract-print-btn,
     #contract-download-btn,
     #contract-file-btn,
-    #contract-send-btn {
+    #contract-send-btn,
+    #contract-modal > div > div:first-child {
       display: none !important;
     }
 
-    /* Contract document fills page */
+    /* Contract document — clean, full-width, no shadows */
     #contract-document {
       box-shadow: none !important;
       max-width: 100% !important;
       width: 100% !important;
       margin: 0 !important;
+      border-radius: 0 !important;
     }
 
-    /* Preserve backgrounds and colors */
+    /* Preserve all backgrounds, colors, and gradients */
     * {
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
     }
 
-    .contract-dark-section {
+    /* Dark sections keep their backgrounds */
+    .contract-dark-section,
+    #contract-document .bg-charcoal,
+    #contract-document [style*="background: #1C1C1E"],
+    #contract-document [style*="background:#1C1C1E"] {
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
-      background: #1C1C1E !important;
-      color: #FAFAF8 !important;
     }
 
-    /* Proper page breaks */
+    /* Page breaks — keep sections together */
     #contract-document > div {
       page-break-inside: avoid;
+      break-inside: avoid;
     }
 
-    /* Page setup */
-    @page {
-      margin: 0.4in;
-      size: letter;
+    /* Prevent orphaned headings */
+    .contract-section-heading {
+      page-break-after: avoid;
+      break-after: avoid;
     }
   }
 </style>
