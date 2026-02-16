@@ -119,7 +119,7 @@ CT HIC Reg. #0647302`;
 
     // Build Resend request body
     const emailPayload: Record<string, any> = {
-      from: 'Daragh McLoughlin <daragh@oldheadplaster.com>',
+      from: 'Daragh McLoughlin <daraghmcloughlin1982@gmail.com>',
       to: [clientEmail],
       subject: `Old Head Plaster — Service Agreement${contractNumber ? ` (${contractNumber})` : ''}`,
       html: emailHtml,

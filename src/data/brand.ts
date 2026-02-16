@@ -60,7 +60,7 @@ export const BRAND_PRESETS: Record<string, BrandConfig> = {
     ownerTitle: "Master Plasterer",
 
     phone: "860-574-7004",
-    email: "daragh@oldheadplaster.com",
+    email: "daraghmcloughlin1982@gmail.com",
     location: "Madison, Connecticut",
     serviceArea: "Fairfield & New Haven Counties",
 
