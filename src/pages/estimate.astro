@@ -538,12 +538,29 @@ const finishTypes = [
       <div class="py-8">
         <div class="max-w-5xl mx-auto px-6 space-y-6">
 
-          <!-- Client Quick Entry -->
+          <!-- Client & Project Info -->
           <div class="bg-cream p-6 shadow-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label class="block text-xs tracking-[0.15em] uppercase text-charcoal/60 mb-2">Client Name</label>
+                <input type="text" id="client-name" placeholder="e.g., Michael Chen"
+                  class="w-full px-4 py-3 border border-stone/50 focus:border-bronze focus:outline-none text-charcoal" />
+              </div>
+              <div>
+                <label class="block text-xs tracking-[0.15em] uppercase text-charcoal/60 mb-2">Project Name</label>
+                <input type="text" id="project-name" placeholder="e.g., Master Bath Renovation"
+                  class="w-full px-4 py-3 border border-stone/50 focus:border-bronze focus:outline-none text-charcoal" />
+              </div>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div class="md:col-span-2">
-                <label class="block text-xs tracking-[0.15em] uppercase text-charcoal/60 mb-2">Client / Project Name</label>
-                <input type="text" id="client-name" placeholder="e.g., Chen Residence - Master Bath"
+              <div>
+                <label class="block text-xs tracking-[0.15em] uppercase text-charcoal/60 mb-2">Client Email</label>
+                <input type="email" id="client-email" placeholder="client@email.com"
+                  class="w-full px-4 py-3 border border-stone/50 focus:border-bronze focus:outline-none text-charcoal" />
+              </div>
+              <div>
+                <label class="block text-xs tracking-[0.15em] uppercase text-charcoal/60 mb-2">Client Phone</label>
+                <input type="tel" id="client-phone" placeholder="(203) 555-0123"
                   class="w-full px-4 py-3 border border-stone/50 focus:border-bronze focus:outline-none text-charcoal" />
               </div>
               <div>
@@ -2556,11 +2573,11 @@ const finishTypes = [
           Back to Estimator
         </button>
         <div class="flex items-center gap-3">
-          <button id="quote-email-btn" class="flex items-center gap-2 px-4 py-2 border border-cream/30 text-cream text-sm hover:bg-cream/10 transition-colors rounded">
+          <button id="quote-email-btn" class="flex items-center gap-2 px-4 py-2 bg-bronze text-charcoal text-sm font-medium hover:bg-bronze/90 transition-colors rounded">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
-            Email
+            Send to Client
           </button>
           <button id="quote-sms-btn" class="flex items-center gap-2 px-4 py-2 border border-cream/30 text-cream text-sm hover:bg-cream/10 transition-colors rounded">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2606,7 +2623,9 @@ const finishTypes = [
             <div>
               <p class="text-charcoal/50 text-xs uppercase tracking-wide mb-2">Prepared For</p>
               <p class="text-charcoal text-xl font-heading" id="quote-client">Client Name</p>
+              <p class="text-charcoal/70" id="quote-project">Project</p>
               <p class="text-charcoal/70" id="quote-location">Location</p>
+              <p class="text-charcoal/50 text-sm mt-1" id="quote-client-email"></p>
             </div>
             <div>
               <p class="text-charcoal/50 text-xs uppercase tracking-wide mb-2">Finish Type</p>
@@ -3935,6 +3954,9 @@ const finishTypes = [
       saveBtn.addEventListener('click', () => {
         const data = {
           client: document.getElementById('client-name')?.value || '',
+          projectName: document.getElementById('project-name')?.value || '',
+          clientEmail: document.getElementById('client-email')?.value || '',
+          clientPhone: document.getElementById('client-phone')?.value || '',
           location: document.getElementById('project-location')?.value || '',
           finishType: document.getElementById('finish-type')?.value || '',
           tier: state.tier,
@@ -3964,6 +3986,9 @@ const finishTypes = [
 
     const estimate = calculateEstimate();
     const client = document.getElementById('client-name')?.value || 'Client';
+    const projectName = document.getElementById('project-name')?.value || '';
+    const clientEmail = document.getElementById('client-email')?.value || '';
+    const clientPhone = document.getElementById('client-phone')?.value || '';
     const location = document.getElementById('project-location')?.value || '';
     const finishType = document.getElementById('finish-type')?.value || 'Venetian Plaster';
 
@@ -3977,7 +4002,11 @@ const finishTypes = [
 
     // Client info
     el('quote-client').textContent = client;
+    el('quote-project').textContent = projectName || '';
+    el('quote-project').style.display = projectName ? 'block' : 'none';
     el('quote-location').textContent = location || 'Location TBD';
+    el('quote-client-email').textContent = clientEmail || '';
+    el('quote-client-email').style.display = clientEmail ? 'block' : 'none';
     el('quote-finish').textContent = finishType;
     el('quote-tier').textContent = `${tierNames[state.tier] || 'Signature'} Tier`;
 
@@ -4076,54 +4105,97 @@ const finishTypes = [
     });
   }
 
-  function emailQuote() {
-    const client = document.getElementById('quote-client')?.textContent || 'Client';
+  async function emailQuote() {
+    const clientName = document.getElementById('client-name')?.value || '';
+    const clientEmail = document.getElementById('client-email')?.value || '';
+    const clientPhone = document.getElementById('client-phone')?.value || '';
+    const projectName = document.getElementById('project-name')?.value || '';
+
+    if (!clientEmail) {
+      alert('Please enter a client email address in the form above to send the estimate.');
+      return;
+    }
+    if (!clientName) {
+      alert('Please enter a client name in the form above to send the estimate.');
+      return;
+    }
+
     const estimate = calculateEstimate();
-    const finishType = document.getElementById('quote-finish')?.textContent || '';
+    const location = document.getElementById('project-location')?.value || '';
+    const finishType = document.getElementById('finish-type')?.value || 'Venetian Plaster';
+    const quoteNumber = document.getElementById('quote-number')?.textContent || '';
 
-    const subject = encodeURIComponent(`Old Head Plaster - Project Estimate for ${client}`);
-    const body = encodeURIComponent(`Dear ${client},
+    const btn = document.getElementById('quote-email-btn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Sending...';
+    btn.disabled = true;
 
-Thank you for your interest in Old Head Plaster. Please find below a summary of your project estimate.
+    try {
+      // Generate PDF blob from the quote document
+      const quoteEl = document.getElementById('quote-document');
+      const pdfBlob = await html2pdf().set({
+        margin: 0,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      }).from(quoteEl).outputPdf('blob');
 
-PROJECT DETAILS
----------------
-Finish Type: ${finishType}
-Total Area: ${estimate.totalSqFt.toLocaleString()} sq ft
-Estimate Range: $${estimate.lowEstimate.toLocaleString()} – $${estimate.highEstimate.toLocaleString()}
+      const formData = new FormData();
+      formData.append('clientName', clientName);
+      formData.append('clientEmail', clientEmail);
+      formData.append('clientPhone', clientPhone);
+      formData.append('projectName', projectName);
+      formData.append('location', location);
+      formData.append('finishType', finishType);
+      formData.append('tier', tierNames[state.tier] || 'Signature');
+      formData.append('totalSqFt', estimate.totalSqFt.toString());
+      formData.append('lowEstimate', estimate.lowEstimate.toString());
+      formData.append('highEstimate', estimate.highEstimate.toString());
+      formData.append('quoteNumber', quoteNumber);
+      formData.append('pdf', new Blob([pdfBlob], { type: 'application/pdf' }), `OldHeadPlaster_Estimate_${clientName.replace(/\s+/g, '_')}.pdf`);
 
-This estimate includes:
-• On-site consultation & measurements
-• Custom sample creation (up to 3)
-• All materials & specialized tools
-• Surface preparation & priming
-• Multi-coat plaster application
-• Protective sealer application
-• Final walkthrough & care guide
+      const response = await fetch('/api/send-estimate', {
+        method: 'POST',
+        body: formData
+      });
 
-NEXT STEPS
-----------
-1. Schedule a consultation to review your space
-2. We'll create custom samples for your approval
-3. Once approved, we'll schedule your project
+      const result = await response.json();
 
-Please reply to this email or call 860-574-7004 to schedule your consultation.
-
-Best regards,
-Daragh
-Old Head Plaster
-oldheadplaster.com`);
-
-    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+      if (result.success) {
+        btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg> Sent!';
+        btn.classList.add('border-green-400', 'text-green-400');
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+          btn.classList.remove('border-green-400', 'text-green-400');
+        }, 3000);
+        alert(result.message || `Estimate sent to ${clientEmail}!`);
+      } else {
+        throw new Error(result.error || 'Failed to send');
+      }
+    } catch (error) {
+      console.error('Send estimate error:', error);
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      // Fallback to mailto
+      const subject = encodeURIComponent(`Old Head Plaster - Project Estimate for ${clientName}`);
+      const body = encodeURIComponent(`Dear ${clientName},\n\nThank you for your interest in Old Head Plaster.\n\nEstimate Range: $${estimate.lowEstimate.toLocaleString()} – $${estimate.highEstimate.toLocaleString()}\nTotal Area: ${estimate.totalSqFt.toLocaleString()} sq ft\n\nPlease call 860-574-7004 to schedule your consultation.\n\nBest regards,\nDaragh\nOld Head Plaster`);
+      if (confirm('Could not send directly. Open your email client instead?')) {
+        window.location.href = `mailto:${encodeURIComponent(clientEmail)}?subject=${subject}&body=${body}`;
+      }
+    }
   }
 
   function smsQuote() {
-    const client = document.getElementById('quote-client')?.textContent || '';
+    const client = document.getElementById('client-name')?.value || '';
+    const clientPhone = document.getElementById('client-phone')?.value || '';
     const estimate = calculateEstimate();
 
     const message = encodeURIComponent(`Hi${client ? ' ' + client : ''}! Here's your Old Head Plaster estimate: ${estimate.totalSqFt.toLocaleString()} sq ft, $${estimate.lowEstimate.toLocaleString()}–$${estimate.highEstimate.toLocaleString()}. Ready to schedule a consultation? Reply or call 860-574-7004. - Daragh`);
 
-    window.location.href = `sms:?body=${message}`;
+    // Pre-fill the phone number if available
+    const phoneParam = clientPhone ? clientPhone.replace(/\D/g, '') : '';
+    window.location.href = `sms:${phoneParam}?body=${message}`;
   }
 
   function initQuoteModal() {
@@ -4454,6 +4526,11 @@ oldheadplaster.com`);
     el('contract-client').textContent = client;
     el('contract-location').textContent = location;
     el('contract-client-sig').textContent = client;
+    // Pre-fill client email from the form
+    const clientEmailVal = document.getElementById('client-email')?.value || '';
+    if (clientEmailVal && el('contract-client-email')) {
+      el('contract-client-email').value = clientEmailVal;
+    }
 
     // Scope
     el('contract-finish').textContent = finishType;
