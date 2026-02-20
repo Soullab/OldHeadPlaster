@@ -2877,7 +2877,7 @@ const finishTypes = [
             <!-- Property Owner -->
             <div style="border-top: 2px solid #A8935C; padding-top: 20px;">
               <p class="contract-label" style="margin-bottom: 12px;">Property Owner</p>
-              <p class="contract-value" id="contract-client" style="margin-bottom: 4px;">Client Name</p>
+              <p class="contract-value" id="contract-client" contenteditable="true" spellcheck="false" style="margin-bottom: 4px; cursor: text; outline: none; border-bottom: 1px solid rgba(168,147,92,0.35); padding-bottom: 2px;">Client Name</p>
               <p class="contract-body" id="contract-location" style="font-size: 12px; margin-bottom: 16px;">Location</p>
               <div style="margin-bottom: 10px;">
                 <label class="contract-label" style="display: block; margin-bottom: 4px; font-size: 9px;">Email</label>
@@ -4211,6 +4211,27 @@ const finishTypes = [
     document.getElementById('contract-download-btn')?.addEventListener('click', downloadContractPDF);
     document.getElementById('contract-file-btn')?.addEventListener('click', fileCurrentContract);
     document.getElementById('contract-send-btn')?.addEventListener('click', sendContract);
+
+    // Client name: editable in contract — clear placeholder on first click, sync to signature line
+    const contractClientEl = document.getElementById('contract-client');
+    if (contractClientEl) {
+      contractClientEl.addEventListener('focus', () => {
+        if (contractClientEl.textContent?.trim() === 'Client Name') {
+          contractClientEl.textContent = '';
+        }
+      });
+      contractClientEl.addEventListener('blur', () => {
+        if (!contractClientEl.textContent?.trim()) {
+          contractClientEl.textContent = 'Client Name';
+        }
+        const sig = document.getElementById('contract-client-sig');
+        if (sig) sig.textContent = contractClientEl.textContent;
+      });
+      contractClientEl.addEventListener('input', () => {
+        const sig = document.getElementById('contract-client-sig');
+        if (sig) sig.textContent = contractClientEl.textContent;
+      });
+    }
 
     // Send confirmation modal
     document.getElementById('send-confirm-cancel')?.addEventListener('click', () => {
