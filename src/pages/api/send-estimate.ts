@@ -140,6 +140,7 @@ CT HIC Reg. #0647302`;
 
     const emailPayload: Record<string, any> = {
       from: 'Daragh McLoughlin <daragh@soullab.life>',
+      reply_to: 'daraghmcloughlin1982@gmail.com',
       to: [clientEmail],
       subject: `Old Head Plaster — Project Estimate${projectName ? ` for ${projectName}` : ''}`,
       html: emailHtml,
