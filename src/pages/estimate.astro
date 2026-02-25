@@ -4843,24 +4843,32 @@ const finishTypes = [
 <head>
   <meta charset="utf-8">
   <title>Old Head Plaster — Contract</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap">
   ${styleLinks}
   ${inlineStyles}
   <style>
     @page { margin: 0; size: letter; }
     body { margin: 0; padding: 0; background: white; }
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    [data-astro-cid-z74meu4i] { all: revert; }
   </style>
 </head>
 <body>
 ${clone.outerHTML}
+<script>
+  // Print once fonts and images are ready
+  window.onload = function() {
+    setTimeout(function() {
+      window.focus();
+      window.print();
+      window.close();
+    }, 500);
+  };
+<\/script>
 </body>
 </html>`);
     printWindow.document.close();
-    printWindow.onload = () => {
-      printWindow.focus();
-      printWindow.print();
-      printWindow.close();
-    };
   }
 
   function downloadContractPDF() {
