@@ -4786,10 +4786,115 @@ const finishTypes = [
   }
 
   function printContract() {
+    openContractPrintWindow('Old Head Plaster — Contract', null);
+  }
+
+  async function downloadContractPDF() {
+    const client = document.getElementById('contract-client')?.textContent || 'Client';
+    const date = new Date().toISOString().split('T')[0];
+    const contractNumber = document.getElementById('contract-number')?.textContent || '';
+
+    const btn = document.getElementById('contract-download-btn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generating...';
+    btn.disabled = true;
+
+    try {
+      const filename = `OldHeadPlaster_Contract_${client.replace(/\s+/g, '_')}_${date}.pdf`;
+      const contractHtml = buildContractHTML();
+
+      const pdfResponse = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ html: contractHtml })
+      });
+
+      if (!pdfResponse.ok) throw new Error('PDF generation failed');
+      const pdfBlob = await pdfResponse.blob();
+
+      // Trigger browser download
+      const url = URL.createObjectURL(pdfBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+
+      // Auto-file to documents
+      let amount = '$0';
+      if (bespokeMode) {
+        const total = bespokeSections.reduce((sum, s) => sum + s.subtotal, 0);
+        amount = '$' + total.toLocaleString();
+      }
+      fileContractToDocuments(contractNumber, client, amount, 'downloaded');
+    } catch (err) {
+      console.error('Download PDF error:', err);
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      alert('PDF generation failed. Please try Print and save as PDF instead.');
+    }
+  }
+
+  // Build the full contract HTML document for server-side PDF rendering
+  function buildContractHTML() {
+    const contractDoc = document.getElementById('contract-document');
+    if (!contractDoc) return '';
+
+    // Snapshot canvases to data URLs
+    const canvases = contractDoc.querySelectorAll('canvas');
+    const canvasDataUrls = [];
+    canvases.forEach(canvas => {
+      try {
+        const w = canvas.width || canvas.offsetWidth;
+        const h = canvas.height || canvas.offsetHeight;
+        canvasDataUrls.push({ id: canvas.id, src: (w > 0 && h > 0) ? canvas.toDataURL('image/png') : null, w, h });
+      } catch(e) { canvasDataUrls.push({ id: canvas.id, src: null }); }
+    });
+
+    const clone = contractDoc.cloneNode(true);
+    canvasDataUrls.forEach(({ id, src, w, h }) => {
+      const el = clone.querySelector('#' + id);
+      if (el && el.parentNode) {
+        if (src) {
+          const img = document.createElement('img');
+          img.src = src;
+          img.style.cssText = el.style.cssText;
+          img.style.width = w + 'px';
+          img.style.height = h + 'px';
+          el.parentNode.replaceChild(img, el);
+        } else { el.parentNode.removeChild(el); }
+      }
+    });
+    clone.querySelectorAll('button, [id$="-btn"], #send-confirm-modal').forEach(el => el.remove());
+
+    // Inline all stylesheets as full text so Puppeteer doesn't need to fetch them
+    const inlineStyles = Array.from(document.querySelectorAll('style'))
+      .map(s => `<style>${s.innerHTML}</style>`).join('\n');
+
+    return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap">
+  ${inlineStyles}
+  <style>
+    @page { margin: 0; size: letter; }
+    body { margin: 0; padding: 0; background: white; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  </style>
+</head>
+<body>${clone.outerHTML}</body>
+</html>`;
+  }
+
+  // Shared helper: open contract in a print window. onDone called after print dialog dismissed.
+  function openContractPrintWindow(suggestedFilename, onDone) {
     const contractDoc = document.getElementById('contract-document');
     if (!contractDoc) return;
 
-    // Collect all stylesheet links and style tags from the current page
     const styleLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
       .map(l => `<link rel="stylesheet" href="${l.href}">`)
       .join('\n');
@@ -4797,44 +4902,31 @@ const finishTypes = [
       .map(s => `<style>${s.innerHTML}</style>`)
       .join('\n');
 
-    // Capture canvas elements as data URLs before cloning
+    // Snapshot canvases
     const canvases = contractDoc.querySelectorAll('canvas');
     const canvasDataUrls = [];
     canvases.forEach(canvas => {
       try {
         const w = canvas.width || canvas.offsetWidth;
         const h = canvas.height || canvas.offsetHeight;
-        if (w > 0 && h > 0) {
-          canvasDataUrls.push({ id: canvas.id, src: canvas.toDataURL('image/png'), w, h });
-        } else {
-          canvasDataUrls.push({ id: canvas.id, src: null });
-        }
-      } catch(e) {
-        canvasDataUrls.push({ id: canvas.id, src: null });
-      }
+        canvasDataUrls.push({ id: canvas.id, src: (w > 0 && h > 0) ? canvas.toDataURL('image/png') : null, w, h });
+      } catch(e) { canvasDataUrls.push({ id: canvas.id, src: null }); }
     });
 
-    // Clone the contract document HTML
     const clone = contractDoc.cloneNode(true);
-
-    // Replace canvas elements with <img> snapshots in the clone
     canvasDataUrls.forEach(({ id, src, w, h }) => {
-      const cloneCanvas = clone.querySelector(`#${id}`);
-      if (cloneCanvas && cloneCanvas.parentNode) {
+      const el = clone.querySelector('#' + id);
+      if (el && el.parentNode) {
         if (src) {
           const img = document.createElement('img');
           img.src = src;
-          img.style.cssText = cloneCanvas.style.cssText;
+          img.style.cssText = el.style.cssText;
           img.style.width = w + 'px';
           img.style.height = h + 'px';
-          cloneCanvas.parentNode.replaceChild(img, cloneCanvas);
-        } else {
-          cloneCanvas.parentNode.removeChild(cloneCanvas);
-        }
+          el.parentNode.replaceChild(img, el);
+        } else { el.parentNode.removeChild(el); }
       }
     });
-
-    // Remove interactive UI elements not needed in print
     clone.querySelectorAll('button, [id$="-btn"], #send-confirm-modal').forEach(el => el.remove());
 
     const printWindow = window.open('', '_blank', 'width=900,height=700');
@@ -4842,7 +4934,7 @@ const finishTypes = [
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Old Head Plaster — Contract</title>
+  <title>${suggestedFilename || 'Old Head Plaster — Contract'}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap">
   ${styleLinks}
@@ -4851,65 +4943,22 @@ const finishTypes = [
     @page { margin: 0; size: letter; }
     body { margin: 0; padding: 0; background: white; }
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    [data-astro-cid-z74meu4i] { all: revert; }
   </style>
 </head>
 <body>
 ${clone.outerHTML}
 <script>
-  // Print once fonts and images are ready
   window.onload = function() {
-    setTimeout(function() {
-      window.focus();
-      window.print();
-      window.close();
-    }, 500);
+    setTimeout(function() { window.focus(); window.print(); }, 500);
   };
 <\/script>
 </body>
 </html>`);
     printWindow.document.close();
-  }
-
-  function downloadContractPDF() {
-    const element = document.getElementById('contract-document');
-    const client = document.getElementById('contract-client')?.textContent || 'Client';
-    const date = new Date().toISOString().split('T')[0];
-
-    const opt = {
-      margin: 0,
-      filename: `OldHeadPlaster_Contract_${client.replace(/\s+/g, '_')}_${date}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-    };
-
-    const btn = document.getElementById('contract-download-btn');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
-    btn.disabled = true;
-
-    const pdfElement = cloneForPDF(element);
-    html2pdf().set(opt).from(pdfElement).save().then(() => {
-      if (pdfElement.parentNode) pdfElement.parentNode.removeChild(pdfElement);
-      btn.innerHTML = originalText;
-      btn.disabled = false;
-
-      // Auto-file to documents on download
-      const contractNumber = document.getElementById('contract-number')?.textContent || '';
-      let amount = '$0';
-      if (bespokeMode) {
-        const total = bespokeSections.reduce((sum, s) => sum + s.subtotal, 0);
-        amount = '$' + total.toLocaleString();
-      }
-      fileContractToDocuments(contractNumber, client, amount, 'downloaded');
-    }).catch(err => {
-      if (pdfElement.parentNode) pdfElement.parentNode.removeChild(pdfElement);
-      console.error('Contract PDF error:', err);
-      btn.innerHTML = originalText;
-      btn.disabled = false;
-      alert('PDF generation failed. Please try again.');
-    });
+    if (onDone) {
+      // Call onDone after a generous delay (user dismisses print dialog)
+      setTimeout(onDone, 2000);
+    }
   }
 
   function sendContract() {
@@ -4990,26 +5039,23 @@ ${clone.outerHTML}
     updateContractStatus('sending', 'Generating PDF & sending...');
 
     try {
-      // Generate PDF from the contract document (cloned for oklab color compat)
-      const element = document.getElementById('contract-document');
-      const pdfElement = cloneForPDF(element);
+      // Generate PDF server-side via Puppeteer
       const date = new Date().toISOString().split('T')[0];
+      const filename = `OldHeadPlaster_Contract_${client.replace(/\s+/g, '_')}_${date}.pdf`;
+      const contractHtml = buildContractHTML();
 
-      const opt = {
-        margin: 0,
-        filename: `OldHeadPlaster_Contract_${client.replace(/\s+/g, '_')}_${date}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-      };
+      const pdfResponse = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ html: contractHtml })
+      });
 
-      // Generate PDF as blob
-      const pdfBlob = await html2pdf().set(opt).from(pdfElement).outputPdf('blob');
-      if (pdfElement.parentNode) pdfElement.parentNode.removeChild(pdfElement);
+      if (!pdfResponse.ok) throw new Error('PDF generation failed');
+      const pdfBlob = await pdfResponse.blob();
 
       // Create FormData with PDF and contract details
       const formData = new FormData();
-      formData.append('pdf', new File([pdfBlob], opt.filename, { type: 'application/pdf' }));
+      formData.append('pdf', new File([pdfBlob], filename, { type: 'application/pdf' }));
       formData.append('clientName', client);
       formData.append('clientEmail', clientEmail);
       if (sendSms && clientPhone) formData.append('clientPhone', clientPhone);
