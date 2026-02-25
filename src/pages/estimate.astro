@@ -4870,7 +4870,13 @@ const finishTypes = [
     });
     clone.querySelectorAll('button, [id$="-btn"], #send-confirm-modal').forEach(el => el.remove());
 
-    // Inline all stylesheets as full text so Puppeteer doesn't need to fetch them
+    // Use absolute URLs for all stylesheets so they work in print windows and Puppeteer
+    const origin = window.location.origin;
+    const styleLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+      .map(l => {
+        const href = l.href.startsWith('http') ? l.href : origin + l.href;
+        return `<link rel="stylesheet" href="${href}">`;
+      }).join('\n');
     const inlineStyles = Array.from(document.querySelectorAll('style'))
       .map(s => `<style>${s.innerHTML}</style>`).join('\n');
 
@@ -4878,7 +4884,9 @@ const finishTypes = [
 <html>
 <head>
   <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap">
+  ${styleLinks}
   ${inlineStyles}
   <style>
     @page { margin: 0; size: letter; }
@@ -4890,75 +4898,23 @@ const finishTypes = [
 </html>`;
   }
 
-  // Shared helper: open contract in a print window. onDone called after print dialog dismissed.
+  // Shared helper: open contract in a print window using fully self-contained HTML
   function openContractPrintWindow(suggestedFilename, onDone) {
-    const contractDoc = document.getElementById('contract-document');
-    if (!contractDoc) return;
-
-    const styleLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
-      .map(l => `<link rel="stylesheet" href="${l.href}">`)
-      .join('\n');
-    const inlineStyles = Array.from(document.querySelectorAll('style'))
-      .map(s => `<style>${s.innerHTML}</style>`)
-      .join('\n');
-
-    // Snapshot canvases
-    const canvases = contractDoc.querySelectorAll('canvas');
-    const canvasDataUrls = [];
-    canvases.forEach(canvas => {
-      try {
-        const w = canvas.width || canvas.offsetWidth;
-        const h = canvas.height || canvas.offsetHeight;
-        canvasDataUrls.push({ id: canvas.id, src: (w > 0 && h > 0) ? canvas.toDataURL('image/png') : null, w, h });
-      } catch(e) { canvasDataUrls.push({ id: canvas.id, src: null }); }
-    });
-
-    const clone = contractDoc.cloneNode(true);
-    canvasDataUrls.forEach(({ id, src, w, h }) => {
-      const el = clone.querySelector('#' + id);
-      if (el && el.parentNode) {
-        if (src) {
-          const img = document.createElement('img');
-          img.src = src;
-          img.style.cssText = el.style.cssText;
-          img.style.width = w + 'px';
-          img.style.height = h + 'px';
-          el.parentNode.replaceChild(img, el);
-        } else { el.parentNode.removeChild(el); }
-      }
-    });
-    clone.querySelectorAll('button, [id$="-btn"], #send-confirm-modal').forEach(el => el.remove());
+    // Reuse buildContractHTML which properly inlines all styles with absolute URLs
+    const html = buildContractHTML().replace(
+      '<body>',
+      `<body><script>
+  window.onload = function() {
+    document.title = ${JSON.stringify(suggestedFilename || 'Old Head Plaster — Contract')};
+    setTimeout(function() { window.focus(); window.print(); }, 1200);
+  };
+<\/script>`
+    );
 
     const printWindow = window.open('', '_blank', 'width=900,height=700');
-    printWindow.document.write(`<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>${suggestedFilename || 'Old Head Plaster — Contract'}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap">
-  ${styleLinks}
-  ${inlineStyles}
-  <style>
-    @page { margin: 0; size: letter; }
-    body { margin: 0; padding: 0; background: white; }
-    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  </style>
-</head>
-<body>
-${clone.outerHTML}
-<script>
-  window.onload = function() {
-    setTimeout(function() { window.focus(); window.print(); }, 500);
-  };
-<\/script>
-</body>
-</html>`);
+    printWindow.document.write(html);
     printWindow.document.close();
-    if (onDone) {
-      // Call onDone after a generous delay (user dismisses print dialog)
-      setTimeout(onDone, 2000);
-    }
+    if (onDone) setTimeout(onDone, 2000);
   }
 
   function sendContract() {
