@@ -67,7 +67,7 @@ async function sendEmail(to: string, subject: string, body: string) {
 async function sendSMS(to: string, message: string) {
   const accountSid = import.meta.env.TWILIO_ACCOUNT_SID;
   const authToken = import.meta.env.TWILIO_AUTH_TOKEN;
-  const fromPhone = import.meta.env.TWILIO_PHONE_NUMBER;
+  const fromPhone = import.meta.env.TWILIO_FROM_NUMBER || import.meta.env.TWILIO_PHONE_NUMBER;
 
   if (!accountSid || !authToken || !fromPhone) {
     console.log('Twilio not configured, skipping SMS');

@@ -16,7 +16,7 @@ export const POST: APIRoute = async ({ request }) => {
     // Get Twilio credentials from environment
     const accountSid = import.meta.env.TWILIO_ACCOUNT_SID;
     const authToken = import.meta.env.TWILIO_AUTH_TOKEN;
-    const fromPhone = import.meta.env.TWILIO_PHONE_NUMBER;
+    const fromPhone = import.meta.env.TWILIO_FROM_NUMBER || import.meta.env.TWILIO_PHONE_NUMBER;
 
     if (!accountSid || !authToken || !fromPhone) {
       console.log('Twilio not configured, using fallback');

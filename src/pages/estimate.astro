@@ -4080,6 +4080,61 @@ const finishTypes = [
     }
   }
 
+  // ===== PDF COLOR FIX =====
+  // Tailwind v4 uses oklab/oklch color space which html2canvas cannot parse.
+  // This function clones an element and converts all computed colors to sRGB.
+  function cloneForPDF(element) {
+    const clone = element.cloneNode(true);
+    // Temporarily attach clone off-screen to compute styles
+    clone.style.position = 'fixed';
+    clone.style.left = '-9999px';
+    clone.style.top = '0';
+    document.body.appendChild(clone);
+
+    const colorProps = ['color', 'background-color', 'border-color',
+      'border-top-color', 'border-bottom-color', 'border-left-color',
+      'border-right-color', 'outline-color', 'text-decoration-color',
+      'box-shadow'];
+
+    // Create a canvas to convert colors
+    const ctx = document.createElement('canvas').getContext('2d');
+
+    function oklabToRGB(colorStr) {
+      if (!colorStr || colorStr === 'transparent' || colorStr === 'rgba(0, 0, 0, 0)') return colorStr;
+      if (!colorStr.includes('oklab') && !colorStr.includes('oklch') && !colorStr.includes('color-mix')) return colorStr;
+      try {
+        ctx.fillStyle = 'rgba(0,0,0,0)';
+        ctx.fillStyle = colorStr;
+        // Canvas converts to sRGB automatically
+        ctx.fillRect(0, 0, 1, 1);
+        const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+        return a < 255 ? `rgba(${r}, ${g}, ${b}, ${(a/255).toFixed(3)})` : `rgb(${r}, ${g}, ${b})`;
+      } catch(e) {
+        return colorStr;
+      }
+    }
+
+    const allEls = clone.querySelectorAll('*');
+    [clone, ...allEls].forEach(el => {
+      const computed = getComputedStyle(el);
+      colorProps.forEach(prop => {
+        const val = computed.getPropertyValue(prop);
+        if (val && (val.includes('oklab') || val.includes('oklch'))) {
+          el.style.setProperty(prop, oklabToRGB(val));
+        }
+      });
+      // Handle background shorthand
+      const bg = computed.getPropertyValue('background');
+      if (bg && (bg.includes('oklab') || bg.includes('oklch'))) {
+        const bgColor = computed.getPropertyValue('background-color');
+        el.style.setProperty('background-color', oklabToRGB(bgColor));
+      }
+    });
+
+    document.body.removeChild(clone);
+    return clone;
+  }
+
   function downloadQuotePDF() {
     const element = document.getElementById('quote-document');
     const client = document.getElementById('quote-client')?.textContent || 'Client';
@@ -4099,9 +4154,15 @@ const finishTypes = [
     btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generating...';
     btn.disabled = true;
 
-    html2pdf().set(opt).from(element).save().then(() => {
+    const pdfElement = cloneForPDF(element);
+    html2pdf().set(opt).from(pdfElement).save().then(() => {
       btn.innerHTML = originalText;
       btn.disabled = false;
+    }).catch(err => {
+      console.error('Quote PDF error:', err);
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      alert('PDF generation failed. Please try again.');
     });
   }
 
@@ -4131,14 +4192,15 @@ const finishTypes = [
     btn.disabled = true;
 
     try {
-      // Generate PDF blob from the quote document
+      // Generate PDF blob from the quote document (cloned for oklab color compat)
       const quoteEl = document.getElementById('quote-document');
+      const pdfQuoteClone = cloneForPDF(quoteEl);
       const pdfBlob = await html2pdf().set({
         margin: 0,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-      }).from(quoteEl).outputPdf('blob');
+      }).from(pdfQuoteClone).outputPdf('blob');
 
       const formData = new FormData();
       formData.append('clientName', clientName);
@@ -4686,7 +4748,8 @@ const finishTypes = [
     btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
     btn.disabled = true;
 
-    html2pdf().set(opt).from(element).save().then(() => {
+    const pdfElement = cloneForPDF(element);
+    html2pdf().set(opt).from(pdfElement).save().then(() => {
       btn.innerHTML = originalText;
       btn.disabled = false;
 
@@ -4698,6 +4761,11 @@ const finishTypes = [
         amount = '$' + total.toLocaleString();
       }
       fileContractToDocuments(contractNumber, client, amount, 'downloaded');
+    }).catch(err => {
+      console.error('Contract PDF error:', err);
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      alert('PDF generation failed. Please try again.');
     });
   }
 
@@ -4779,8 +4847,9 @@ const finishTypes = [
     updateContractStatus('sending', 'Generating PDF & sending...');
 
     try {
-      // Generate PDF from the contract document
+      // Generate PDF from the contract document (cloned for oklab color compat)
       const element = document.getElementById('contract-document');
+      const pdfElement = cloneForPDF(element);
       const date = new Date().toISOString().split('T')[0];
 
       const opt = {
@@ -4792,7 +4861,7 @@ const finishTypes = [
       };
 
       // Generate PDF as blob
-      const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
+      const pdfBlob = await html2pdf().set(opt).from(pdfElement).outputPdf('blob');
 
       // Create FormData with PDF and contract details
       const formData = new FormData();

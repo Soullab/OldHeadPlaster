@@ -154,7 +154,7 @@ CT HIC Reg. #0647302`;
       // Also send SMS notification if phone provided
       const twilioSid = import.meta.env.TWILIO_ACCOUNT_SID;
       const twilioToken = import.meta.env.TWILIO_AUTH_TOKEN;
-      const twilioPhone = import.meta.env.TWILIO_PHONE_NUMBER;
+      const twilioPhone = import.meta.env.TWILIO_FROM_NUMBER || import.meta.env.TWILIO_PHONE_NUMBER;
 
       let smsSent = false;
       if (clientPhone && twilioSid && twilioToken && twilioPhone) {
