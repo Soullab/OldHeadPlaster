@@ -4095,19 +4095,23 @@ const finishTypes = [
     clone.setAttribute('data-pdf-clone', 'true');
     document.body.appendChild(clone);
 
-    // Copy canvas content (e.g. signature pad) from original to clone
+    // Replace canvas elements with <img> snapshots to avoid drawImage 0x0 errors.
+    // html2canvas chokes on cloned canvas elements; static images work reliably.
     const origCanvases = element.querySelectorAll('canvas');
     const cloneCanvases = clone.querySelectorAll('canvas');
     origCanvases.forEach((origCanvas, i) => {
       if (cloneCanvases[i]) {
-        const cloneCanvas = cloneCanvases[i];
-        cloneCanvas.width = origCanvas.width;
-        cloneCanvas.height = origCanvas.height;
         try {
-          const ctx = cloneCanvas.getContext('2d');
-          ctx.drawImage(origCanvas, 0, 0);
+          const img = document.createElement('img');
+          img.src = origCanvas.toDataURL('image/png');
+          img.width = origCanvas.width;
+          img.height = origCanvas.height;
+          img.style.width = origCanvas.offsetWidth + 'px';
+          img.style.height = origCanvas.offsetHeight + 'px';
+          cloneCanvases[i].parentNode.replaceChild(img, cloneCanvases[i]);
         } catch(e) {
-          // Canvas may be tainted, skip
+          // Canvas may be tainted — just remove it to prevent crash
+          cloneCanvases[i].parentNode.removeChild(cloneCanvases[i]);
         }
       }
     });
