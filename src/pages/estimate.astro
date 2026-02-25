@@ -4087,11 +4087,12 @@ const finishTypes = [
   // and is cleaned up automatically after pdf generation.
   function cloneForPDF(element) {
     const clone = element.cloneNode(true);
-    // Position off-screen but keep in DOM (html2pdf needs attached elements)
-    clone.style.position = 'fixed';
+    // Use absolute positioning off-screen — fixed causes html2canvas to measure 0 height
+    clone.style.position = 'absolute';
     clone.style.left = '-9999px';
     clone.style.top = '0';
     clone.style.width = element.offsetWidth + 'px';
+    clone.style.height = element.offsetHeight + 'px';
     clone.setAttribute('data-pdf-clone', 'true');
     document.body.appendChild(clone);
 
