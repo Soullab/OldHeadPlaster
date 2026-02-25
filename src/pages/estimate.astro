@@ -4102,13 +4102,27 @@ const finishTypes = [
     origCanvases.forEach((origCanvas, i) => {
       if (cloneCanvases[i]) {
         try {
-          const img = document.createElement('img');
-          img.src = origCanvas.toDataURL('image/png');
-          img.width = origCanvas.width;
-          img.height = origCanvas.height;
-          img.style.width = origCanvas.offsetWidth + 'px';
-          img.style.height = origCanvas.offsetHeight + 'px';
-          cloneCanvases[i].parentNode.replaceChild(img, cloneCanvases[i]);
+          // Use pixel dimensions — fall back to offsetWidth if canvas.width is 0
+          const pxW = origCanvas.width || origCanvas.offsetWidth;
+          const pxH = origCanvas.height || origCanvas.offsetHeight;
+          if (pxW > 0 && pxH > 0) {
+            // Ensure canvas backing store matches its display size before snapshot
+            if (origCanvas.width === 0) {
+              origCanvas.width = pxW;
+              origCanvas.height = pxH;
+            }
+            const img = document.createElement('img');
+            img.src = origCanvas.toDataURL('image/png');
+            img.width = pxW;
+            img.height = pxH;
+            img.style.width = pxW + 'px';
+            img.style.height = pxH + 'px';
+            img.style.cssText = origCanvas.style.cssText;
+            cloneCanvases[i].parentNode.replaceChild(img, cloneCanvases[i]);
+          } else {
+            // Canvas has no dimensions — remove to prevent drawImage crash
+            cloneCanvases[i].parentNode.removeChild(cloneCanvases[i]);
+          }
         } catch(e) {
           // Canvas may be tainted — just remove it to prevent crash
           cloneCanvases[i].parentNode.removeChild(cloneCanvases[i]);
@@ -4309,7 +4323,7 @@ const finishTypes = [
 
     // Contract modal
     document.getElementById('close-contract-modal')?.addEventListener('click', closeContractModal);
-    document.getElementById('contract-print-btn')?.addEventListener('click', () => window.print());
+    document.getElementById('contract-print-btn')?.addEventListener('click', printContract);
     document.getElementById('contract-download-btn')?.addEventListener('click', downloadContractPDF);
     document.getElementById('contract-file-btn')?.addEventListener('click', fileCurrentContract);
     document.getElementById('contract-send-btn')?.addEventListener('click', sendContract);
@@ -4768,6 +4782,84 @@ const finishTypes = [
       hasSigned = false;
       document.getElementById('signature-placeholder')?.classList.remove('hidden');
     });
+  }
+
+  function printContract() {
+    const contractDoc = document.getElementById('contract-document');
+    if (!contractDoc) return;
+
+    // Collect all stylesheet links and style tags from the current page
+    const styleLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+      .map(l => `<link rel="stylesheet" href="${l.href}">`)
+      .join('\n');
+    const inlineStyles = Array.from(document.querySelectorAll('style'))
+      .map(s => `<style>${s.innerHTML}</style>`)
+      .join('\n');
+
+    // Capture canvas elements as data URLs before cloning
+    const canvases = contractDoc.querySelectorAll('canvas');
+    const canvasDataUrls = [];
+    canvases.forEach(canvas => {
+      try {
+        const w = canvas.width || canvas.offsetWidth;
+        const h = canvas.height || canvas.offsetHeight;
+        if (w > 0 && h > 0) {
+          canvasDataUrls.push({ id: canvas.id, src: canvas.toDataURL('image/png'), w, h });
+        } else {
+          canvasDataUrls.push({ id: canvas.id, src: null });
+        }
+      } catch(e) {
+        canvasDataUrls.push({ id: canvas.id, src: null });
+      }
+    });
+
+    // Clone the contract document HTML
+    const clone = contractDoc.cloneNode(true);
+
+    // Replace canvas elements with <img> snapshots in the clone
+    canvasDataUrls.forEach(({ id, src, w, h }) => {
+      const cloneCanvas = clone.querySelector(`#${id}`);
+      if (cloneCanvas && cloneCanvas.parentNode) {
+        if (src) {
+          const img = document.createElement('img');
+          img.src = src;
+          img.style.cssText = cloneCanvas.style.cssText;
+          img.style.width = w + 'px';
+          img.style.height = h + 'px';
+          cloneCanvas.parentNode.replaceChild(img, cloneCanvas);
+        } else {
+          cloneCanvas.parentNode.removeChild(cloneCanvas);
+        }
+      }
+    });
+
+    // Remove interactive UI elements not needed in print
+    clone.querySelectorAll('button, [id$="-btn"], #send-confirm-modal').forEach(el => el.remove());
+
+    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    printWindow.document.write(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Old Head Plaster — Contract</title>
+  ${styleLinks}
+  ${inlineStyles}
+  <style>
+    @page { margin: 0; size: letter; }
+    body { margin: 0; padding: 0; background: white; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  </style>
+</head>
+<body>
+${clone.outerHTML}
+</body>
+</html>`);
+    printWindow.document.close();
+    printWindow.onload = () => {
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    };
   }
 
   function downloadContractPDF() {
