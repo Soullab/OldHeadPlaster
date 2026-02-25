@@ -33,7 +33,7 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    const resendApiKey = import.meta.env.RESEND_API_KEY;
+    const resendApiKey = process.env.RESEND_API_KEY;
     if (!resendApiKey) {
       return new Response(
         JSON.stringify({ success: false, error: 'Email service not configured' }),
@@ -171,9 +171,9 @@ CT HIC Reg. #0647302`;
 
     if (response.ok) {
       // Also send SMS notification if phone provided
-      const twilioSid = import.meta.env.TWILIO_ACCOUNT_SID;
-      const twilioToken = import.meta.env.TWILIO_AUTH_TOKEN;
-      const twilioPhone = import.meta.env.TWILIO_FROM_NUMBER || import.meta.env.TWILIO_PHONE_NUMBER;
+      const twilioSid = process.env.TWILIO_ACCOUNT_SID;
+      const twilioToken = process.env.TWILIO_AUTH_TOKEN;
+      const twilioPhone = process.env.TWILIO_FROM_NUMBER || process.env.TWILIO_PHONE_NUMBER;
 
       let smsSent = false;
       if (clientPhone && twilioSid && twilioToken && twilioPhone) {
