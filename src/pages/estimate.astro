@@ -4082,32 +4082,67 @@ const finishTypes = [
 
   // ===== PDF COLOR FIX =====
   // Tailwind v4 uses oklab/oklch color space which html2canvas cannot parse.
-  // This function clones an element and converts all computed colors to sRGB.
+  // This function clones an element, converts oklab/oklch to sRGB, copies canvas
+  // content, and returns a clone ready for html2pdf. Clone stays in DOM off-screen
+  // and is cleaned up automatically after pdf generation.
   function cloneForPDF(element) {
     const clone = element.cloneNode(true);
-    // Temporarily attach clone off-screen to compute styles
+    // Position off-screen but keep in DOM (html2pdf needs attached elements)
     clone.style.position = 'fixed';
     clone.style.left = '-9999px';
     clone.style.top = '0';
+    clone.style.width = element.offsetWidth + 'px';
+    clone.setAttribute('data-pdf-clone', 'true');
     document.body.appendChild(clone);
+
+    // Copy canvas content (e.g. signature pad) from original to clone
+    const origCanvases = element.querySelectorAll('canvas');
+    const cloneCanvases = clone.querySelectorAll('canvas');
+    origCanvases.forEach((origCanvas, i) => {
+      if (cloneCanvases[i]) {
+        const cloneCanvas = cloneCanvases[i];
+        cloneCanvas.width = origCanvas.width;
+        cloneCanvas.height = origCanvas.height;
+        try {
+          const ctx = cloneCanvas.getContext('2d');
+          ctx.drawImage(origCanvas, 0, 0);
+        } catch(e) {
+          // Canvas may be tainted, skip
+        }
+      }
+    });
+
+    // Copy input/textarea values from original to clone
+    const origInputs = element.querySelectorAll('input, textarea, select');
+    const cloneInputs = clone.querySelectorAll('input, textarea, select');
+    origInputs.forEach((origInput, i) => {
+      if (cloneInputs[i]) {
+        if (origInput.type === 'checkbox' || origInput.type === 'radio') {
+          cloneInputs[i].checked = origInput.checked;
+        } else {
+          cloneInputs[i].value = origInput.value;
+        }
+      }
+    });
 
     const colorProps = ['color', 'background-color', 'border-color',
       'border-top-color', 'border-bottom-color', 'border-left-color',
-      'border-right-color', 'outline-color', 'text-decoration-color',
-      'box-shadow'];
+      'border-right-color', 'outline-color', 'text-decoration-color'];
 
-    // Create a canvas to convert colors
-    const ctx = document.createElement('canvas').getContext('2d');
+    // Create a tiny canvas to convert oklab/oklch colors to sRGB
+    const convCanvas = document.createElement('canvas');
+    convCanvas.width = 1;
+    convCanvas.height = 1;
+    const convCtx = convCanvas.getContext('2d');
 
     function oklabToRGB(colorStr) {
       if (!colorStr || colorStr === 'transparent' || colorStr === 'rgba(0, 0, 0, 0)') return colorStr;
       if (!colorStr.includes('oklab') && !colorStr.includes('oklch') && !colorStr.includes('color-mix')) return colorStr;
       try {
-        ctx.fillStyle = 'rgba(0,0,0,0)';
-        ctx.fillStyle = colorStr;
-        // Canvas converts to sRGB automatically
-        ctx.fillRect(0, 0, 1, 1);
-        const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+        convCtx.clearRect(0, 0, 1, 1);
+        convCtx.fillStyle = colorStr;
+        convCtx.fillRect(0, 0, 1, 1);
+        const [r, g, b, a] = convCtx.getImageData(0, 0, 1, 1).data;
         return a < 255 ? `rgba(${r}, ${g}, ${b}, ${(a/255).toFixed(3)})` : `rgb(${r}, ${g}, ${b})`;
       } catch(e) {
         return colorStr;
@@ -4123,15 +4158,13 @@ const finishTypes = [
           el.style.setProperty(prop, oklabToRGB(val));
         }
       });
-      // Handle background shorthand
-      const bg = computed.getPropertyValue('background');
-      if (bg && (bg.includes('oklab') || bg.includes('oklch'))) {
-        const bgColor = computed.getPropertyValue('background-color');
-        el.style.setProperty('background-color', oklabToRGB(bgColor));
-      }
     });
 
-    document.body.removeChild(clone);
+    // Auto-cleanup: remove clone after a generous timeout (pdf gen can take a while)
+    setTimeout(() => {
+      if (clone.parentNode) clone.parentNode.removeChild(clone);
+    }, 60000);
+
     return clone;
   }
 
@@ -4156,9 +4189,11 @@ const finishTypes = [
 
     const pdfElement = cloneForPDF(element);
     html2pdf().set(opt).from(pdfElement).save().then(() => {
+      if (pdfElement.parentNode) pdfElement.parentNode.removeChild(pdfElement);
       btn.innerHTML = originalText;
       btn.disabled = false;
     }).catch(err => {
+      if (pdfElement.parentNode) pdfElement.parentNode.removeChild(pdfElement);
       console.error('Quote PDF error:', err);
       btn.innerHTML = originalText;
       btn.disabled = false;
@@ -4201,6 +4236,7 @@ const finishTypes = [
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
       }).from(pdfQuoteClone).outputPdf('blob');
+      if (pdfQuoteClone.parentNode) pdfQuoteClone.parentNode.removeChild(pdfQuoteClone);
 
       const formData = new FormData();
       formData.append('clientName', clientName);
@@ -4750,6 +4786,7 @@ const finishTypes = [
 
     const pdfElement = cloneForPDF(element);
     html2pdf().set(opt).from(pdfElement).save().then(() => {
+      if (pdfElement.parentNode) pdfElement.parentNode.removeChild(pdfElement);
       btn.innerHTML = originalText;
       btn.disabled = false;
 
@@ -4762,6 +4799,7 @@ const finishTypes = [
       }
       fileContractToDocuments(contractNumber, client, amount, 'downloaded');
     }).catch(err => {
+      if (pdfElement.parentNode) pdfElement.parentNode.removeChild(pdfElement);
       console.error('Contract PDF error:', err);
       btn.innerHTML = originalText;
       btn.disabled = false;
@@ -4862,6 +4900,7 @@ const finishTypes = [
 
       // Generate PDF as blob
       const pdfBlob = await html2pdf().set(opt).from(pdfElement).outputPdf('blob');
+      if (pdfElement.parentNode) pdfElement.parentNode.removeChild(pdfElement);
 
       // Create FormData with PDF and contract details
       const formData = new FormData();
