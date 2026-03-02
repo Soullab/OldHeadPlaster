@@ -1,51 +1,50 @@
 import type { APIRoute } from 'astro';
-import puppeteer from 'puppeteer-core';
-import chromium from '@sparticuz/chromium-min';
 
 export const prerender = false;
 
+const PDF_SERVICE_URL = process.env.PDF_SERVICE_URL || 'http://minisforum:3033';
+
 export const POST: APIRoute = async ({ request }) => {
-  let browser = null;
   try {
-    const { html } = await request.json();
+    const { html, filename } = await request.json();
+
     if (!html) {
-      return new Response(JSON.stringify({ error: 'html is required' }), {
-        status: 400, headers: { 'Content-Type': 'application/json' }
-      });
+      return new Response(
+        JSON.stringify({ error: 'html is required' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
     }
 
-    // Launch headless browser
-    browser = await puppeteer.launch({
-      args: chromium.args,
-      executablePath: await chromium.executablePath(
-        'https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar'
-      ),
-      headless: true,
+    const upstream = await fetch(`${PDF_SERVICE_URL}/pdf`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ html, filename }),
     });
 
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0', timeout: 30000 });
+    if (!upstream.ok) {
+      const err = await upstream.text();
+      console.error('pdf-service error:', err);
+      return new Response(
+        JSON.stringify({ error: 'PDF generation failed' }),
+        { status: 502, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
 
-    const pdfBuffer = await page.pdf({
-      format: 'Letter',
-      printBackground: true,
-      margin: { top: 0, right: 0, bottom: 0, left: 0 },
-    });
+    const pdfBuffer = await upstream.arrayBuffer();
 
     return new Response(pdfBuffer, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="contract.pdf"',
-      }
+        'Content-Disposition': `attachment; filename="${filename || 'document.pdf'}"`,
+        'Content-Length': pdfBuffer.byteLength.toString(),
+      },
     });
-
-  } catch (error) {
-    console.error('PDF generation error:', error);
-    return new Response(JSON.stringify({ error: 'PDF generation failed', detail: String(error) }), {
-      status: 500, headers: { 'Content-Type': 'application/json' }
-    });
-  } finally {
-    if (browser) await browser.close();
+  } catch (err) {
+    console.error('generate-pdf proxy error:', err);
+    return new Response(
+      JSON.stringify({ error: 'Internal server error' }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
   }
 };

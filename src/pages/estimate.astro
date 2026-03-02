@@ -4423,6 +4423,16 @@ const finishTypes = [
     const signDateEl = el('contract-sign-date');
     if (signDateEl) signDateEl.value = formatDate(now);
 
+    const startDate = new Date(now);
+    startDate.setDate(startDate.getDate() + 14);
+    const startDateEl = el('contract-start-date');
+    if (startDateEl) startDateEl.value = formatDate(startDate);
+
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 7);
+    const endDateEl = el('contract-end-date');
+    if (endDateEl) endDateEl.value = formatDate(endDate);
+
     // Default client info (blank for bespoke)
     el('contract-client').textContent = 'Client';
     el('contract-location').textContent = '';
@@ -4498,7 +4508,7 @@ const finishTypes = [
       // Section header
       html += '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;">';
       html += '<div style="flex:1;">';
-      html += '<input type="text" value="' + section.title + '" onchange="bespokeSections[' + si + '].title=this.value;updateBespokeTotal()"';
+      html += '<input type="text" value="' + section.title + '" oninput="bespokeSections[' + si + '].title=this.value" onchange="bespokeSections[' + si + '].title=this.value;updateBespokeTotal()"';
       html += ' style="font-family:Cormorant Garamond,Georgia,serif;font-size:18px;color:#1C1C1E;font-weight:500;background:transparent;border:none;border-bottom:1px solid transparent;width:100%;padding-bottom:4px;outline:none;"';
       html += ' placeholder="Section title (e.g., Microcement Areas)" />';
       html += '</div>';
@@ -4528,7 +4538,7 @@ const finishTypes = [
       for (var ii = 0; ii < section.items.length; ii++) {
         var item = section.items[ii];
         html += '<div style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid rgba(236,234,231,0.6);gap:12px;">';
-        html += '<input type="text" value="' + item.name + '" onchange="bespokeSections[' + si + '].items[' + ii + '].name=this.value"';
+        html += '<input type="text" value="' + item.name + '" oninput="bespokeSections[' + si + '].items[' + ii + '].name=this.value" onchange="bespokeSections[' + si + '].items[' + ii + '].name=this.value"';
         html += ' style="flex:1;font-family:Inter,sans-serif;font-size:12px;color:#1C1C1E;background:transparent;border:none;outline:none;padding:0;"';
         html += ' placeholder="Area name (e.g., Master Bathroom)" />';
         html += '<div style="display:flex;align-items:baseline;gap:2px;">';
@@ -4785,45 +4795,67 @@ const finishTypes = [
     });
   }
 
-  function printContract() {
-    openContractPrintWindow('Old Head Plaster — Contract', null);
+  async function printContract() {
+    const printBtn = document.getElementById('contract-print-btn');
+    const originalHtml = printBtn?.innerHTML;
+    if (printBtn) {
+      printBtn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Preparing...';
+      printBtn.disabled = true;
+    }
+    try {
+      const html = buildContractHTML();
+      const filename = 'OldHeadPlaster_Contract.pdf';
+      const response = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ html, filename }),
+      });
+      if (!response.ok) throw new Error('PDF generation failed');
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    } catch (err) {
+      console.error('Print PDF error:', err);
+      openContractPrintWindow('Old Head Plaster — Contract', null);
+    } finally {
+      if (printBtn) { printBtn.innerHTML = originalHtml; printBtn.disabled = false; }
+    }
   }
 
   async function downloadContractPDF() {
     const client = document.getElementById('contract-client')?.textContent || 'Client';
     const date = new Date().toISOString().split('T')[0];
     const contractNumber = document.getElementById('contract-number')?.textContent || '';
+    const filename = `OldHeadPlaster_Contract_${client.replace(/\s+/g, '_')}_${date}.pdf`;
 
-    const btn = document.getElementById('contract-download-btn');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generating...';
-    btn.disabled = true;
+    const downloadBtn = document.getElementById('contract-download-btn');
+    const originalHtml = downloadBtn?.innerHTML;
+    if (downloadBtn) {
+      downloadBtn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generating...';
+      downloadBtn.disabled = true;
+    }
 
     try {
-      const filename = `OldHeadPlaster_Contract_${client.replace(/\s+/g, '_')}_${date}.pdf`;
-      const contractHtml = buildContractHTML();
-
-      const pdfResponse = await fetch('/api/generate-pdf', {
+      const html = buildContractHTML();
+      const response = await fetch('/api/generate-pdf', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ html: contractHtml })
+        body: JSON.stringify({ html, filename }),
       });
 
-      if (!pdfResponse.ok) throw new Error('PDF generation failed');
-      const pdfBlob = await pdfResponse.blob();
+      if (!response.ok) throw new Error('PDF generation failed');
 
-      // Trigger browser download
-      const url = URL.createObjectURL(pdfBlob);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = filename;
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      btn.innerHTML = originalText;
-      btn.disabled = false;
-
-      // Auto-file to documents
+      // Auto-file to documents after download
       let amount = '$0';
       if (bespokeMode) {
         const total = bespokeSections.reduce((sum, s) => sum + s.subtotal, 0);
@@ -4832,46 +4864,158 @@ const finishTypes = [
       fileContractToDocuments(contractNumber, client, amount, 'downloaded');
     } catch (err) {
       console.error('Download PDF error:', err);
-      btn.innerHTML = originalText;
-      btn.disabled = false;
-      alert('PDF generation failed. Please try Print and save as PDF instead.');
+      // Fallback to print dialog
+      openContractPrintWindow(filename, null);
+    } finally {
+      if (downloadBtn) {
+        downloadBtn.innerHTML = originalHtml;
+        downloadBtn.disabled = false;
+      }
     }
   }
 
-  // Build the full contract HTML document for server-side PDF rendering
+  // Build the full contract HTML document for server-side PDF rendering.
   function buildContractHTML() {
     const contractDoc = document.getElementById('contract-document');
     if (!contractDoc) return '';
 
-    // Snapshot canvases to data URLs
-    const canvases = contractDoc.querySelectorAll('canvas');
-    const canvasDataUrls = [];
-    canvases.forEach(canvas => {
+    // Snapshot canvases to data URLs before cloning (cloneNode loses pixel data)
+    // Check if canvas is blank by comparing to an empty canvas of the same size
+    function isCanvasBlank(canvas) {
+      try {
+        const blank = document.createElement('canvas');
+        blank.width = canvas.width; blank.height = canvas.height;
+        return canvas.toDataURL() === blank.toDataURL();
+      } catch(e) { return true; }
+    }
+    const liveCanvases = Array.from(contractDoc.querySelectorAll('canvas'));
+    const canvasSnapshots = liveCanvases.map(canvas => {
       try {
         const w = canvas.width || canvas.offsetWidth;
         const h = canvas.height || canvas.offsetHeight;
-        canvasDataUrls.push({ id: canvas.id, src: (w > 0 && h > 0) ? canvas.toDataURL('image/png') : null, w, h });
-      } catch(e) { canvasDataUrls.push({ id: canvas.id, src: null }); }
+        if (w <= 0 || h <= 0 || isCanvasBlank(canvas)) return null;
+        return canvas.toDataURL('image/png');
+      } catch(e) { return null; }
+    });
+
+    // Build a map of id → live value BEFORE cloning.
+    // cloneNode(true) does NOT copy user-typed .value — only the HTML attribute default.
+    // We use ID for named fields; for unnamed inputs (bespoke section items) we fall back
+    // to a data-index approach stamped onto the live elements.
+    const liveValueMap = {};
+    Array.from(contractDoc.querySelectorAll('input, textarea, select')).forEach((el, i) => {
+      const key = el.id || ('__idx__' + i);
+      if (!el.id) el.dataset.liveIdx = i; // stamp index so clone can find it
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        liveValueMap[key] = el.checked;
+      } else if (el.type === 'date') {
+        liveValueMap[key] = el.value || el.getAttribute('value') || '';
+      } else {
+        liveValueMap[key] = el.value;
+      }
     });
 
     const clone = contractDoc.cloneNode(true);
-    canvasDataUrls.forEach(({ id, src, w, h }) => {
-      const el = clone.querySelector('#' + id);
-      if (el && el.parentNode) {
+
+    // Restore live values onto clone inputs using the same key lookup
+    Array.from(clone.querySelectorAll('input, textarea, select')).forEach((el, i) => {
+      const key = el.id || ('__idx__' + (el.dataset.liveIdx ?? i));
+      const val = liveValueMap[key];
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        if (val !== undefined) el.checked = val;
+      } else {
+        el.value = val ?? '';
+      }
+    });
+
+    // Replace canvases: drawn ones become img snapshots, blank ones become signature placeholder
+    Array.from(clone.querySelectorAll('canvas')).forEach((cloneCanvas, i) => {
+      const src = canvasSnapshots[i];
+      const live = liveCanvases[i];
+      const w = (live.width || live.offsetWidth) + 'px';
+      const h = (live.height || live.offsetHeight) + 'px';
+      if (cloneCanvas.parentNode) {
         if (src) {
           const img = document.createElement('img');
           img.src = src;
-          img.style.cssText = el.style.cssText;
-          img.style.width = w + 'px';
-          img.style.height = h + 'px';
-          el.parentNode.replaceChild(img, el);
-        } else { el.parentNode.removeChild(el); }
+          img.style.width = w; img.style.height = h;
+          cloneCanvas.parentNode.replaceChild(img, cloneCanvas);
+        } else {
+          // Replace blank signature canvas with a styled placeholder line
+          const placeholder = document.createElement('div');
+          placeholder.style.cssText = `width:100%;height:${h};border-bottom:1.5px solid rgba(28,28,30,0.2);display:flex;align-items:flex-end;padding-bottom:4px;`;
+          const label = document.createElement('span');
+          label.style.cssText = 'font-family:Inter,sans-serif;font-size:10px;color:rgba(28,28,30,0.3);letter-spacing:0.1em;';
+          label.textContent = 'x';
+          placeholder.appendChild(label);
+          cloneCanvas.parentNode.replaceChild(placeholder, cloneCanvas);
+        }
       }
     });
+
+    // Helper: format ISO date (YYYY-MM-DD) → MM/DD/YYYY for display
+    function formatDateForPDF(isoVal) {
+      if (!isoVal) return '';
+      const parts = isoVal.split('-');
+      if (parts.length === 3) return `${parts[1]}/${parts[2]}/${parts[0]}`;
+      return isoVal;
+    }
+
+    // Replace all inputs/textareas with plain text (removes the box chrome)
+    // Date inputs get formatted as MM/DD/YYYY; other inputs use their live value
+    clone.querySelectorAll('input, textarea, select').forEach((el, i) => {
+      if (el.type === 'checkbox' || el.type === 'radio') return;
+
+      const span = document.createElement('span');
+      const key = el.id || ('__idx__' + (el.dataset.liveIdx ?? i));
+      const liveVal = liveValueMap[key] ?? el.value ?? '';
+
+      span.textContent = el.type === 'date'
+        ? (liveVal ? formatDateForPDF(liveVal) : '')
+        : (liveVal || '');
+
+      // Copy id so document structure is preserved
+      if (el.id) span.id = el.id;
+
+      // Fully self-contained inline style — no dependency on CSS classes or scoping
+      // Use !important to override anything the inlined stylesheet might apply
+      span.setAttribute('style',
+        'display:block !important;' +
+        'color:#1c1c1e !important;' +
+        'font-family:Inter,-apple-system,sans-serif !important;' +
+        'font-size:13px !important;' +
+        'line-height:1.5 !important;' +
+        'padding:4px 0 !important;' +
+        'min-height:1.2em !important;' +
+        'opacity:1 !important;' +
+        'visibility:visible !important;'
+      );
+
+      el.parentNode?.replaceChild(span, el);
+    });
+
+    // Remove buttons and UI chrome
     clone.querySelectorAll('button, [id$="-btn"], #send-confirm-modal').forEach(el => el.remove());
 
-    // Use absolute URLs for all stylesheets so they work in print windows and Puppeteer
+    // Rewrite relative src/href/url() to absolute so Puppeteer can fetch them
     const origin = window.location.origin;
+    clone.querySelectorAll('[src]').forEach(el => {
+      const s = el.getAttribute('src');
+      if (s && s.startsWith('/')) el.setAttribute('src', origin + s);
+    });
+    clone.querySelectorAll('[href]').forEach(el => {
+      const h = el.getAttribute('href');
+      if (h && h.startsWith('/')) el.setAttribute('href', origin + h);
+    });
+    // Fix url('/...') in inline style attributes
+    clone.querySelectorAll('[style]').forEach(el => {
+      const st = el.getAttribute('style');
+      if (st && st.includes('url(')) {
+        el.setAttribute('style', st.replace(/url\(['"]?(\/[^'")]+)['"]?\)/g, `url('${origin}$1')`));
+      }
+    });
+
+    // Use absolute URLs for all stylesheets so Puppeteer can fetch them
     const styleLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
       .map(l => {
         const href = l.href.startsWith('http') ? l.href : origin + l.href;
@@ -4889,7 +5033,7 @@ const finishTypes = [
   ${styleLinks}
   ${inlineStyles}
   <style>
-    @page { margin: 0; size: letter; }
+    @page { margin: 0; }
     body { margin: 0; padding: 0; background: white; }
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   </style>
@@ -4995,23 +5139,32 @@ const finishTypes = [
     updateContractStatus('sending', 'Generating PDF & sending...');
 
     try {
-      // Generate PDF server-side via Puppeteer
+      // Generate PDF via pdf-service on MinisForum (x86 Linux — Puppeteer works natively)
       const date = new Date().toISOString().split('T')[0];
       const filename = `OldHeadPlaster_Contract_${client.replace(/\s+/g, '_')}_${date}.pdf`;
       const contractHtml = buildContractHTML();
 
-      const pdfResponse = await fetch('/api/generate-pdf', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ html: contractHtml })
-      });
+      let pdfFile = null;
+      try {
+        const pdfResponse = await fetch('/api/generate-pdf', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ html: contractHtml, filename }),
+        });
+        if (pdfResponse.ok) {
+          const pdfBlob = await pdfResponse.blob();
+          pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
+        } else {
+          console.warn('PDF generation failed, sending without attachment');
+        }
+      } catch (pdfErr) {
+        console.warn('PDF service unreachable, sending without attachment:', pdfErr);
+      }
 
-      if (!pdfResponse.ok) throw new Error('PDF generation failed');
-      const pdfBlob = await pdfResponse.blob();
+      updateContractStatus('sending', 'Sending contract...');
 
-      // Create FormData with PDF and contract details
       const formData = new FormData();
-      formData.append('pdf', new File([pdfBlob], filename, { type: 'application/pdf' }));
+      if (pdfFile) formData.append('pdf', pdfFile);
       formData.append('clientName', client);
       formData.append('clientEmail', clientEmail);
       if (sendSms && clientPhone) formData.append('clientPhone', clientPhone);
